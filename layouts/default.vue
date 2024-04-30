@@ -1,14 +1,17 @@
 <script lang="ts" setup>
-definePageMeta({
-    middleware: 'auth'
-})
+
 </script>
 
 <template>
-    <div>
-        Layout: default
-        <slot/>
+    <div class="flex">
+        <div>
+            <Sidebar/>
+        </div>
+        <div>
+            <div></div>
+            <main>
+                <slot/>
+            </main>
+        </div>
     </div>
 </template>
-
-<style scoped></style>

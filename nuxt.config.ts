@@ -1,28 +1,72 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
 export default defineNuxtConfig({
-    devtools: {enabled: true},
-    ssr: false,
-    css: ['@/assets/css/main.scss'],
-    modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', 'nuxt-icon', '@nuxt/image', 'nuxt-headlessui', '@morev/vue-transitions/nuxt',],
+    ssr: true,
+    devtools: { enabled: true },
+    typescript: {
+        tsConfig: {
+            compilerOptions: {
+                moduleResolution: 'bundler',
+            },
+        },
+    },
+    pinia: {
+        autoImports: ['defineStore'],
+    },
+    experimental: {
+        emitRouteChunkError: 'automatic',
+        sharedPrerenderData: true,
+        typedPages: true,
+    },
     runtimeConfig: {
         public: {
-            appUrl: process.env.APP_URL ?? 'http://dashboard.wsa.test:4664',
-            apiUrl: process.env.API_URL ?? 'http://api.wsa.test:8805',
+            appUrl: process.env.APP_URL ?? 'http://events-nuxt.test:4224',
+            apiUrl: process.env.API_URL ?? 'http://dashboard.wsa-network.test:8805',
+            description: 'WSA Events is a part of World Shipping Alliance is an independent worldwide network for all freight forwarders.',
+            keywords:
+                'World Shipping Alliance, freight forwarders network, global logistics, OTI/NVOCC operations, logistics community, logistics excellence, logistics network, dependable connections, global freight services, freight agents, logistics journey, event, wsa',
         },
     },
     build: {
         transpile: ['@vuepic/vue-datepicker'],
     },
-    imports: {
-        dirs: ['./stores'],
+    site: {
+        url: process.env.APP_URL ?? 'https://events-nuxt.test:4224',
+    },
+    sitemap: {
+        exclude: ['/dashboard/**'],
     },
     nitro: {
         routeRules: {
             '/backend/**': {
-                proxy: `${process.env.API_URL ?? 'http://api.wsa.test:8805'}/**`,
-            }
+                proxy: `${process.env.API_URL ?? 'http://dashboard.wsa-network.test:8805'}/**`,
+            },
+            '/get-geoip/**': {
+                proxy: `http://ip-api.com/json/**`,
+            },
         },
         compressPublicAssets: true,
+    },
+    routeRules: {
+        // '/dashboard/**': { ssr: false },
+    },
+    css: ['@/assets/css/main.scss'],
+    modules: ['nuxt-lodash', '@pinia/nuxt', 'nuxt-icon', '@nuxtjs/eslint-module', '@nuxtjs/color-mode', '@nuxt/image', 'nuxt-swiper', 'nuxt-headlessui', '@morev/vue-transitions/nuxt', 'nuxt-simple-sitemap', '@unlok-co/nuxt-stripe'],
+    image: {
+        inject: true,
+        quality: 65,
+        format: ['webp'],
+        screens: {
+            xs: 320,
+            sm: 640,
+            md: 768,
+            lg: 1024,
+            xl: 1280,
+            xxl: 1536,
+        },
+    },
+    imports: {
+        dirs: ['./stores'],
     },
     app: {
         buildAssetsDir: '/wsa-dashboard/',
@@ -50,4 +94,14 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
-})
+    colorMode: {
+        preference: 'light', // default value of $colorMode.preference
+        fallback: 'light', // fallback value if not system preference found
+        hid: 'wsa-dashboard-app-color-mode-script',
+        globalName: '__WSA_DASHBOARD_COLOR_MODE__',
+        componentName: 'ColorScheme',
+        classPrefix: '',
+        classSuffix: '',
+        storageKey: 'wsa-dashboard-color-mode',
+    },
+});

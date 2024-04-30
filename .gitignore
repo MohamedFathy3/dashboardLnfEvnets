@@ -12,6 +12,7 @@ node_modules
 # Logs
 logs
 *.log
+.unlighthouse
 
 # Misc
 .DS_Store
@@ -22,3 +23,9 @@ logs
 .env
 .env.*
 !.env.example
+package-lock.json
+.htaccess
+.yarn
+yarn.lock
+ssl.crt
+ssl.key
