@@ -18,55 +18,55 @@ export const useResourceStore = defineStore('resource', () => {
     };
 
     const fetchCountries = async () => {
-        const {data: res, error} = await useApiFetch(`/api/country-public`, {
+        const { data: res, error } = await useApiFetch(`/api/country-public`, {
             lazy: true,
-            transform: (res) => (res as ApiResponse).data as Country[]
+            transform: (res) => (res as ApiResponse).data as Country[],
         });
         if (res.value) {
-            setCountries(res.value as Country[])
+            setCountries(res.value as Country[]);
         }
         if (error && error.value) {
-            setCountries()
-            console.error(error)
+            setCountries();
+            console.error(error);
         }
     };
     const fetchCertificates = async () => {
-        const {data: res, error} = await useApiFetch(`/api/certificate-public`, {
+        const { data: res, error } = await useApiFetch(`/api/certificate-public`, {
             lazy: true,
-            transform: (res) => (res as ApiResponse).data as Resource[]
+            transform: (res) => (res as ApiResponse).data as Resource[],
         });
         if (res.value) {
-            setCertificates(res.value as Resource[])
+            setCertificates(res.value as Resource[]);
         }
         if (error && error.value) {
-            setCertificates()
-            console.error(error)
+            setCertificates();
+            console.error(error);
         }
     };
     const fetchServices = async () => {
-        const {data: res, error} = await useApiFetch(`/api/service-public`, {
+        const { data: res, error } = await useApiFetch(`/api/service-public`, {
             lazy: true,
-            transform: (res) => (res as ApiResponse).data as Resource[]
+            transform: (res) => (res as ApiResponse).data as Resource[],
         });
         if (res.value) {
-            setServices(res.value as Resource[])
+            setServices(res.value as Resource[]);
         }
         if (error && error.value) {
-            setServices()
-            console.error(error)
+            setServices();
+            console.error(error);
         }
     };
     const fetchReferrals = async () => {
-        const {data: res, error} = await useApiFetch(`/api/referral-public`, {
+        const { data: res, error } = await useApiFetch(`/api/referral-public`, {
             lazy: true,
-            transform: (res) => (res as ApiResponse).data as Resource[]
+            transform: (res) => (res as ApiResponse).data as Resource[],
         });
         if (res.value) {
-            setReferrals(res.value as Resource[])
+            setReferrals(res.value as Resource[]);
         }
         if (error && error.value) {
-            setReferrals()
-            console.error(error)
+            setReferrals();
+            console.error(error);
         }
     };
 

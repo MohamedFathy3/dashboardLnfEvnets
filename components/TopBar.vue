@@ -1,0 +1,59 @@
+<script lang="ts" setup>
+const route = useRoute();
+const userStore = useUserStore();
+const formatRoutePath = (path: string) => {
+    if (path === '/') {
+        return [];
+    } else {
+        path = path.replace(/^\//, '').replace(/\/$/, '');
+        const segments = path.split('/');
+        return segments.map((segment, index) => {
+            const name = segment
+                .split('-')
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            const url = '/' + segments.slice(0, index + 1).join('/');
+            return { name, url };
+        });
+    }
+};
+const formattedPath = ref(formatRoutePath(route.fullPath));
+
+watch(
+    () => route.fullPath,
+    (newPath) => {
+        formattedPath.value = formatRoutePath(newPath);
+    },
+);
+</script>
+
+<template>
+    <div class="flex items-center gap-5 justify-end sm:justify-between py-3 text-white/75 pl-5">
+        <ul class="sm:flex hidden items-center font-light gap-2 text-sm">
+            <li class="flex items-center gap-2 intro-x">
+                <Icon class="size-4 opacity-50" name="solar:double-alt-arrow-right-line-duotone" />
+                <NuxtLink :to="route.fullPath === '/' ? '' : '/'" class="flex items-center gap-2">
+                    <span :class="[route.fullPath === '/' ? 'opacity-100' : 'hover:opacity-100 opacity-50 ease-in-out duration-300']">Dashboard</span>
+                </NuxtLink>
+                <Icon v-if="route.fullPath !== '/'" class="size-4 opacity-50" name="solar:double-alt-arrow-right-line-duotone" />
+            </li>
+            <template v-for="(path, i) in formattedPath" :key="i">
+                <li v-if="route.fullPath !== '/'" class="intro-x flex items-center gap-2">
+                    <NuxtLink :to="i === formattedPath.length - 1 ? '' : path.url" class="flex items-center gap-2">
+                        <span :class="[route.fullPath === '/' ? 'opacity-100' : '', i === formattedPath.length - 1 ? 'text-white' : 'ease-in-out duration-300 hover:opacity-100 opacity-50']">{{ path.name }}</span>
+                    </NuxtLink>
+                    <Icon v-if="i !== formattedPath.length - 1" class="size-4 opacity-50" name="solar:double-alt-arrow-right-line-duotone" />
+                </li>
+            </template>
+        </ul>
+        <div class="flex items-center gap-5 py-1 px-3 rounded-xl hover:bg-white/10">
+            <div>
+                <div class="text-sm font-medium">{{ userStore.user?.name }}</div>
+                <div class="text-xs opacity-75 font-extralight">
+                    {{ userStore.user?.superAdmin ? 'Super Admin' : userStore.user?.role?.name }}
+                </div>
+            </div>
+            <Icon class="size-4" name="solar:alt-arrow-down-outline" />
+        </div>
+    </div>
+</template>

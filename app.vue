@@ -3,7 +3,7 @@
 <template>
     <NuxtLayout>
         <div>
-            <NuxtLoadingIndicator class="z-[9999]" color="rgb(30 132 199)" :height="4" :duration="5000" :throttle="0" />
+            <NuxtLoadingIndicator :duration="5000" :height="4" :throttle="0" class="z-[9999]" color="rgb(255 255 80)" />
             <NuxtPage />
         </div>
     </NuxtLayout>

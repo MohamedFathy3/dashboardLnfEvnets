@@ -1,40 +1,45 @@
 export const useUserStore = defineStore('user', () => {
     const user = ref<Admin>();
-    const token = useCookie('WSA_ADMIN_AUTH_TOKEN', {maxAge: 60 * 60 * 2});
+    const token = useCookie('WSA_ADMIN_AUTH_TOKEN', { maxAge: 60 * 60 * 2 });
 
     const setToken = (data?: string) => (token.value = data);
     const setUser = (data?: Admin) => (user.value = data);
 
-    const signIn = async (data: Credentials) => {
+    const login = async (data: Credentials) => {
         await useApiFetch('/sanctum/csrf-cookie');
-        const {data: userData, error} = await useApiFetch(`/api/admin/login`, {
+        const { data: userData, error } = await useApiFetch(`/api/admin/login`, {
             method: 'POST',
             body: data,
             lazy: true,
         });
-
         if (userData.value) {
-            // Data
-            useToast({title: 'Welcome', message: 'Logged in Successfully', type: 'success', duration: 5000});
+            setUser((userData.value as ApiResponse).data as Admin);
+            setToken((userData.value as ApiResponse).token as string);
+            navigateTo('/');
+            useToast({ title: 'Welcome', message: 'Logged in Successfully', type: 'success', duration: 5000 });
         }
-
         if (error && error.value) {
-            // data
+            console.error(error);
         }
     };
-    const fetchAuthUser = async () => {
-        if (token.value) {
-            const {data: userData, error} = await useApiFetch('/api/event-auth');
-            if (userData.value) {
 
-            }
-            if (error.value) {
-                logout();
-                console.log(error.value);
-            }
+    const fetchAuthUser = async () => {
+        const { data: res, error } = await useApiFetch(`/api/get-admin`, {
+            lazy: true,
+            transform: (res) => (res as ApiResponse).data as Admin,
+        });
+        if (res.value) {
+            setUser(res.value as Admin);
+        }
+        if (error && error.value) {
+            setUser();
+            await logout();
+            console.error(error);
         }
     };
-    const logout = () => {
+
+    const logout = async () => {
+        await useApiFetch('/api/admin-logout');
         setToken();
         setUser();
         navigateTo('/login');
@@ -44,7 +49,7 @@ export const useUserStore = defineStore('user', () => {
         user,
         token,
         logout,
-        signIn,
+        login,
         fetchAuthUser,
         setUser,
         setToken,
