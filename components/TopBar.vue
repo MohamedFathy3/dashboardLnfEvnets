@@ -65,25 +65,25 @@ async function logout() {
             <TransitionExpand>
                 <HeadlessMenuItems as="div" class="absolute text-sm right-0 mt-2 w-56 origin-top-right rounded-xl bg-white shadow-lg ring-1 ring-black/5 focus:outline-none text-slate-600">
                     <ul class="px-2 py-1">
-                        <HeadlessMenuItem v-slot="{ active }" as="li" class="py-0.5">
+                        <HeadlessMenuItem as="li" class="py-0.5">
                             <NuxtLink class="w-full p-2 flex items-center gap-3 grow px-3 rounded-full hover:bg-primary hover:text-white ease-in-out duration-100" to="/profile">
                                 <Icon class="size-5 opacity-75" name="solar:user-circle-line-duotone" />
                                 <div>Profile</div>
                             </NuxtLink>
                         </HeadlessMenuItem>
-                        <HeadlessMenuItem v-slot="{ active }" as="li" class="py-0.5">
+                        <HeadlessMenuItem as="li" class="py-0.5">
                             <NuxtLink class="w-full p-2 flex items-center gap-3 grow px-3 rounded-full hover:bg-primary hover:text-white ease-in-out duration-100" to="/profile/edit">
                                 <Icon class="size-5 opacity-75" name="solar:settings-outline" />
                                 <div>Edit profile</div>
                             </NuxtLink>
                         </HeadlessMenuItem>
-                        <HeadlessMenuItem v-slot="{ active }" as="li" class="py-0.5">
+                        <HeadlessMenuItem as="li" class="py-0.5">
                             <NuxtLink class="w-full p-2 flex items-center gap-3 grow px-3 rounded-full hover:bg-primary hover:text-white ease-in-out duration-100" to="/profile/tasks">
                                 <Icon class="size-5 opacity-75" name="solar:server-2-outline" />
                                 <div>Tasks</div>
                             </NuxtLink>
                         </HeadlessMenuItem>
-                        <HeadlessMenuItem v-slot="{ active }" as="li" class="py-0.5 text-danger">
+                        <HeadlessMenuItem as="li" class="py-0.5 text-danger">
                             <div class="w-full p-2 flex items-center gap-3 grow cursor-pointer px-3 rounded-full hover:bg-danger hover:text-white ease-in-out duration-100" @click="logout">
                                 <Icon class="size-5 opacity-75" name="solar:logout-3-line-duotone" />
                                 <div>Logout</div>

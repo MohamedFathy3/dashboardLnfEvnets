@@ -52,7 +52,7 @@ watchEffect(() => {
     emit('update:model-value', value.value);
 });
 onMounted(() => {
-    value.value = props.modelValue;
+    value.value = props.modelValue ? props.modelValue : null;
 });
 </script>
 
