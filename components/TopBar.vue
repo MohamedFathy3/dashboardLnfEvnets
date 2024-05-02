@@ -25,6 +25,10 @@ watch(
         formattedPath.value = formatRoutePath(newPath);
     },
 );
+
+async function logout() {
+    await userStore.logout();
+}
 </script>
 
 <template>
@@ -46,14 +50,48 @@ watch(
                 </li>
             </template>
         </ul>
-        <div class="flex items-center gap-5 py-1 px-3 rounded-xl hover:bg-white/10">
-            <div>
-                <div class="text-sm font-medium">{{ userStore.user?.name }}</div>
-                <div class="text-xs opacity-75 font-extralight">
-                    {{ userStore.user?.superAdmin ? 'Super Admin' : userStore.user?.role?.name }}
+        <HeadlessMenu as="div" class="relative inline-block">
+            <HeadlessMenuButton>
+                <div class="flex items-center gap-5 py-1 px-3 rounded-xl hover:bg-white/10">
+                    <div class="text-right">
+                        <div class="text-sm font-medium">{{ userStore.user?.name }}</div>
+                        <span class="text-xs opacity-75 font-extralight">
+                            {{ userStore.user?.superAdmin ? 'Super Admin' : userStore.user?.role?.name }}
+                        </span>
+                    </div>
+                    <Icon class="size-4" name="solar:alt-arrow-down-outline" />
                 </div>
-            </div>
-            <Icon class="size-4" name="solar:alt-arrow-down-outline" />
-        </div>
+            </HeadlessMenuButton>
+            <TransitionExpand>
+                <HeadlessMenuItems as="div" class="absolute text-sm right-0 mt-2 w-56 origin-top-right rounded-xl bg-white shadow-lg ring-1 ring-black/5 focus:outline-none text-slate-600">
+                    <ul class="px-2 py-1">
+                        <HeadlessMenuItem v-slot="{ active }" as="li" class="py-0.5">
+                            <NuxtLink class="w-full p-2 flex items-center gap-3 grow px-3 rounded-full hover:bg-primary hover:text-white ease-in-out duration-100" to="/profile">
+                                <Icon class="size-5 opacity-75" name="solar:user-circle-line-duotone" />
+                                <div>Profile</div>
+                            </NuxtLink>
+                        </HeadlessMenuItem>
+                        <HeadlessMenuItem v-slot="{ active }" as="li" class="py-0.5">
+                            <NuxtLink class="w-full p-2 flex items-center gap-3 grow px-3 rounded-full hover:bg-primary hover:text-white ease-in-out duration-100" to="/profile/edit">
+                                <Icon class="size-5 opacity-75" name="solar:settings-outline" />
+                                <div>Edit profile</div>
+                            </NuxtLink>
+                        </HeadlessMenuItem>
+                        <HeadlessMenuItem v-slot="{ active }" as="li" class="py-0.5">
+                            <NuxtLink class="w-full p-2 flex items-center gap-3 grow px-3 rounded-full hover:bg-primary hover:text-white ease-in-out duration-100" to="/profile/tasks">
+                                <Icon class="size-5 opacity-75" name="solar:server-2-outline" />
+                                <div>Tasks</div>
+                            </NuxtLink>
+                        </HeadlessMenuItem>
+                        <HeadlessMenuItem v-slot="{ active }" as="li" class="py-0.5 text-danger">
+                            <div class="w-full p-2 flex items-center gap-3 grow cursor-pointer px-3 rounded-full hover:bg-danger hover:text-white ease-in-out duration-100" @click="logout">
+                                <Icon class="size-5 opacity-75" name="solar:logout-3-line-duotone" />
+                                <div>Logout</div>
+                            </div>
+                        </HeadlessMenuItem>
+                    </ul>
+                </HeadlessMenuItems>
+            </TransitionExpand>
+        </HeadlessMenu>
     </div>
 </template>
