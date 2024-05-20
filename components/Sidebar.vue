@@ -40,15 +40,15 @@ const menuItems = ref([
                 subMenus: [],
             },
             {
-                name: 'Referrals',
-                path: '/master-data/referrals',
-                icon: 'solar:multiple-forward-left-linear',
-                subMenus: [],
-            },
-            {
                 name: 'Services',
                 path: '/master-data/services',
                 icon: 'solar:server-square-update-linear',
+                subMenus: [],
+            },
+            {
+                name: 'Referrals',
+                path: '/master-data/referrals',
+                icon: 'solar:multiple-forward-left-linear',
                 subMenus: [],
             },
         ],
@@ -453,19 +453,22 @@ function toggleSubMenuOpen(path: string) {
         <div :class="[open ? 'flex items-center justify-between gap-5' : 'px-4']">
             <div :class="['flex items-center gap-3 place-content-center']">
                 <Icon v-if="open" class="size-7" name="solar:asteroid-linear" />
-                <div v-if="open" class="text-lg">{{ settingStore.network?.name }}</div>
+                <div v-if="open" class="text-lg">
+                    <span class="text-white">{{ settingStore.network?.name }}</span>
+                    <span class="text-[0.65rem] font-light align-super ml-2 opacity-75">v1.0.3</span>
+                </div>
             </div>
             <Icon v-if="!open" class="size-5 mx-auto cursor-pointer" name="solar:round-alt-arrow-right-linear" @click="emit('toggleSidebar')" />
             <Icon v-if="open" class="size-5 cursor-pointer hover:text-white" name="solar:round-alt-arrow-left-linear" @click="emit('toggleSidebar')" />
         </div>
-        <div class="pr-2 scrollbar-w-2 scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar scrollbar-thumb-white/25 overflow-y-hidden hover:overflow-y-auto overflow-x-hidden">
+        <div class="relative pr-2 scrollbar-w-2 scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar scrollbar-thumb-white/25 overflow-y-hidden hover:overflow-y-auto">
             <ul class="flex flex-col gap-2 font-light text-sm mb-12">
                 <template v-for="(item, i) in menuItems" :key="i">
                     <template v-if="typeof item === 'string'">
                         <li v-if="open" class="text-xs first:mt-0 mt-5 opacity-75">{{ item }}</li>
                         <li v-else class="first:mt-0 mt-5 opacity-75 text-center">...</li>
                     </template>
-                    <li v-else class="">
+                    <li v-else class="relative">
                         <NuxtLink
                             :class="[
                                 open ? 'px-6 rounded-full' : 'px-4 rounded-xl',
@@ -485,14 +488,14 @@ function toggleSubMenuOpen(path: string) {
                                 name="solar:alt-arrow-down-line-duotone"
                             />
                             <div v-if="!open" class="amj__tooltip-content">
-                                <span>{{ item.name }}</span>
+                                <span class="amj__tooltip-text">{{ item.name }}</span>
                             </div>
                         </NuxtLink>
                         <TransitionExpand>
                             <template v-if="activeMenuItem === item.path || item.subMenus.some((m) => m.path === activeMenuItem)">
                                 <ul v-if="item.subMenus.length > 0" class="bg-white/10 rounded-xl p-2 flex flex-col gap-2 mt-2">
                                     <template v-for="(subItem, s) in item.subMenus" :key="s">
-                                        <li class="">
+                                        <li class="relative">
                                             <NuxtLink
                                                 :class="[
                                                     open ? 'px-4 rounded-full' : 'px-2 rounded-xl',
@@ -507,7 +510,7 @@ function toggleSubMenuOpen(path: string) {
                                                 </div>
                                                 <Icon v-if="subItem.subMenus.length > 0 && open" class="size-4 opacity-75" name="solar:alt-arrow-down-line-duotone" />
                                                 <div v-if="!open" class="amj__tooltip-content">
-                                                    <span>{{ subItem.name }}</span>
+                                                    <span class="amj__tooltip-text">{{ subItem.name }}</span>
                                                 </div>
                                             </NuxtLink>
                                         </li>

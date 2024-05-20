@@ -38,7 +38,7 @@ const props = defineProps({
     },
     rounded: {
         type: Boolean,
-        default: false,
+        default: true,
     },
     autofocus: {
         type: Boolean,
@@ -86,11 +86,14 @@ onMounted(() => {
 watchEffect(() => {
     emit('update:model-value', value.value);
 });
+watchEffect(() => {
+    value.value = props.modelValue;
+});
 </script>
 
 <template>
-    <div class="text-base" :class="[flexTitle ? 'form-inline' : '']">
-        <label v-if="label" :for="name" class="form-label opacity-75 font-medium" :class="[flexTitle ? '!text-left sm:w-20' : '']">
+    <div class="text-base" :class="[flexTitle && 'form-inline']">
+        <label v-if="label" :for="name" class="form-label opacity-75 font-light" :class="[flexTitle ? '!text-left sm:w-20' : '']">
             <span>{{ label }}</span>
             <span v-if="label && required" class="ml-1 text-sm text-danger">*</span>
         </label>
@@ -109,7 +112,7 @@ watchEffect(() => {
                     :maxlength="maxlength"
                     :required="required"
                     :aria-label="label ?? name"
-                    class="form-control placeholder:!text-slate-400"
+                    class="form-control placeholder:!text-slate-400 font-light"
                     :class="[size === 'lg' ? 'form-control-lg' : '', size === 'sm' ? 'form-control-sm' : '', icon ? 'pl-10' : '', errors?.length > 0 ? '!border-danger' : '', rounded ? 'form-control-rounded' : '']"
                     :placeholder="placeholder"
                     :disabled="disabled"
@@ -134,8 +137,8 @@ watchEffect(() => {
                     :readonly="readonly"
                     :required="required"
                     :aria-label="label ?? name"
-                    class="form-control"
-                    :class="[size === 'lg' ? 'form-control-lg' : '', size === 'sm' ? 'form-control-sm' : '', errors?.length > 0 ? '!border-danger' : '', rounded ? 'form-control-rounded' : '']"
+                    class="form-control font-light rounded-2xl"
+                    :class="[size === 'lg' ? 'form-control-lg' : '', size === 'sm' ? 'form-control-sm' : '', errors?.length > 0 ? '!border-danger' : '']"
                     :placeholder="placeholder"
                     :disabled="disabled"
                 />

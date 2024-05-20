@@ -26,6 +26,8 @@ module.exports = {
     "vue/multi-word-component-names": "off",
     "@typescript-eslint/no-var-requires": "off",
     "vue/no-v-html": "off",
+    "eslint-disable-next-line": "off",
+    "vue/require-default-prop": "off",
     camelcase: "off",
     "prettier/prettier": [
       "error",

@@ -91,7 +91,7 @@ const props = defineProps({
     },
     modelValue: {
         type: Object,
-        default: null,
+        default: () => {},
     },
     selectData: {
         type: Array,
@@ -107,11 +107,15 @@ onMounted(() => {
 watchEffect(() => {
     emit('update:model-value', value.value);
 });
+
+watchEffect(() => {
+    value.value = props.modelValue;
+});
 </script>
 
 <template>
     <div class="text-base" :class="[flexTitle ? 'form-inline' : '']">
-        <div v-if="label" class="form-label font-medium" :class="[flexTitle ? '!text-left sm:w-20' : '']">
+        <div v-if="label" class="form-label opacity-75 font-light" :class="[flexTitle ? '!text-left sm:w-20' : '']">
             <span>{{ label }}</span>
             <span v-if="label && required" class="ml-1 text-sm text-danger">*</span>
         </div>
@@ -131,7 +135,7 @@ watchEffect(() => {
                 :selectable="selectable"
                 :multiple="multiple"
                 :label="$attrs.labelvalue"
-                :img-value="$attrs.imgvalue"
+                :imgvalue="$attrs.imgvalue"
                 :secondlabel-value="$attrs.secondlabelvalue"
                 :thirdlabel-value="$attrs.thirdlabelvalue"
                 :reduce="(data) => data[$attrs.keyvalue]"
@@ -146,11 +150,12 @@ watchEffect(() => {
                         <span v-if="$attrs.thirdlabelvalue" class="font-light ml-0.5 group-hover:text-slate-100 opacity-75">, {{ option[$attrs.thirdlabelvalue] }}</span>
                     </div>
                 </template>
-                <template #selected-option="{ name, key, image_url }">
+                <template #selected-option="{ name, key, imageUrl, title }">
                     <div :class="[icon ? 'pl-5' : '', 'flex items-center whitespace-nowrap truncate text-sm']">
-                        <img v-if="$attrs.imgvalue" :class="[isRoundedImage ? 'rounded-full w-5 h-5' : 'rounded-sm w-6 h-4', 'mr-2 object-cover']" :src="image_url" :alt="name" :title="name" />
+                        <img v-if="$attrs.imgvalue" :class="[isRoundedImage ? 'rounded-full w-5 h-5' : 'rounded-sm w-6 h-4', 'mr-2 object-cover']" :src="imageUrl" :alt="name" :title="name" />
                         <div v-if="prefix" class="truncate">{{ prefix }}</div>
-                        <div v-if="$attrs.labelvalue === 'name'" class="truncate font-medium">{{ name }}</div>
+                        <div v-if="$attrs.labelvalue === 'name'" class="truncate font-light">{{ name }}</div>
+                        <div v-if="$attrs.labelvalue === 'title'" class="truncate font-light">{{ title }}</div>
                         <div v-if="$attrs.labelvalue === 'key'" class="truncate">{{ key }}</div>
                     </div>
                 </template>
@@ -171,54 +176,3 @@ watchEffect(() => {
         </template>
     </div>
 </template>
-<style lang="scss">
-.vs__dropdown-menu {
-    @apply absolute z-40 mt-4 p-3 max-h-52 w-full overflow-x-hidden overflow-y-auto bg-white dark:bg-slate-800 rounded-xl shadow-lg border;
-}
-
-.vs__selected-options {
-    @apply border-0 grow inset-0;
-}
-
-.vs__selected {
-    @apply absolute py-1.5 mx-5 inset-0 mr-14 flex items-center space-x-2;
-}
-
-.vs--multiple .vs__deselect {
-    @apply fill-slate-400;
-}
-
-.vs__search {
-    @apply rounded-full;
-}
-
-.vs--searching .vs__selected,
-.vs--open .vs__selected {
-    @apply opacity-10 ease-in-out duration-150;
-}
-
-.vs--multiple .vs__selected-options {
-    @apply flex items-center gap-3;
-}
-
-.vs--single .vs__selected-options {
-    //@apply flex items-center gap-3
-}
-
-.vs__actions {
-    @apply fill-slate-400;
-}
-
-.vs--open .vs__actions .vs__open-indicator {
-    @apply ease-in-out duration-300 rotate-180;
-}
-
-.vs__clear {
-    @apply absolute right-10;
-}
-
-.vs__dropdown-toggle {
-    //@apply border border-slate-200 rounded-full shadow-sm;
-    @apply flex items-center space-x-2 relative w-full;
-}
-</style>

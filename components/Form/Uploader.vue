@@ -109,30 +109,27 @@ function validateFile($event: DragEvent | InputEvent) {
 // }
 
 type UploadResponse = {
-    id: number;
-    preview_url: string;
-    full_url: string;
+    data: Media;
+    message: string;
+    status: string;
 };
 
-type ShowFile = {
-    data: {
-        id: number;
-        name: string;
-        file_name: string;
-        mime_type: string;
-        size: number;
-        created_at: string;
-        preview_url: string;
-        url: string;
-        full_url: string;
-    };
+type Media = {
+    id: number;
+    name: string;
+    mimeType: string;
+    size: number;
+    authorId: number;
+    previewUrl: string;
+    fullUrl: string;
+    createdAt: string;
 };
 
 const emit = defineEmits(['update:model-value']);
 const dragging = ref(false);
 const uploading = ref(false);
 
-const file: Ref<null | UploadResponse | ShowFile | undefined> = ref();
+const file: Ref<null | UploadResponse | Media | undefined> = ref();
 const value: Ref<null | number | undefined> = ref(props.modelValue ? props.modelValue.id : null);
 
 async function onDropFile($event: DragEvent) {
@@ -189,8 +186,8 @@ async function onUploadFile($event: InputEvent): Promise<void> {
     });
 
     if (data && data.value) {
-        file.value = data.value as UploadResponse;
-        value.value = (data.value as UploadResponse).id;
+        file.value = (data.value as UploadResponse).data;
+        value.value = (data.value as UploadResponse).data.id;
         emit('update:model-value', value.value);
         uploading.value = false;
     }
@@ -202,9 +199,9 @@ watchEffect(() => {
 
 async function getFile(id: number) {
     uploading.value = true;
-    const { data } = await useApiFetch(`/api/media/${id}`);
-    if (data && (data.value as ShowFile).data) {
-        file.value = (data.value as ShowFile).data;
+    const { data } = await useApiFetch(`/api/get-media/${id}`);
+    if (data && (data.value as UploadResponse).data) {
+        file.value = (data.value as UploadResponse).data;
         uploading.value = false;
     }
 }
@@ -242,11 +239,11 @@ onMounted(async () => {
 </script>
 <template>
     <div class="relative" @drop.prevent="onDropFile" @dragover.prevent="dragging = true" @dragleave.prevent="dragging = false">
-        <div v-if="label" class="form-label" :class="[flexTitle ? '!text-left sm:w-20' : '']">
+        <div v-if="label" class="form-label opacity-75 font-light" :class="[flexTitle ? '!text-left sm:w-20' : '']">
             <span>{{ label }}</span>
             <span v-if="label && required" class="ml-1 text-sm text-danger">*</span>
         </div>
-        <div v-if="file && file.full_url" class="relative group bg-white flex justify-center ease-in-out duration-300 px-6 pt-5 pb-6 rounded-xl">
+        <div v-if="file && file.fullUrl" class="relative group bg-white flex justify-center ease-in-out duration-300 px-6 pt-5 pb-6 rounded-xl">
             <div class="absolute inset-0 hidden group-hover:flex items-center justify-center z-10 ease-in-out duration-300 group gap-5">
                 <label :for="name + '-update-file'" class="btn btn-primary btn-rounded whitespace-nowrap btn-sm">
                     <Icon name="solar:gallery-send-broken" class="h-5 w-5 mr-2" />
@@ -258,7 +255,7 @@ onMounted(async () => {
                     <span>Remove</span>
                 </button>
             </div>
-            <NuxtImg :src="file.full_url" alt="company-logo" class="z-5 w-full h-36 group-hover:blur-md object-contain ease-in-out duration-300" />
+            <NuxtImg :src="file.fullUrl" alt="company-logo" class="z-5 w-full h-36 group-hover:blur-md object-contain ease-in-out duration-300" />
         </div>
         <div v-else-if="uploading" class="bg-white flex justify-center ease-in-out duration-300 px-6 pt-5 pb-6 rounded-xl min-h-36">
             <Icon name="eos-icons:three-dots-loading" class="h-14 w-14" />

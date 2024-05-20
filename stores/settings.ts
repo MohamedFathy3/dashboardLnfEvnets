@@ -1,6 +1,7 @@
 export const useSettingsStore = defineStore('settings', () => {
     const networkId = ref<number>(1);
     const network = ref<Network>();
+    const networks = ref<Network[]>();
     const conference = ref<Conference>();
     // const settings = ref<PublicSetting[]>();
 
@@ -9,6 +10,9 @@ export const useSettingsStore = defineStore('settings', () => {
     };
     const setNetwork = (data?: Network) => {
         network.value = data;
+    };
+    const setNetworks = (data?: Network[]) => {
+        networks.value = data;
     };
     const setNetworkId = (data?: number) => {
         networkId.value = data ? data : 1;
@@ -43,19 +47,19 @@ export const useSettingsStore = defineStore('settings', () => {
             console.error(error);
         }
     };
-    // const getSettings = async () => {
-    //     const {data: res, error} = await useApiFetch(`/api/public-setting`, {
-    //         lazy: true,
-    //         transform: (res) => (res as ApiResponse).data as PublicSetting[]
-    //     });
-    //     if (res.value) {
-    //         setSettings(res.value as PublicSetting[])
-    //     }
-    //     if (error && error.value) {
-    //         setSettings()
-    //         console.error(error)
-    //     }
-    // };
+    const getActiveNetworks = async () => {
+        const { data: res, error } = await useApiFetch(`/api/network-public`, {
+            lazy: true,
+            transform: (res) => (res as ApiResponse).data as Network[],
+        });
+        if (res.value) {
+            setNetworks(res.value as Network[]);
+        }
+        if (error && error.value) {
+            setNetworks();
+            console.error(error);
+        }
+    };
 
     return {
         setConference,
@@ -66,5 +70,8 @@ export const useSettingsStore = defineStore('settings', () => {
         network,
         networkId,
         conference,
+        networks,
+        setNetworks,
+        getActiveNetworks,
     };
 });

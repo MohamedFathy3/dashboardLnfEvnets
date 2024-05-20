@@ -1,14 +1,95 @@
 type ApiResponse = {
-    data: Media | Media[] | PublicSetting | PublicSetting[] | City | City[] | Conference | Conference[] | Role | Role[] | Admin | Admin[] | Network | Network[] | Country | Country[] | Resource | Resource[] | Continent | Continent[];
+    data: ApiResponseData;
     result: string;
     message: string;
-    token: string;
+    token?: string;
     status: number;
+    links?: any;
+    meta?: any;
 };
+
+type VotedMember = {
+    id: number;
+    country: Country;
+    member: Company;
+};
+
+type Company = {
+    id: number;
+    voted: boolean;
+    name: string;
+    email: string;
+    wsaId: string;
+    countryName: string;
+    city: string;
+    state: string | null;
+    typeCompany: string;
+    country: Country;
+    imageUrl: string;
+    totalVotes: number;
+    votingActive: boolean;
+};
+
+type CompanyVoteUpdateBody = {
+    id: number;
+    votingActive: boolean;
+};
+
+type ApiResponseData =
+    | Company
+    | Company[]
+    | User
+    | User[]
+    | Media
+    | Media[]
+    | PublicSetting
+    | PublicSetting[]
+    | City
+    | City[]
+    | Conference
+    | Conference[]
+    | Role
+    | Role[]
+    | Admin
+    | Admin[]
+    | Network
+    | Network[]
+    | Country
+    | Country[]
+    | Resource
+    | Resource[]
+    | Continent
+    | Continent[];
+
 type PublicSetting = {
     id: number;
     name: string;
     value: any;
+};
+type PostServerParams = {
+    filters: Record<string, string | number | undefined>;
+    orderBy: string;
+    orderByDirection: string;
+    perPage: number;
+    paginate: boolean;
+    deleted: boolean;
+};
+type VoteStatisticsApiResponse = {
+    totalVoters: number;
+    totalCountriesWithMembers: number;
+    totalVotes: number;
+    totalVotedMembers: number;
+};
+type InfoBoxType = {
+    title: string;
+    icon: string;
+    value: string | number;
+    description?: string;
+};
+
+type ChartDataValues = {
+    label: string;
+    data: number[];
 };
 type Conference = {
     id: number;
@@ -75,6 +156,7 @@ type Network = {
     orderId: string;
     imageUrl: string;
     image: Media;
+    settings?: NetworkSetting[];
 };
 type Resource = {
     id: number;
@@ -146,4 +228,11 @@ type SideBarMenu = {
     path: string;
     icon: string;
     subMenus: SideBarMenu[];
+};
+
+type NetworkSetting = {
+    id: number;
+    name: string;
+    type: string;
+    value: any | null;
 };

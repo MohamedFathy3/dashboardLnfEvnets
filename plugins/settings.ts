@@ -2,6 +2,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     const settingsStore = useSettingsStore();
     await settingsStore.getCurrentConference();
     await settingsStore.getNetwork();
+    await settingsStore.getActiveNetworks();
 
     const resourceStore = useResourceStore();
     await resourceStore.fetchCountries();

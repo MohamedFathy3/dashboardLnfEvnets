@@ -1,0 +1,47 @@
+<script setup lang="ts">
+const props = defineProps({
+    pending: {
+        type: Boolean,
+        default: true,
+        required: true,
+    },
+    rows: {
+        type: Object as () => ApiResponse,
+        default: () => {},
+        required: true,
+    },
+    page: {
+        type: Number,
+        default: 1,
+        required: true,
+    },
+});
+
+const emit = defineEmits(['change-page']);
+
+function onPageChange(page: number) {
+    emit('change-page', page);
+}
+</script>
+
+<template>
+    <div v-if="!props.pending && props.rows.data" class="flex items-center justify-between gap-5">
+        <button :disabled="props.rows.meta.current_page === 1" class="btn-secondary btn" @click="onPageChange(props.page - 1)">
+            <Icon class="mr-2 w-5 h-5" name="solar:double-alt-arrow-left-line-duotone" />
+            Previous
+        </button>
+        <ul class="flex items-center gap-3">
+            <template v-for="(link, pageIndex) in props.rows.meta.links" :key="pageIndex">
+                <li v-if="pageIndex !== 0 && pageIndex !== props.rows.meta.links.length - 1">
+                    <button :class="[link.active ? 'btn-primary' : 'btn-secondary', 'btn']" :disabled="props.rows.meta.current_page === parseInt(link.label) || link.label === '...'" @click="onPageChange(link.label)">{{ link.label }}</button>
+                </li>
+            </template>
+        </ul>
+        <button :disabled="props.rows.meta.current_page === props.rows.meta.last_page" class="btn-secondary btn" @click="onPageChange(props.page + 1)">
+            Next
+            <Icon class="ml-2 w-5 h-5" name="solar:double-alt-arrow-right-line-duotone" />
+        </button>
+    </div>
+</template>
+
+<style scoped></style>
