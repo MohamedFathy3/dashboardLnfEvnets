@@ -1,7 +1,7 @@
 <template>
-    <div :class="[flexTitle ? 'flex items-center' : '', '']">
-        <label :class="[flexTitle ? 'mr-2' : '']">{{ label }}</label>
-        <div :class="[label && !flexTitle ? 'mt-3' : '']">
+    <div :class="[flexTitle && 'flex items-center']">
+        <label v-if="label" :class="[flexTitle && 'mr-5 !mb-0', 'form-label opacity-75 font-light']">{{ label }}</label>
+        <div :class="[label && (!flexTitle ? 'mt-3' : '')]">
             <div v-if="!multiple" class="form-check form-switch">
                 <input :id="name" v-model="value" :disabled="disabled" class="form-check-input" :type="type" />
                 <label class="form-check-label" :for="name">{{ des }}</label>

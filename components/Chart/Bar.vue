@@ -1,8 +1,11 @@
 <template>
     <div class="p-5 bg-white rounded-2xl">
-        <div class="flex items-center gap-3">
-            <Icon v-if="icon" :name="icon" class="opacity-75 size-5" />
-            <span v-if="sectionHeading" class="font-medium">{{ sectionHeading }}</span>
+        <div class="flex items-center gap-5 justify-between">
+            <div class="flex items-center gap-3">
+                <Icon v-if="icon" :name="icon" class="opacity-75 size-5" />
+                <span v-if="sectionHeading" class="font-medium">{{ sectionHeading }}</span>
+            </div>
+            <div v-if="total" class="px-2 py-0.5 bg-slate-200 rounded-md">{{ currency ? useFormatCurrency(total) : total }} <span v-if="currency" class="text-xs opacity-75 ml-1">USD</span></div>
         </div>
         <div class="mt-5">
             <Bar :data="data" :options="options" class="min-h-64" />
@@ -31,6 +34,14 @@ const props = defineProps({
     chartDataValues: {
         type: Array as () => ChartDataValues[],
         required: true,
+    },
+    total: {
+        type: Number,
+        default: undefined,
+    },
+    currency: {
+        type: Boolean,
+        default: false,
     },
 });
 

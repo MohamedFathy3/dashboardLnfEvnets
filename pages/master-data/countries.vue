@@ -38,6 +38,7 @@ const resetServerParams = async () => {
         orderBy: 'id',
         orderByDirection: 'desc',
         perPage: 25,
+        page: 1,
         paginate: true,
         deleted: false,
     };
@@ -231,7 +232,7 @@ async function deleteItems() {
 async function forceDeleteItems() {
     const confirmed = confirm('Are you sure you want to delete this item?');
     if (confirmed) {
-        const { data, error } = await useApiFetch(`/api/country/forceDelete`, {
+        const { data, error } = await useApiFetch(`/api/country/force-delete`, {
             body: { items: selectedRows.value },
             method: 'DELETE',
             lazy: true,
@@ -264,7 +265,7 @@ async function restoreItems() {
 }
 </script>
 <template>
-    <div class="flex flex-col gap-8">
+    <div v-if="useCheckPermission(['list-country', 'create-country', 'edit-country', 'delete-country', 'restore-country', 'force-delete-country'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">

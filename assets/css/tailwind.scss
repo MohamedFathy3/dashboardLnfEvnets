@@ -13,3 +13,6 @@
   @apply bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-500
 }
 
+.dp__input {
+  @apply form-control form-control-rounded font-normal;
+}

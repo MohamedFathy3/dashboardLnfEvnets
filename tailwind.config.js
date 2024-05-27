@@ -86,6 +86,26 @@ export const theme = {
             script: ['Pacifico', 'handwriting'],
             'script-extra': ['Comforter', 'handwriting'],
         },
+        typography: () => ({
+            DEFAULT: {
+                css: {
+                    ul: {
+                        'margin-top': '0.65rem',
+                    },
+                    ol: {
+                        'margin-top': '0.65rem',
+                    },
+                    hr: {
+                        'margin-top': '0.65rem',
+                        'margin-bottom': '0.65rem',
+                    },
+                    li: {
+                        margin: 0,
+                        p: { margin: 0 },
+                    },
+                },
+            },
+        }),
         colors: {
             rgb: toRGB({
                 inherit: _inherit,
@@ -171,7 +191,7 @@ export const theme = {
         },
     },
 };
-export const plugins = [require('@tailwindcss/forms'), require('tailwind-scrollbar')({ nocompatible: true })];
+export const plugins = [require('@tailwindcss/forms'), require('@tailwindcss/typography'), require('tailwind-scrollbar')({ nocompatible: true })];
 export const variants = {
     extend: {
         boxShadow: ['dark'],

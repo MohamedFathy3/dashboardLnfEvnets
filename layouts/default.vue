@@ -1,5 +1,6 @@
 <template>
     <div class="flex items-start relative gap-5">
+        <ToastList />
         <div :class="[sidebarOpen ? 'w-[290px] sm:shadow-none shadow-md' : 'sm:w-[64]', 'sm:fixed absolute delay-200 ease-in-out duration-500 whitespace-nowrap transform-all sm:z-50 sm:bg-transparent bg-primary']">
             <Sidebar :open="sidebarOpen" class="h-screen duration-300 ease-in-out" @toggle-sidebar="toggleSideBarOpenStatus" />
         </div>

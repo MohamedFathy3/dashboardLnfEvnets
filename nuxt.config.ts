@@ -51,7 +51,20 @@ export default defineNuxtConfig({
         // '/dashboard/**': { ssr: false },
     },
     css: ['@/assets/css/main.scss'],
-    modules: ['nuxt-lodash', '@pinia/nuxt', 'nuxt-icon', '@nuxtjs/eslint-module', '@nuxtjs/color-mode', '@nuxt/image', 'nuxt-swiper', 'nuxt-headlessui', '@morev/vue-transitions/nuxt', 'nuxt-simple-sitemap', '@unlok-co/nuxt-stripe'],
+    modules: [
+        'nuxt-lodash',
+        '@pinia/nuxt',
+        'nuxt-icon',
+        '@nuxtjs/eslint-module',
+        '@nuxtjs/color-mode',
+        '@nuxt/image',
+        'nuxt-swiper',
+        'nuxt-headlessui',
+        '@morev/vue-transitions/nuxt',
+        'nuxt-simple-sitemap',
+        '@unlok-co/nuxt-stripe',
+        'nuxt-tiptap-editor',
+    ],
     image: {
         inject: true,
         quality: 65,
@@ -103,5 +116,8 @@ export default defineNuxtConfig({
         classPrefix: '',
         classSuffix: '',
         storageKey: 'wsa-dashboard-color-mode',
+    },
+    tiptap: {
+        prefix: 'Tiptap',
     },
 });

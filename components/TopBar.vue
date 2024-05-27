@@ -9,10 +9,14 @@ const formatRoutePath = (path: string) => {
         path = path.replace(/^\//, '').replace(/\/$/, '');
         const segments = path.split('/');
         return segments.map((segment, index) => {
-            const name = segment
+            let name = segment
                 .split('-')
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(' ');
+            // Check if the last segment is a number
+            if (index === segments.length - 1 && /^\d+$/.test(segment)) {
+                name = 'View';
+            }
             const url = '/' + segments.slice(0, index + 1).join('/');
             return { name, url };
         });
@@ -34,7 +38,7 @@ async function logout() {
 
 <template>
     <div class="flex items-center gap-5 justify-end lg:justify-between py-3 text-white/75 pl-5">
-        <ul class="lg:flex hidden items-center font-light gap-2 text-sm">
+        <ul class="lg:flex hidden items-center font-light gap-2 text-xs">
             <li class="flex items-center gap-2 intro-x">
                 <Icon class="size-4 opacity-50" name="solar:double-alt-arrow-right-line-duotone" />
                 <NuxtLink :to="route.fullPath === '/' ? '' : '/'" class="flex items-center gap-2">

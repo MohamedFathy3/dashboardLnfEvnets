@@ -3,7 +3,6 @@
 <template>
     <NuxtLayout>
         <div>
-            <ToastList />
             <NuxtLoadingIndicator :duration="5000" :height="4" :throttle="0" class="z-[9999]" color="rgb(255 255 80)" />
             <NuxtPage />
         </div>

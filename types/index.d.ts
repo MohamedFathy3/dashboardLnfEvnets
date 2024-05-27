@@ -28,6 +28,66 @@ type Company = {
     imageUrl: string;
     totalVotes: number;
     votingActive: boolean;
+
+    ref: Admin | null;
+    detectedCountryName: string | null;
+    detectedCountry: string | Country;
+    unhashedPassword: string;
+    addressLine1: string;
+    addressLine2: string | null;
+    mapLong: string;
+    mapLat: string;
+    slogan: string | null;
+    postalCode: string | null;
+    companyEmail: string;
+    phone: string;
+    phoneKeyId: number;
+    phoneKey: string;
+    fax: string;
+    faxKeyId: number;
+    faxKey: string;
+    website: string;
+    profile: string | null;
+    branches: string | null;
+    businessEst: string;
+    employeesNum: string;
+    refValue: string | null;
+    otherCertificates: string | null;
+    otherServices: string | null;
+    tosAcceptance: true;
+    referralId: number;
+    countryId: number;
+    image: Media;
+    contactPersons: ContactPerson[];
+    tradeReferences: [];
+    services: number[];
+    certificates: number[];
+    networks: MemberNetwork[];
+    currentNetworkStatus: MemberNetwork;
+    pendingNetworkStatus: MemberNetwork[];
+};
+
+type ContactPerson = {
+    id: number;
+    userId: number;
+    title: string;
+    name: string;
+    email: string;
+    birthDate: string | null;
+    phone: string;
+    phoneKeyId: number;
+    phoneKey: string;
+    cell: string;
+    cellKeyId: number;
+    cellKey: string;
+    company: Company;
+    jobTitle: string;
+    imageUrl: string;
+    image: Media;
+    deleted: boolean;
+    deletedAt: string | null;
+    createdAt: string;
+    updatedAt: string;
 };
 
 type CompanyVoteUpdateBody = {
@@ -38,12 +98,16 @@ type CompanyVoteUpdateBody = {
 type ApiResponseData =
     | Company
     | Company[]
+    | Visit
+    | Visit[]
     | User
     | User[]
     | Media
     | Media[]
     | PublicSetting
     | PublicSetting[]
+    | InfoBoxType
+    | InfoBoxType[]
     | City
     | City[]
     | Conference
@@ -66,6 +130,19 @@ type PublicSetting = {
     name: string;
     value: any;
 };
+
+type ConferenceStatisticsBox = {
+    totalAmount: number;
+    totalApprovedDelegates: number;
+    totalBookedRooms: number;
+    totalRegisteredCompanies: number;
+};
+type NetworkStatisticsBox = {
+    totalApproved: number;
+    totalBlacklisted: number;
+    totalSuspended: number;
+    totalCountriesWithMembers: number;
+};
 type PostServerParams = {
     filters: Record<string, string | number | undefined>;
     orderBy: string;
@@ -84,7 +161,13 @@ type InfoBoxType = {
     title: string;
     icon: string;
     value: string | number;
-    description?: string;
+    description?: string | undefined;
+};
+type MemberInfoBoxType = {
+    title: string;
+    icon: string;
+    value: string | number | boolean;
+    description?: string | undefined;
 };
 
 type ChartDataValues = {
@@ -118,11 +201,16 @@ type Conference = {
     duration: string[];
     isPast: boolean;
     logoUrl: string;
-    logo: Media; // Adjust the type according to your actual data type
+    logo: Media;
     logoDarkUrl: string;
-    logoDark: Media; // Adjust the type according to your actual data type
+    logoDark: Media;
     deleted: boolean;
     deletedAt: string | null;
+};
+
+type Visit = {
+    country: Country;
+    count: number;
 };
 type Media = {
     id: number;
@@ -158,6 +246,42 @@ type Network = {
     image: Media;
     settings?: NetworkSetting[];
 };
+type MemberNetwork = {
+    id: number;
+    networkId?: number;
+    name: string;
+    slug: string;
+    domain: string;
+    active: boolean;
+    collection: boolean;
+    orderId: string;
+    imageUrl: string;
+    image: Media;
+    fpp: boolean;
+    network: boolean;
+    status: string;
+    type: string;
+    startDate: string | null;
+    expireDate: string | null;
+    createdAt: string;
+    startDateFormatted: string | null;
+    expireDateFormatted: string | null;
+    createdAtFormatted: string | null;
+    createdSince: string | null;
+    expireDaysLeft: string | null;
+    expireSoon: boolean;
+    expired: boolean;
+};
+type MemberNetworkForm = {
+    networkId: number;
+    active: boolean;
+    fpp: boolean;
+    network: boolean;
+    status: string;
+    type: string;
+    startDate: string | null;
+    expireDate: string | null;
+};
 type Resource = {
     id: number;
     active: boolean;
@@ -187,10 +311,11 @@ type Admin = {
     role: Role;
 };
 type ToastItem = {
-    title: string | null | undefined;
-    message: string | null | undefined;
-    type: string | null | undefined;
-    duration: number | null | undefined;
+    title: string | undefined;
+    message: string | undefined;
+    type: string | undefined;
+    key?: symbol;
+    duration: number | undefined;
 };
 
 type Country = {
@@ -227,6 +352,7 @@ type SideBarMenu = {
     name: string;
     path: string;
     icon: string;
+    permissions: string[];
     subMenus: SideBarMenu[];
 };
 

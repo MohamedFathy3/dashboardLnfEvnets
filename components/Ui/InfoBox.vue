@@ -9,8 +9,8 @@ defineProps({
 
 <template>
     <div v-if="data && data.length > 0" class="lg:col-span-12 grid lg:grid-cols-12 gap-5">
-        <div v-for="(item, i) in data" :key="i" class="xl:col-span-3 lg:col-span-6 border bg-white rounded-2xl p-5 text-sm">
-            <div class="flex items-center gap-3">
+        <div v-for="(item, i) in data" :key="i" class="xl:col-span-3 lg:col-span-6 border bg-white rounded-2xl p-5 text-sm intro-x">
+            <div class="flex items-center gap-3 whitespace-nowrap">
                 <Icon :name="item.icon" class="size-5 opacity-65" />
                 <div>{{ item.title }}</div>
             </div>

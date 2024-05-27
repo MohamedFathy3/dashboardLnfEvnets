@@ -14,7 +14,8 @@ async function login() {
 }
 </script>
 <template>
-    <div class="container">
+    <div class="container relative">
+        <ToastList />
         <div class="w-full min-h-screen p-5 md:p-20 flex items-center justify-center">
             <div class="w-96 intro-y">
                 <WSANetworkLogo alt="WSA Consol Dashboard" class="w-64 text-white mx-auto" />

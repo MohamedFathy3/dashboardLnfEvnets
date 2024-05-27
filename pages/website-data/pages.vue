@@ -35,6 +35,7 @@ const resetServerParams = async () => {
         orderBy: 'id',
         orderByDirection: 'desc',
         perPage: 5,
+        page: 1,
         paginate: true,
         deleted: false,
     };
@@ -228,7 +229,7 @@ async function deleteItems() {
 async function forceDeleteItems() {
     const confirmed = confirm('Are you sure you want to delete this item?');
     if (confirmed) {
-        const { data, error } = await useApiFetch(`/api/page/forceDelete`, {
+        const { data, error } = await useApiFetch(`/api/page/force-delete`, {
             body: { items: selectedRows.value },
             method: 'DELETE',
             lazy: true,

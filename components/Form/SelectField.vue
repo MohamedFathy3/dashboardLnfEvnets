@@ -128,6 +128,7 @@ watchEffect(() => {
                 :readonly="readonly"
                 :placeholder="placeholder"
                 :required="required"
+                :autofocus="autofocus"
                 :name="name"
                 :is-rounded-image="isRoundedImage"
                 :clearable="clearable"
@@ -151,12 +152,14 @@ watchEffect(() => {
                     </div>
                 </template>
                 <template #selected-option="{ name, key, imageUrl, title }">
-                    <div :class="[icon ? 'pl-5' : '', 'flex items-center whitespace-nowrap truncate text-sm']">
-                        <img v-if="$attrs.imgvalue" :class="[isRoundedImage ? 'rounded-full w-5 h-5' : 'rounded-sm w-6 h-4', 'mr-2 object-cover']" :src="imageUrl" :alt="name" :title="name" />
-                        <div v-if="prefix" class="truncate">{{ prefix }}</div>
-                        <div v-if="$attrs.labelvalue === 'name'" class="truncate font-light">{{ name }}</div>
-                        <div v-if="$attrs.labelvalue === 'title'" class="truncate font-light">{{ title }}</div>
-                        <div v-if="$attrs.labelvalue === 'key'" class="truncate">{{ key }}</div>
+                    <div>
+                        <div :class="[icon ? 'pl-5' : '', 'flex items-center whitespace-nowrap truncate text-sm']">
+                            <img v-if="$attrs.imgvalue" :class="[isRoundedImage ? 'rounded-full w-5 h-5' : 'rounded-sm w-6 h-4', 'mr-2 object-cover']" :src="imageUrl" :alt="name" :title="name" />
+                            <div v-if="prefix" class="truncate">{{ prefix }}</div>
+                            <div v-if="$attrs.labelvalue === 'name'" class="truncate font-normal opacity-75">{{ name }}</div>
+                            <div v-if="$attrs.labelvalue === 'title'" class="truncate font-normal opacity-75">{{ title }}</div>
+                            <div v-if="$attrs.labelvalue === 'key'" class="truncate font-normal opacity-75">{{ key }}</div>
+                        </div>
                     </div>
                 </template>
                 <template #search="{ attributes, events }">
@@ -164,7 +167,12 @@ watchEffect(() => {
                         <Icon :name="icon" class="h-5 w-5 text-slate-400 dark:text-slate-600" />
                     </div>
                     <label :for="name" class="sr-only">{{ label }}</label>
-                    <input :id="name" :class="[icon ? 'pl-10' : 'pl-4', errors.length > 0 ? 'border !border-danger' : '', 'vs__search form-control form-control-rounded dark:placeholder:!text-slate-400']" v-bind="attributes" v-on="events" />
+                    <input
+                        :id="name"
+                        :class="[icon ? 'pl-10' : 'pl-4', errors.length > 0 ? 'border !border-danger' : '', 'vs__search form-control form-control-rounded placeholder:font-light dark:placeholder:!text-slate-400']"
+                        v-bind="attributes"
+                        v-on="events"
+                    />
                 </template>
             </VueSelect>
         </div>

@@ -36,7 +36,7 @@ function closeModal() {
                             leave-from="opacity-100 scale-100"
                             leave-to="opacity-0 scale-95"
                         >
-                            <HeadlessDialogPanel :class="['max-w-' + size]" as="div" class="grow transform rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all dark:bg-slate-900">
+                            <HeadlessDialogPanel :class="['max-w-' + size]" as="form" class="grow transform rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all dark:bg-slate-900">
                                 <HeadlessDialogTitle v-if="$slots.header" as="div" class="border-b border-slate-100 pb-5 text-lg font-medium leading-6 dark:border-slate-800">
                                     <slot name="header" />
                                 </HeadlessDialogTitle>

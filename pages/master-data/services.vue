@@ -13,7 +13,6 @@ const sortByList = ref([
 const filter = ref({
     name: null,
 });
-const resources = useResourceStore();
 
 const serverParams = ref({
     filters: {},
@@ -36,6 +35,7 @@ const resetServerParams = async () => {
         orderBy: 'id',
         orderByDirection: 'desc',
         perPage: 25,
+        page: 1,
         paginate: true,
         deleted: false,
     };
@@ -220,7 +220,7 @@ async function deleteItems() {
 async function forceDeleteItems() {
     const confirmed = confirm('Are you sure you want to delete this item?');
     if (confirmed) {
-        const { data, error } = await useApiFetch(`/api/service/forceDelete`, {
+        const { data, error } = await useApiFetch(`/api/service/force-delete`, {
             body: { items: selectedRows.value },
             method: 'DELETE',
             lazy: true,

@@ -115,7 +115,7 @@ const isSelected = (id) => {
     return selectedRows.value.some((r) => r === id);
 };
 const allSelected = computed(() => {
-    return rows?.value?.data.every((row) => selectedRows.value.includes(row.id));
+    return rows?.value?.data?.every((row) => selectedRows.value.includes(row.id));
 });
 const selectAllRows = () => {
     const allSelected = rows.value.data.every((row) => isSelected(row.id));
@@ -324,7 +324,7 @@ async function deleteItems() {
 async function forceDeleteItems() {
     const confirmed = confirm('Are you sure you want to delete this item?');
     if (confirmed) {
-        const { data, error } = await useApiFetch(`/api/page-section/forceDelete`, {
+        const { data, error } = await useApiFetch(`/api/page-section/force-delete`, {
             body: { items: selectedRows.value },
             method: 'DELETE',
             lazy: true,

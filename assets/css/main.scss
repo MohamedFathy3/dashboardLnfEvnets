@@ -7,6 +7,10 @@ body {
   @apply m-0 overflow-x-hidden antialiased;
 }
 
+.dp__input {
+  @apply form-control form-control-rounded dark:text-white text-slate-600 font-medium
+}
+
 //html {
 //  @apply scrollbar-thumb-primary scrollbar-track-primary/25,
 //}
@@ -103,7 +107,7 @@ body {
 }
 
 .data-box {
-  @apply relative rounded-2xl bg-white dark:bg-slate-900 shadow-sm rounded-lg border border-slate-200/75 duration-300 ease-in-out hover:scale-105 dark:border-slate-900;
+  @apply relative rounded-2xl bg-white dark:bg-slate-900 shadow-sm border border-slate-200/75 duration-300 ease-in-out hover:scale-105 dark:border-slate-900;
 }
 
 .hero-divider {
@@ -174,9 +178,7 @@ input[type=number]::-webkit-outer-spin-button {
   @apply mt-3 rounded-xl p-5 box bg-opacity-75 dark:bg-opacity-15 shadow-none text-sm
 }
 
-.dp__input {
-  @apply form-control form-control-rounded dark:text-white text-slate-600 font-medium
-}
+
 
 .dp__range_start {
   @apply rounded-l-full
@@ -216,16 +218,17 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 
+
 .vs__dropdown-menu {
-  @apply absolute z-40 mt-4 p-3 max-h-52 w-full overflow-x-hidden overflow-y-auto bg-white dark:bg-slate-800 rounded-xl shadow-lg border;
+  @apply absolute z-50 mt-4 p-3 max-h-52 w-full overflow-x-hidden overflow-y-auto bg-white dark:bg-slate-800 rounded-xl shadow-lg border;
 }
 
 .vs__selected-options {
-  @apply border-0 grow inset-0;
+  @apply relative border-0 grow inset-0 flex items-center gap-3 flex-wrap;
 }
 
-.vs__selected {
-  @apply absolute py-1.5 mx-5 inset-0 mr-14 flex items-center space-x-2;
+.vs__selected-options .vs__selected {
+  @apply absolute py-1.5 mx-5 inset-0 mr-14 flex items-center gap-3 ;
 }
 
 .vs--multiple .vs__deselect {
@@ -242,7 +245,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .vs--multiple .vs__selected-options {
-  @apply flex items-center gap-3;
+  @apply flex flex-wrap items-center gap-3;
 }
 
 .vs__actions {

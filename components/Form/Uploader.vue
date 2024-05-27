@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 const props = defineProps({
     label: {
         type: String,
@@ -46,12 +46,12 @@ const types = {
     document: ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf'],
     archive: ['application/zip', 'application/x-7z-compressed', 'application/gzip', 'application/vnd.rar'],
 };
-function getSubtypes(category: string): string[] {
-    const subtypes: string[] = [];
-    const categoryTypes = (types as Record<string, string[]>)[category];
+function getSubtypes(category) {
+    const subtypes = [];
+    const categoryTypes = types[category];
 
     if (categoryTypes) {
-        categoryTypes.forEach((type: string) => {
+        categoryTypes.forEach((type) => {
             const typeRegex = /\/(.+)$/;
             const match = type.match(typeRegex);
             if (match) {
@@ -68,7 +68,7 @@ function resetErrors() {
     maxFileTypeMessage.value = false;
     validationError.value = false;
 }
-function validateFile($event: DragEvent | InputEvent) {
+function validateFile($event) {
     const fileInput = $event instanceof DragEvent ? $event.dataTransfer?.files?.[0] : $event.target instanceof HTMLInputElement ? $event.target.files?.[0] : undefined;
     resetErrors();
 
@@ -86,7 +86,7 @@ function validateFile($event: DragEvent | InputEvent) {
 
     // Check file type
     const isValidType = props.allowedTypes.some((category) => {
-        const categoryTypes = types[category as keyof typeof types];
+        const categoryTypes = types[category];
         return categoryTypes && categoryTypes.includes(fileInput?.type || '');
     });
 
@@ -98,41 +98,14 @@ function validateFile($event: DragEvent | InputEvent) {
     return isValid;
 }
 
-// function determineFileType(fileType: string) {
-//     // Map the given file type to the corresponding category
-//     for (const [category, categoryTypes] of Object.entries(types)) {
-//         if (categoryTypes.includes(fileType)) {
-//             return category;
-//         }
-//     }
-//     return null; // Default to null if the type doesn't match any category
-// }
-
-type UploadResponse = {
-    data: Media;
-    message: string;
-    status: string;
-};
-
-type Media = {
-    id: number;
-    name: string;
-    mimeType: string;
-    size: number;
-    authorId: number;
-    previewUrl: string;
-    fullUrl: string;
-    createdAt: string;
-};
-
 const emit = defineEmits(['update:model-value']);
 const dragging = ref(false);
 const uploading = ref(false);
 
-const file: Ref<null | UploadResponse | Media | undefined> = ref();
-const value: Ref<null | number | undefined> = ref(props.modelValue ? props.modelValue.id : null);
+const file = ref();
+const value = ref(props.modelValue ? props.modelValue.id : null);
 
-async function onDropFile($event: DragEvent) {
+async function onDropFile($event) {
     if (!validateFile($event)) {
         validationError.value = true;
         dragging.value = false;
@@ -152,8 +125,8 @@ async function onDropFile($event: DragEvent) {
         });
 
         if (data && data.value) {
-            file.value = data.value as UploadResponse;
-            value.value = (data.value as UploadResponse).id;
+            file.value = data.value;
+            value.value = data.value.id;
             emit('update:model-value', value.value);
             uploading.value = false;
             dragging.value = false;
@@ -161,7 +134,7 @@ async function onDropFile($event: DragEvent) {
     }
 }
 
-async function onUploadFile($event: InputEvent): Promise<void> {
+async function onUploadFile($event) {
     if (!validateFile($event)) {
         validationError.value = true;
         return;
@@ -169,7 +142,7 @@ async function onUploadFile($event: InputEvent): Promise<void> {
     resetErrors();
     uploading.value = true;
 
-    const fileInput = $event.target as HTMLInputElement;
+    const fileInput = $event.target;
     const formData = new FormData();
 
     if (fileInput.files && fileInput.files[0]) {
@@ -186,8 +159,8 @@ async function onUploadFile($event: InputEvent): Promise<void> {
     });
 
     if (data && data.value) {
-        file.value = (data.value as UploadResponse).data;
-        value.value = (data.value as UploadResponse).data.id;
+        file.value = data.value.data;
+        value.value = data.value.data.id;
         emit('update:model-value', value.value);
         uploading.value = false;
     }
@@ -197,11 +170,11 @@ watchEffect(() => {
     value.value = props.modelValue ? props.modelValue.id : null;
 });
 
-async function getFile(id: number) {
+async function getFile(id) {
     uploading.value = true;
     const { data } = await useApiFetch(`/api/get-media/${id}`);
-    if (data && (data.value as UploadResponse).data) {
-        file.value = (data.value as UploadResponse).data;
+    if (data && data.value.data) {
+        file.value = data.value.data;
         uploading.value = false;
     }
 }
@@ -225,7 +198,10 @@ function removeFile() {
     uploading.value = false;
 }
 
+const isLoading = ref(true);
+
 onMounted(async () => {
+    isLoading.value = true;
     if (value.value) {
         await getFile(value.value);
     }
@@ -235,6 +211,7 @@ onMounted(async () => {
             getSubtypes(type);
         }
     });
+    isLoading.value = false;
 });
 </script>
 <template>
@@ -243,15 +220,15 @@ onMounted(async () => {
             <span>{{ label }}</span>
             <span v-if="label && required" class="ml-1 text-sm text-danger">*</span>
         </div>
-        <div v-if="file && file.fullUrl" class="relative group bg-white flex justify-center ease-in-out duration-300 px-6 pt-5 pb-6 rounded-xl">
-            <div class="absolute inset-0 hidden group-hover:flex items-center justify-center z-10 ease-in-out duration-300 group gap-5">
-                <label :for="name + '-update-file'" class="btn btn-primary btn-rounded whitespace-nowrap btn-sm">
-                    <Icon name="solar:gallery-send-broken" class="h-5 w-5 mr-2" />
+        <div v-if="file && file.fullUrl" class="relative border-dashed border group bg-white flex justify-center ease-in-out duration-300 px-6 pt-5 pb-6 rounded-xl">
+            <div class="absolute inset-0 hidden group-hover:flex group-hover:flex-col items-center justify-center z-10 ease-in-out duration-300 group gap-5">
+                <label :for="name + '-update-file'" class="btn btn-primary btn-sm btn-rounded whitespace-nowrap btn-sm">
+                    <Icon name="solar:gallery-send-broken" class="h-4 w-4 mr-2" />
                     <span class="font-semibold">Update Image</span>
                     <input :id="name + '-update-file'" :name="name + '-update-file'" type="file" class="sr-only" @change="onUploadFile" />
                 </label>
-                <button type="button" class="btn btn-danger btn-rounded group btn-sm" @click="removeFile">
-                    <Icon name="clarity:close-line" class="mr-2 w-5 h-5" />
+                <button type="button" class="btn btn-danger btn-sm btn-rounded group btn-sm" @click="removeFile">
+                    <Icon name="clarity:close-line" class="mr-2 w-4 h-4" />
                     <span>Remove</span>
                 </button>
             </div>
@@ -280,7 +257,7 @@ onMounted(async () => {
                     <div class="text-xs text-slate-400 text-center">
                         <span v-for="(allowedType, index) in props.allowedTypes" :key="index" class="">
                             <template v-for="(mimeType, mimeIndex) in getSubtypes(allowedType)" :key="mimeIndex">
-                                <span class="uppercase font-semibold">{{ mimeType }}{{ mimeIndex < getSubtypes(allowedType).length - 1 ? ', ' : '' }}</span>
+                                <span class="uppercase font-light">{{ mimeType }}{{ mimeIndex < getSubtypes(allowedType).length - 1 ? ', ' : '' }}</span>
                             </template>
                             {{ index < props.allowedTypes.length - 1 ? ', ' : '' }}
                         </span>

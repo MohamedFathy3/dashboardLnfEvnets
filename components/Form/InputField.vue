@@ -93,12 +93,12 @@ watchEffect(() => {
 
 <template>
     <div class="text-base" :class="[flexTitle && 'form-inline']">
-        <label v-if="label" :for="name" class="form-label opacity-75 font-light" :class="[flexTitle ? '!text-left sm:w-20' : '']">
+        <label v-if="label" :for="name" class="form-label opacity-75 font-light" :class="[flexTitle && '!text-left sm:w-20']">
             <span>{{ label }}</span>
             <span v-if="label && required" class="ml-1 text-sm text-danger">*</span>
         </label>
         <template v-if="type !== 'textarea'">
-            <div class="grow" :class="[icon ? 'relative' : '']">
+            <div class="grow" :class="[icon && 'relative']">
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                     <Icon :name="icon" class="h-5 w-5 text-slate-400 dark:text-slate-600" />
                 </div>
@@ -118,7 +118,7 @@ watchEffect(() => {
                     :disabled="disabled"
                 />
             </div>
-            <div v-if="description" class="form-help" v-html="description" />
+            <div v-if="description" class="form-help px-3 opacity-75" v-html="description" />
             <template v-if="errors.length > 0">
                 <ul class="mt-1">
                     <li v-for="(error, errorIndex) in errors" :key="errorIndex" class="text-sm text-danger">{{ error.$message }}</li>

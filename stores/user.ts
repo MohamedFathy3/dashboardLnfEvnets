@@ -18,8 +18,9 @@ export const useUserStore = defineStore('user', () => {
             navigateTo('/');
             useToast({ title: 'Welcome', message: 'Logged in Successfully', type: 'success', duration: 5000 });
         }
-        if (error && error.value) {
-            console.error(error);
+        if (error.value) {
+            const message = error.value.data.message;
+            useToast({ title: 'Error', message: message, type: 'error', duration: 5000 });
         }
     };
 
@@ -39,7 +40,7 @@ export const useUserStore = defineStore('user', () => {
     };
 
     const logout = async () => {
-        await useApiFetch('/api/admin-logout');
+        await useApiFetch('/api/admin-logout', { method: 'POST' });
         setToken();
         setUser();
         navigateTo('/login');
