@@ -11,8 +11,8 @@ const props = defineProps({
         default: null,
     },
     memberId: {
-        required: true,
         type: Number,
+        default: null,
     },
     open: {
         required: false,
