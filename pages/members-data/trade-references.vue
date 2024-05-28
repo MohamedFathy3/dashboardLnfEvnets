@@ -9,6 +9,7 @@ const sortByList = ref([
 ]);
 const filter = ref({
     name: null,
+    countryId: null,
 });
 
 const serverParams = ref({
@@ -26,6 +27,7 @@ const editMode = ref(false);
 const resetServerParams = async () => {
     filter.value = {
         name: null,
+        countryId: null,
     };
     serverParams.value = {
         filters: {},
@@ -104,17 +106,17 @@ const toggleRowSelection = (id) => {
         selectedRows.value.splice(index, 1);
     }
 };
-const selectedIndex = ref(null);
+const selectedId = ref(null);
 
 async function closeModal() {
     isOpen.value = false;
-    selectedIndex.value = null;
+    selectedId.value = null;
 }
 
 async function openModal(index) {
     formLoading.value = true;
     if (index) {
-        selectedIndex.value = index;
+        selectedId.value = index;
     }
     isOpen.value = true;
     formLoading.value = false;
@@ -173,6 +175,7 @@ async function restoreItems() {
         }
     }
 }
+const resources = useResourceStore();
 </script>
 <template>
     <div class="flex flex-col gap-8">
@@ -209,11 +212,12 @@ async function restoreItems() {
         </div>
         <!-- Filter & Search -->
         <div class="grid lg:grid-cols-12 gap-5 items-center p-5 bg-white border rounded-2xl">
-            <FormInputField v-model="filter.name" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Name" />
-            <FormSelectField v-model="serverParams.orderBy" :clearable="false" class="xl:col-span-4 lg:col-span-4" labelvalue="name" keyvalue="value" placeholder="Sort Direction" :select-data="sortByList" />
+            <FormInputField v-model="filter.name" rounded class="xl:col-span-6 lg:col-span-6" placeholder="Name" />
+            <FormSelectField v-model="filter.countryId" labelvalue="name" keyvalue="id" imgvalue="imageUrl" :select-data="resources.countries" class="xl:col-span-6 lg:col-span-6" name="reference-country" placeholder="Country" />
+            <FormSelectField v-model="serverParams.orderBy" :clearable="false" class="xl:col-span-6 lg:col-span-6" labelvalue="name" keyvalue="value" placeholder="Sort Direction" :select-data="sortByList" />
             <FormSelectField
                 v-model="serverParams.orderByDirection"
-                class="xl:col-span-4 lg:col-span-4"
+                class="xl:col-span-6 lg:col-span-6"
                 :clearable="false"
                 labelvalue="name"
                 keyvalue="value"
@@ -247,7 +251,7 @@ async function restoreItems() {
             </thead>
             <tbody>
                 <template v-if="!pending && rows">
-                    <tr v-for="(row, index) in rows.data" :key="row.id" class="text-sm">
+                    <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
                         </td>
@@ -274,7 +278,7 @@ async function restoreItems() {
                         <td v-if="serverParams.deleted" class="text-sm">{{ row.deletedAt }}</td>
                         <td class="text-right">
                             <div>
-                                <button :disabled="serverParams.deleted" class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(index)">
+                                <button :disabled="serverParams.deleted" class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
                                     <Icon name="solar:eye-outline" class="size-4" />
                                     View
                                 </button>
@@ -293,6 +297,6 @@ async function restoreItems() {
         </table>
         <!-- Pagination -->
         <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
-        <MemberViewTradeReferenceModal v-if="isOpen" :open="isOpen" :reference="rows.data[selectedIndex]" @close="closeModal" />
+        <MemberViewTradeReferenceModal v-if="isOpen" :open="isOpen" :reference-id="selectedId" @close="closeModal" />
     </div>
 </template>

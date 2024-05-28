@@ -144,7 +144,13 @@ watchEffect(() => {
             >
                 <template #option="option">
                     <div class="text-sm group flex items-center py-1.5 hover:bg-primary rounded-full px-4 ease-in-out duration-100 cursor-pointer first:border-t-0 last:border-b-0 truncate border-y border-dashed border-slate-100">
-                        <img v-if="$attrs.imgvalue" :class="[isRoundedImage ? 'rounded-full w-5 h-5' : 'rounded-sm w-6 h-4', 'mr-2 object-cover']" :src="option[$attrs.imgvalue]" :alt="option[$attrs.labelvalue]" :title="option[$attrs.labelvalue]" />
+                        <NuxtImg
+                            v-if="$attrs.imgvalue"
+                            :class="[isRoundedImage ? 'rounded-full w-5 h-5' : 'rounded-sm w-6 h-4', 'mr-2 object-contain bg-white shrink-0']"
+                            :src="option[$attrs.imgvalue]"
+                            :alt="option[$attrs.labelvalue]"
+                            :title="option[$attrs.labelvalue]"
+                        />
                         <span v-if="prefix !== null || prefix !== ''" class="group-hover:text-slate-100">{{ prefix }}</span>
                         <span class="group-hover:text-slate-100">{{ option[$attrs.labelvalue] }}</span>
                         <span v-if="$attrs.secondlabelvalue" class="font-light ml-0.5 group-hover:text-slate-100 opacity-75">, {{ option[$attrs.secondlabelvalue] }}</span>
@@ -153,8 +159,8 @@ watchEffect(() => {
                 </template>
                 <template #selected-option="{ name, key, imageUrl, title }">
                     <div>
-                        <div :class="[icon ? 'pl-5' : '', 'flex items-center whitespace-nowrap truncate text-sm']">
-                            <img v-if="$attrs.imgvalue" :class="[isRoundedImage ? 'rounded-full w-5 h-5' : 'rounded-sm w-6 h-4', 'mr-2 object-cover']" :src="imageUrl" :alt="name" :title="name" />
+                        <div :class="[icon && 'pl-5', 'flex items-center whitespace-nowrap truncate text-sm']">
+                            <NuxtImg v-if="$attrs.imgvalue" :class="[isRoundedImage ? 'rounded-full w-5 h-5' : 'rounded-sm w-6 h-4', ' mr-2 object-contain bg-white shrink-0']" :src="imageUrl" :alt="name" :title="name" />
                             <div v-if="prefix" class="truncate">{{ prefix }}</div>
                             <div v-if="$attrs.labelvalue === 'name'" class="truncate font-normal opacity-75">{{ name }}</div>
                             <div v-if="$attrs.labelvalue === 'title'" class="truncate font-normal opacity-75">{{ title }}</div>

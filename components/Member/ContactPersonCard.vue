@@ -40,8 +40,8 @@ function closeModal() {
             <li v-for="person in props.contactPersons" :key="person.id" class="flex items-center gap-3 bg-white rounded-xl p-3 shadow-sm cursor-pointer hover:scale-105 transition-all" @click="openModal(person.id)">
                 <NuxtImg :src="person.imageUrl" :title="person.name" :alt="person.name" class="size-10 shrink-0 rounded-full object-cover ring-2 ring-slate-500/25" />
                 <div>
-                    <div class="font-medium opacity-85">{{ person.name }}</div>
-                    <div class="font-light mt-0.5 text-xs">{{ person.jobTitle }}</div>
+                    <div class="font-medium opacity-85 line-clamp-1">{{ person.name }}</div>
+                    <div class="font-light mt-0.5 text-xs line-clamp-1">{{ person.jobTitle }}</div>
                 </div>
             </li>
         </ul>

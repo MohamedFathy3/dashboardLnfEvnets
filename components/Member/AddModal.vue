@@ -412,14 +412,14 @@ const companyTypes = ref([
                                         placeholder="Email"
                                         type="email"
                                     />
-                                    <FormInputField
+                                    <FormDatePicker
                                         v-model="contactPerson.birthDate"
+                                        :time-picker="false"
+                                        placeholder="Birth Date"
                                         :errors="v$.contactPersons[index].birthDate.$errors"
-                                        name="contact-person-birthdate"
                                         class="lg:col-span-6"
                                         label="Birth Date"
-                                        placeholder="Birth Date"
-                                        type="date"
+                                        name="contact-person-birthdate"
                                     />
                                 </div>
                             </template>
@@ -503,9 +503,11 @@ const companyTypes = ref([
                                 </div>
                             </fieldset>
                         </div>
-                        <div v-if="checkSlugs(item.services, resources.services, 'others')" class="sm:col-span-12">
-                            <FormInputField v-model="item.otherServices" :errors="v$.otherServices.$errors" class="col-span-12 lg:col-span-6" label="Services" name="company-email" placeholder="Services" />
-                        </div>
+                        <TransitionExpand>
+                            <div v-if="checkSlugs(item.services, resources.services, 'others')" class="sm:col-span-12">
+                                <FormInputField v-model="item.otherServices" :errors="v$.otherServices.$errors" class="col-span-12 lg:col-span-6" label="Services" name="company-email" placeholder="Services" />
+                            </div>
+                        </TransitionExpand>
                     </div>
                 </div>
                 <div class="mt-6">
@@ -535,9 +537,11 @@ const companyTypes = ref([
                                 </div>
                             </fieldset>
                         </div>
-                        <div v-if="checkSlugs(item.certificates, resources.certificates, 'others')" class="sm:col-span-12">
-                            <FormInputField v-model="item.otherCertificates" :errors="v$.otherCertificates.$errors" class="col-span-12 lg:col-span-6" label="Certificates" name="company-email" placeholder="Certificates" />
-                        </div>
+                        <TransitionExpand>
+                            <div v-if="checkSlugs(item.certificates, resources.certificates, 'others')" class="sm:col-span-12">
+                                <FormInputField v-model="item.otherCertificates" :errors="v$.otherCertificates.$errors" class="col-span-12 lg:col-span-6" label="Certificates" name="company-email" placeholder="Certificates" />
+                            </div>
+                        </TransitionExpand>
                     </div>
                 </div>
                 <div class="mt-6">

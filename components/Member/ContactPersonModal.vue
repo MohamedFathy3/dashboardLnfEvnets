@@ -36,6 +36,7 @@ const item = ref({
 const rules = ref({
     id: {},
     title: { required },
+    userId: { required },
     image: {},
     name: { required },
     email: { required },
@@ -109,6 +110,13 @@ async function addItem() {
         useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
     }
 }
+const { data: activeMembers } = await useApiFetch(`/api/get/member`, {
+    method: 'POST',
+    body: {
+        type: 'all',
+    },
+    lazy: true,
+});
 async function handleModalSubmit() {
     formLoading.value = true;
     const result = await v$.value.$validate();
@@ -166,7 +174,21 @@ onMounted(async () => {
                     <FormInputField v-model="item.name" :errors="v$.name.$errors" class="lg:col-span-8" label="Name" name="name" placeholder="Name" />
                     <FormInputField v-model="item.jobTitle" :errors="v$.jobTitle.$errors" class="lg:col-span-6" label="Job Title" name="job-title" placeholder="Job Title" />
                     <FormDatePicker v-model="item.birthDate" :time-picker="false" :errors="v$.birthDate.$errors" class="lg:col-span-6" label="Birth Date" name="birth-date" />
-                    <FormInputField v-model="item.email" :errors="v$.email.$errors" class="lg:col-span-12" label="Email" name="email" placeholder="Email" />
+                    <FormInputField v-model="item.email" :errors="v$.email.$errors" class="lg:col-span-6" label="Email" name="email" placeholder="Email" />
+                    <FormSelectField
+                        v-model="item.userId"
+                        :errors="v$.userId.$errors"
+                        labelvalue="name"
+                        secondlabelvalue="countryName"
+                        thirdlabelvalue="city"
+                        imgvalue="imageUrl"
+                        keyvalue="id"
+                        :select-data="activeMembers.data"
+                        class="lg:col-span-6"
+                        name="member"
+                        placeholder="Member"
+                        label="Member"
+                    />
                 </div>
                 <FormSelectField
                     v-model="item.phoneKeyId"

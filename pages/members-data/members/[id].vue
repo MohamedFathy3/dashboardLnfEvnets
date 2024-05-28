@@ -68,22 +68,35 @@ const sendResetPasswordEmail = async () => {
                         <Icon name="solar:pen-new-round-outline" class="size-5 opacity-75" />
                         <span>Update Member</span>
                     </button>
-                    <button class="btn btn-dark btn-rounded px-6 btn-sm gap-5 lg:w-fit w-full lg:mt-0 mt-5" type="button" @click="openNetworkModal">
-                        <Icon name="solar:add-circle-linear" class="size-5 opacity-75" />
-                        <span>Add Network</span>
-                    </button>
-                    <button class="btn btn-dark btn-rounded px-6 btn-sm gap-5 lg:w-fit w-full lg:mt-0 mt-5" type="button" @click="sendWelcomeEmail">
-                        <span class="flex items-center text-white">
-                            <Icon name="solar:streets-navigation-linear" class="w-4 h-4 mr-2" />
-                            Send Welcome Email
-                        </span>
-                    </button>
-                    <button class="btn btn-dark btn-rounded px-6 btn-sm gap-5 lg:w-fit w-full lg:mt-0 mt-5" type="button" @click="sendResetPasswordEmail">
-                        <span class="flex items-center text-white">
-                            <Icon name="solar:password-minimalistic-input-broken" class="w-4 h-4 mr-2" />
-                            Reset Password
-                        </span>
-                    </button>
+                    <HeadlessMenu as="div" class="relative inline-block">
+                        <HeadlessMenuButton>
+                            <Icon class="size-6 opacity-75 hover:scale-105 transition-all" name="solar:hamburger-menu-outline" />
+                        </HeadlessMenuButton>
+                        <TransitionExpand>
+                            <HeadlessMenuItems as="div" class="absolute text-sm right-0 mt-3 w-56 origin-top-right rounded-xl bg-white shadow-lg ring-1 ring-black/5 focus:outline-none text-slate-600 z-50">
+                                <ul class="p-1">
+                                    <HeadlessMenuItem as="li" class="py-0.5" @click="openNetworkModal">
+                                        <div class="flex items-center gap-3 px-2 py-1.5 cursor-pointer hover:bg-slate-100 rounded-full transition-all">
+                                            <Icon name="solar:add-circle-linear" class="size-5 opacity-75" />
+                                            <span>Add Network</span>
+                                        </div>
+                                    </HeadlessMenuItem>
+                                    <HeadlessMenuItem as="li" class="py-0.5" @click="sendWelcomeEmail">
+                                        <div class="flex items-center gap-3 px-2 py-1.5 cursor-pointer hover:bg-slate-100 rounded-full transition-all">
+                                            <Icon name="solar:streets-navigation-linear" class="size-5 opacity-75" />
+                                            <span>Send Welcome Email</span>
+                                        </div>
+                                    </HeadlessMenuItem>
+                                    <HeadlessMenuItem as="li" class="py-0.5" @click="sendResetPasswordEmail">
+                                        <div class="flex items-center gap-3 px-2 py-1.5 cursor-pointer hover:bg-slate-100 rounded-full transition-all">
+                                            <Icon name="solar:password-minimalistic-input-broken" class="size-5 opacity-75" />
+                                            <span>Reset Password</span>
+                                        </div>
+                                    </HeadlessMenuItem>
+                                </ul>
+                            </HeadlessMenuItems>
+                        </TransitionExpand>
+                    </HeadlessMenu>
                 </div>
             </div>
         </div>
@@ -94,15 +107,15 @@ const sendResetPasswordEmail = async () => {
                 </div>
                 <div class="bg-white shadow-sm p-5 rounded-xl lg:col-span-8">
                     <div class="font-medium text-base opacity-75">
-                        <div>{{ company.name }}</div>
+                        <div class="line-clamp-1">{{ company.name }}</div>
                         <div class="font-light text-sm mt-0.5 lowercase hover:text-warning cursor-pointer transition-all" @click="useClipboard(company.email.toLowerCase())">{{ company.email.toLowerCase() }}</div>
                     </div>
                     <div class="border-t mt-1.5 pt-1.5 border-dashed">
-                        <div class="flex items-center">
+                        <div class="flex items-center line-clamp-1 whitespace-nowrap">
                             <NuxtImg :src="company.country.imageUrl" :alt="company.country.name" :title="company.country.name" class="w-6 h-4 mr-2 object-contain" />
                             <div v-if="company.country" class="font-medium opacity-75">{{ company.country.name }}</div>
-                            <div v-if="company.state" class="opacity-75">, {{ company.state }}</div>
-                            <div v-if="company.city" class="opacity-75">, {{ company.city }}</div>
+                            <div v-if="company.state" class="opacity-75 truncate">, {{ company.state }}</div>
+                            <div v-if="company.city" class="opacity-75 truncate">, {{ company.city }}</div>
                         </div>
                         <div class="mt-1.5 pt-1.5 border-t border-dashed opacity-75">
                             <span v-if="company.addressLine1">{{ company.addressLine1 }}</span>
@@ -259,6 +272,12 @@ const sendResetPasswordEmail = async () => {
                         </div>
                     </div>
                 </div>
+                <div class="lg:col-span-12">
+                    <MemberServicesCard :services="company.services" :extra="company.otherServices" />
+                </div>
+                <div class="lg:col-span-12">
+                    <MemberCertificatesCard :certificates="company.certificates" :extra="company.otherCertificates" />
+                </div>
             </div>
             <div class="lg:col-span-4 flex flex-col gap-5">
                 <!-- Networks Details -->
@@ -274,8 +293,6 @@ const sendResetPasswordEmail = async () => {
                 </div>
                 <MemberExtraInfoCard :member="company" />
                 <MemberContactPersonCard :contact-persons="company.contactPersons" :member-id="company.id" @refresh="refresh" />
-                <MemberServicesCard :services="company.services" />
-                <MemberCertificatesCard :certificates="company.certificates" />
                 <MemberTradeReferancesCard :trade-references="company.tradeReferences" />
             </div>
         </div>

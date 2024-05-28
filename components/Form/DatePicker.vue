@@ -95,7 +95,7 @@ watchEffect(() => {
                     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         <Icon :name="icon" class="h-5 w-5 text-slate-400 dark:text-slate-600" />
                     </div>
-                    <input class="form-control-rounded form-control form-control placeholder:!text-slate-400 font-light pl-10" type="text" :value="value" />
+                    <input :placeholder="placeholder" class="form-control-rounded form-control form-control placeholder:!text-slate-400 font-normal pl-10" type="text" :value="value" />
                 </div>
             </template>
         </VueDatePicker>

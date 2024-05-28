@@ -9,6 +9,7 @@ const sortByList = ref([
 ]);
 const filter = ref({
     name: null,
+    email: null,
 });
 
 const serverParams = ref({
@@ -22,10 +23,10 @@ const serverParams = ref({
 });
 const formLoading = ref(false);
 const isOpen = ref(false);
-const editMode = ref(false);
 const resetServerParams = async () => {
     filter.value = {
         name: null,
+        email: null,
     };
     serverParams.value = {
         filters: {},

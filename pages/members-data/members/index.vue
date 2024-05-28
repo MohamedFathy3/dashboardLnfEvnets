@@ -159,14 +159,6 @@ const toggleRowSelection = (id) => {
         selectedRows.value.splice(index, 1);
     }
 };
-async function closeModal() {
-    isOpen.value = false;
-}
-async function openModal() {
-    formLoading.value = true;
-    isOpen.value = true;
-    formLoading.value = false;
-}
 
 async function deleteItems() {
     const confirmed = confirm('Are you sure you want to delete this item?');
@@ -258,10 +250,6 @@ async function prepareInfoBoxes() {
 onMounted(() => {
     prepareInfoBoxes();
 });
-const viewMember = async (value) => {
-    console.log(value);
-    navigateTo('/members-data/members/' + value);
-};
 </script>
 <template>
     <div class="flex flex-col gap-8">
@@ -286,10 +274,6 @@ const viewMember = async (value) => {
                         Restore Items
                     </button>
                 </template>
-                <button :disabled="serverParams.deleted" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
-                    <Icon name="solar:add-square-linear" class="size-5 opacity-75" />
-                    Add New
-                </button>
                 <button class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
                     <Icon :name="serverParams.deleted ? 'solar:hamburger-menu-line-duotone' : 'solar:trash-bin-minimalistic-line-duotone'" class="size-5 opacity-75" />
                     {{ serverParams.deleted ? 'Active Members List' : 'Deleted Members' }}
@@ -303,7 +287,6 @@ const viewMember = async (value) => {
             <FormInputField v-model="filter.name" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Company Name" />
             <FormInputField v-model="filter.wsaId" rounded class="xl:col-span-4 lg:col-span-4" placeholder="WSA ID" type="number" />
             <FormInputField v-model="filter.email" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Login Email" />
-
             <TransitionExpand>
                 <div v-if="showFilter" class="lg:col-span-12 grid lg:grid-cols-12 gap-5 items-center">
                     <FormInputField v-model="filter.companyEmail" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Company Email" />
@@ -440,7 +423,6 @@ const viewMember = async (value) => {
                     />
                 </div>
             </TransitionExpand>
-
             <button class="xl:col-span-4 lg:col-span-4 btn btn-rounded btn-sm btn-primary gap-3 w-full" @click="refresh">
                 <Icon name="solar:rounded-magnifer-line-duotone" class="size-5 shrink-0" />
                 Filter
@@ -540,6 +522,5 @@ const viewMember = async (value) => {
         </div>
         <!-- Pagination -->
         <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
-        <MemberAddModal v-if="isOpen" :open="isOpen" @close="closeModal" @success="viewMember" />
     </div>
 </template>
