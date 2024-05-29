@@ -370,8 +370,8 @@ async function restoreItems() {
             </template>
             <template #content>
                 <div class="grid lg:grid-cols-12 gap-5 items-start">
-                    <FormInputField v-model="item.name" :errors="v$.name.$errors" class="lg:col-span-12" label="Name" name="name" placeholder="Name" />
-                    <FormInputField v-model="item.orderId" :errors="v$.orderId.$errors" class="lg:col-span-12" label="Order" name="order-id" placeholder="Order Number" />
+                    <FormInputField v-model="item.name" :errors="v$.name.$errors" class="lg:col-span-6" label="Name" name="name" placeholder="Name" />
+                    <FormInputField v-model="item.orderId" :errors="v$.orderId.$errors" class="lg:col-span-6" label="Order" name="order-id" placeholder="Order Number" />
                 </div>
             </template>
             <template #footer>
