@@ -1,12 +1,18 @@
 export default defineNuxtPlugin(async (nuxtApp) => {
-    const settingsStore = useSettingsStore();
-    await settingsStore.getCurrentConference();
-    await settingsStore.getNetwork();
-    await settingsStore.getActiveNetworks();
+    const settings = useSettingsStore();
+    if (settings.conferenceId) {
+        await settings.getConference(Number(settings.conferenceId));
+    } else {
+        await settings.getCurrentConference();
+    }
+    await settings.getAllConference();
+    await settings.getNetwork();
+    await settings.getActiveNetworks();
 
-    const resourceStore = useResourceStore();
-    await resourceStore.fetchCountries();
-    await resourceStore.fetchCertificates();
-    await resourceStore.fetchServices();
-    await resourceStore.fetchReferrals();
+    const resources = useResourceStore();
+    await resources.fetchCountries();
+    await resources.fetchCities();
+    await resources.fetchCertificates();
+    await resources.fetchServices();
+    await resources.fetchReferrals();
 });

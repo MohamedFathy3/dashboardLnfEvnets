@@ -47,7 +47,15 @@ const props = defineProps({
         type: String,
         default: 'solar:calendar-linear',
     },
+    format: {
+        type: String,
+        default: null,
+    },
     required: {
+        type: Boolean,
+        default: false,
+    },
+    range: {
         type: Boolean,
         default: false,
     },
@@ -80,11 +88,12 @@ watchEffect(() => {
             :teleport="true"
             :enable-time-picker="timePicker"
             :auto-apply="true"
-            :format="timePicker ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'"
-            :model-type="timePicker ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'"
+            :format="format ? format : timePicker ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'"
+            :model-type="format ? format : timePicker ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'"
             :autocomplete="autocomplete"
             :placeholder="placeholder"
             :name="name"
+            :range="range"
             class="form-control form-control-rounded"
             :readonly="readonly"
             :disabled="disabled"

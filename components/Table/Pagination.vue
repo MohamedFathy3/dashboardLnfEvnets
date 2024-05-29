@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 const props = defineProps({
     pending: {
         type: Boolean,
@@ -6,7 +6,7 @@ const props = defineProps({
         required: true,
     },
     rows: {
-        type: Object as () => ApiResponse,
+        type: Object,
         default: () => {},
         required: true,
     },
@@ -19,7 +19,7 @@ const props = defineProps({
 
 const emit = defineEmits(['change-page']);
 
-function onPageChange(page: number) {
+function onPageChange(page) {
     emit('change-page', page);
 }
 </script>

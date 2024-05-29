@@ -1,11 +1,15 @@
 export const useResourceStore = defineStore('resource', () => {
     const countries = ref<Country[]>();
+    const cities = ref<City[]>();
     const certificates = ref<Resource[]>();
     const services = ref<Resource[]>();
     const referrals = ref<Resource[]>();
 
     const setCountries = (data?: Country[]) => {
         countries.value = data;
+    };
+    const setCities = (data?: City[]) => {
+        cities.value = data;
     };
     const setCertificates = (data?: Resource[]) => {
         certificates.value = data;
@@ -27,6 +31,19 @@ export const useResourceStore = defineStore('resource', () => {
         }
         if (error && error.value) {
             setCountries();
+            console.error(error);
+        }
+    };
+    const fetchCities = async () => {
+        const { data: res, error } = await useApiFetch(`/api/city-public`, {
+            lazy: true,
+            transform: (res) => (res as ApiResponse).data as City[],
+        });
+        if (res.value) {
+            setCities(res.value as City[]);
+        }
+        if (error && error.value) {
+            setCities();
             console.error(error);
         }
     };
@@ -83,5 +100,8 @@ export const useResourceStore = defineStore('resource', () => {
         referrals,
         setReferrals,
         fetchReferrals,
+        cities,
+        fetchCities,
+        setCities,
     };
 });
