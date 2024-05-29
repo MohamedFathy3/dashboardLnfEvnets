@@ -1,8 +1,8 @@
 module.exports = {
     apps: [
         {
-        name: 'WSAEvents',
-        port: '4224',
+        name: 'WSADashboard',
+        port: '3018',
         exec_mode: 'cluster',
         instances: 'max',
         script: './.output/server/index.mjs',
