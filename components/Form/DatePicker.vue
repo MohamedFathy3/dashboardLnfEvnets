@@ -117,7 +117,9 @@ watchEffect(() => {
     </div>
 </template>
 <style lang="scss">
-.has-error >>> .dp__input {
-    @apply border-danger;
+.has-error > {
+    .dp__input {
+        @apply border-danger;
+    }
 }
 </style>

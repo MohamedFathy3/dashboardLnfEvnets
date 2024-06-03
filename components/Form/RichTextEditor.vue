@@ -69,75 +69,75 @@ onBeforeUnmount(() => {
         </label>
         <div class="rounded-xl border bg-slate-50">
             <div v-if="editor" class="p-2 flex items-center gap-1.5 flex-wrap">
-                <button class="editor-button" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }" @click="editor.chain().focus().toggleBold().run()">
+                <button type="button" class="editor-button" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }" @click="editor.chain().focus().toggleBold().run()">
                     <Icon name="oui:editor-bold" class="size-5" />
                 </button>
-                <button class="editor-button" :disabled="!editor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }" @click="editor.chain().focus().toggleItalic().run()">
+                <button type="button" class="editor-button" :disabled="!editor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }" @click="editor.chain().focus().toggleItalic().run()">
                     <Icon name="oui:editor-italic" class="size-5" />
                 </button>
-                <button class="editor-button" :disabled="!editor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }" @click="editor.chain().focus().toggleStrike().run()">
+                <button type="button" class="editor-button" :disabled="!editor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }" @click="editor.chain().focus().toggleStrike().run()">
                     <Icon name="oui:editor-strike" class="size-5" />
                 </button>
-                <button class="editor-button" :disabled="!editor.can().chain().focus().toggleUnderline().run()" :class="{ 'is-active': editor.isActive('underline') }" @click="editor.chain().focus().toggleUnderline().run()">
+                <button type="button" class="editor-button" :disabled="!editor.can().chain().focus().toggleUnderline().run()" :class="{ 'is-active': editor.isActive('underline') }" @click="editor.chain().focus().toggleUnderline().run()">
                     <Icon name="oui:editor-underline" class="size-5" />
                 </button>
-                <button class="editor-button" :disabled="!editor.can().chain().focus().toggleCode().run()" :class="{ 'is-active': editor.isActive('code') }" @click="editor.chain().focus().toggleCode().run()">
+                <button type="button" class="editor-button" :disabled="!editor.can().chain().focus().toggleCode().run()" :class="{ 'is-active': editor.isActive('code') }" @click="editor.chain().focus().toggleCode().run()">
                     <Icon name="oui:editor-code-block" class="size-5" />
                 </button>
-                <!--            <button class="editor-button" @click="editor.chain().focus().unsetAllMarks().run()">clear marks</button>-->
-                <!--            <button class="editor-button" @click="editor.chain().focus().clearNodes().run()">clear nodes</button>-->
-                <!--            <button class="editor-button" :class="{ 'is-active': editor.isActive('paragraph') }" @click="editor.chain().focus().setParagraph().run()">-->
+                <!--            <button type="button" class="editor-button" @click="editor.chain().focus().unsetAllMarks().run()">clear marks</button>-->
+                <!--            <button type="button" class="editor-button" @click="editor.chain().focus().clearNodes().run()">clear nodes</button>-->
+                <!--            <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('paragraph') }" @click="editor.chain().focus().setParagraph().run()">-->
                 <!--                <Icon name="oui:token-parameter" class="size-5" />-->
                 <!--            </button>-->
-                <button class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()">h1</button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()">h2</button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()">h3</button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }" @click="editor.chain().focus().toggleHeading({ level: 4 }).run()">h4</button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }" @click="editor.chain().focus().toggleHeading({ level: 5 }).run()">h5</button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }" @click="editor.chain().focus().toggleHeading({ level: 6 }).run()">h6</button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }" @click="editor.chain().focus().setTextAlign('left').run()">
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()">h1</button>
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()">h2</button>
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()">h3</button>
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }" @click="editor.chain().focus().toggleHeading({ level: 4 }).run()">h4</button>
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }" @click="editor.chain().focus().toggleHeading({ level: 5 }).run()">h5</button>
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }" @click="editor.chain().focus().toggleHeading({ level: 6 }).run()">h6</button>
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }" @click="editor.chain().focus().setTextAlign('left').run()">
                     <Icon name="oui:editor-align-left" class="size-5" />
                 </button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }" @click="editor.chain().focus().setTextAlign('center').run()">
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }" @click="editor.chain().focus().setTextAlign('center').run()">
                     <Icon name="oui:editor-align-center" class="size-5" />
                 </button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }" @click="editor.chain().focus().setTextAlign('right').run()">
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }" @click="editor.chain().focus().setTextAlign('right').run()">
                     <Icon name="oui:editor-align-right" class="size-5" />
                 </button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }" @click="editor.chain().focus().setTextAlign('justify').run()">
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }" @click="editor.chain().focus().setTextAlign('justify').run()">
                     <Icon name="solar:hamburger-menu-outline" class="size-5" />
                 </button>
-                <button class="editor-button" @click="editor.chain().focus().unsetTextAlign().run()">
+                <button type="button" class="editor-button" @click="editor.chain().focus().unsetTextAlign().run()">
                     <Icon name="solar:list-cross-minimalistic-bold" class="size-5" />
                 </button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive('link') }" @click="setLink">
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('link') }" @click="setLink">
                     <Icon name="solar:link-bold" class="size-5" />
                 </button>
-                <button class="editor-button" :disabled="!editor.isActive('link')" @click="editor.chain().focus().unsetLink().run()">
+                <button type="button" class="editor-button" :disabled="!editor.isActive('link')" @click="editor.chain().focus().unsetLink().run()">
                     <Icon name="solar:link-broken-linear" class="size-5" />
                 </button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive('bulletList') }" @click="editor.chain().focus().toggleBulletList().run()">
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('bulletList') }" @click="editor.chain().focus().toggleBulletList().run()">
                     <Icon name="oui:editor-unordered-list" class="size-5" />
                 </button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive('orderedList') }" @click="editor.chain().focus().toggleOrderedList().run()">
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('orderedList') }" @click="editor.chain().focus().toggleOrderedList().run()">
                     <Icon name="oui:editor-ordered-list" class="size-5" />
                 </button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive('codeBlock') }" @click="editor.chain().focus().toggleCodeBlock().run()">
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('codeBlock') }" @click="editor.chain().focus().toggleCodeBlock().run()">
                     <Icon name="oui:editor-code-block" class="size-5" />
                 </button>
-                <button class="editor-button" :class="{ 'is-active': editor.isActive('blockquote') }" @click="editor.chain().focus().toggleBlockquote().run()">
+                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('blockquote') }" @click="editor.chain().focus().toggleBlockquote().run()">
                     <Icon name="oui:quote" class="size-5" />
                 </button>
-                <button class="editor-button" @click="editor.chain().focus().setHorizontalRule().run()">
+                <button type="button" class="editor-button" @click="editor.chain().focus().setHorizontalRule().run()">
                     <Icon name="octicon:horizontal-rule-24" class="size-5" />
                 </button>
-                <button class="editor-button" @click="editor.chain().focus().setHardBreak().run()">
+                <button type="button" class="editor-button" @click="editor.chain().focus().setHardBreak().run()">
                     <Icon name="carbon:text-new-line" class="size-5" />
                 </button>
-                <button class="editor-button" :disabled="!editor.can().chain().focus().undo().run()" @click="editor.chain().focus().undo().run()">
+                <button type="button" class="editor-button" :disabled="!editor.can().chain().focus().undo().run()" @click="editor.chain().focus().undo().run()">
                     <Icon name="oui:editor-undo" class="size-5" />
                 </button>
-                <button class="editor-button" :disabled="!editor.can().chain().focus().redo().run()" @click="editor.chain().focus().redo().run()">
+                <button type="button" class="editor-button" :disabled="!editor.can().chain().focus().redo().run()" @click="editor.chain().focus().redo().run()">
                     <Icon name="oui:editor-redo" class="size-5" />
                 </button>
             </div>

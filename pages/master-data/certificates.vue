@@ -325,7 +325,7 @@ async function restoreItems() {
             </thead>
             <tbody>
                 <template v-if="!pending && rows">
-                    <tr v-for="row in rows.data" :key="row.id">
+                    <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
                         </td>

@@ -494,7 +494,7 @@ async function restoreItems() {
                     <FormInputField v-model="item.urlText" :errors="v$.urlText.$errors" class="lg:col-span-6" label="Url Text" name="url-text" placeholder="Url Text" />
                     <FormInputField v-model="item.urlPath" :errors="v$.urlPath.$errors" class="lg:col-span-6" label="Url Link" name="url-link" placeholder="Url Link" />
                     <FormInputField v-model="item.shortDes" :errors="v$.shortDes.$errors" class="lg:col-span-12" label="Short Description" name="short-description" placeholder="Short Description" type="textarea" />
-                    <FormRichTextEditor v-model="item.des" :errors="v$.des.$errors" label="Description" class="col-span-12" />
+                    <FormRichTextEditor v-model="item.des" :errors="v$.des.$errors" label="Description" class="lg:col-span-12" />
                     <div class="lg:col-span-12 grid lg:grid-cols-12 gap-5 px-5 pb-5 pt-3 rounded-xl border">
                         <div class="lg:col-span-12 flex flex-col border-b border-dashed pb-3">
                             <div class="flex items-center gap-3">

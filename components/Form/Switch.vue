@@ -4,7 +4,7 @@
         <div :class="[label && (!flexTitle ? 'mt-3' : '')]">
             <div v-if="!multiple" class="form-check form-switch">
                 <input :id="name" v-model="value" :disabled="disabled" class="form-check-input" :type="type" />
-                <label class="form-check-label" :for="name">{{ des }}</label>
+                <label class="form-check-label text-xs font-light" :for="name">{{ des }}</label>
             </div>
             <div v-else-if="multiple" class="grid gap-3 xl:grid-cols-3 md:grid-cols-2 grid-cols-1">
                 <div v-for="item in selectData" :id="item[$attrs.keyvalue]" :key="item[$attrs.keyvalue]" class="form-check form-switch">

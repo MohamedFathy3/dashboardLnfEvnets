@@ -26,6 +26,31 @@ const serverParams = ref({
 const formLoading = ref(false);
 const isOpen = ref(false);
 const editMode = ref(false);
+
+const {
+    data: rows,
+    pending,
+    refresh,
+} = await useApiFetch('/api/time-slot/index', {
+    method: 'POST',
+    body: serverParams,
+    lazy: true,
+});
+const { data: days, refresh: refreshDays } = await useApiFetch('/api/event-day/index', {
+    method: 'POST',
+    body: {
+        orderBy: 'name',
+        orderByDirection: 'asc',
+        paginate: false,
+    },
+    lazy: true,
+});
+
+const refreshAllData = async () => {
+    await refresh();
+    await refreshDays();
+};
+
 const resetServerParams = async () => {
     filter.value = {
         note: null,
@@ -39,31 +64,10 @@ const resetServerParams = async () => {
         paginate: true,
     };
     selectedRows.value = [];
+    await refreshDays();
     await refresh();
 };
-const {
-    data: rows,
-    pending,
-    refresh,
-} = await useApiFetch('/api/time-slot/index', {
-    method: 'POST',
-    body: serverParams,
-    lazy: true,
-});
-const { data: days, refreshDays } = await useApiFetch('/api/event-day/index', {
-    method: 'POST',
-    body: {
-        orderBy: 'name',
-        orderByDirection: 'asc',
-        paginate: false,
-    },
-    lazy: true,
-});
 
-async function refreshAllData() {
-    await refresh();
-    await refreshDays();
-}
 watch(
     filter,
     (newVal) => {
