@@ -456,15 +456,15 @@ const removeFeatureRow = (index) => {
                         <FormUploader v-model="item.gallery" :errors="v$.gallery.$errors" label="Gallery" name="gallery" />
                     </div>
                     <div class="lg:col-span-8 grid grid-cols-12 gap-5">
-                        <FormInputField v-model="item.name" :errors="v$.name.$errors" class="col-span-12" label="Name" :name="'name-' + item.id" placeholder="Name" />
-                        <FormInputField v-model="item.description" :errors="v$.description.$errors" class="col-span-12" label="Description" :name="'description-' + item.id" placeholder="Description" type="textarea" />
-                        <FormInputField v-model="item.price" :errors="v$.price.$errors" class="col-span-12" label="Price" :name="'price-' + item.id" placeholder="Price" type="number" />
-                        <FormInputField v-model="item.count" :errors="v$.count.$errors" class="col-span-12" label="Count" :name="'count-' + item.id" placeholder="Count" type="number" />
-                        <FormInputField v-model="item.delegatesCount" :errors="v$.delegatesCount.$errors" class="col-span-12" label="Persons Count" :name="'delegates-count-' + item.id" placeholder="Persons Count" type="number" />
-                        <FormSelectField v-model="item.type" labelvalue="name" keyvalue="id" :select-data="types" class="col-span-12 sm:col-span-6" label="Type" :name="'type-' + item.id" placeholder="Type" />
-                        <FormInputField v-model="item.orderId" type="number" :errors="v$.orderId.$errors" class="col-span-12 sm:col-span-6" label="Position" :name="'order-' + item.id" placeholder="Position" />
-                        <FormSwitch v-model="item.publicShow" :name="'public-show-' + item.id" :errors="v$.publicShow.$errors" class="col-span-12 sm:col-span-6" label="Show in Hotel Page" />
-                        <FormSwitch v-model="item.active" :name="'active-' + item.id" :errors="v$.active.$errors" class="col-span-12 sm:col-span-6" label="Active" />
+                        <FormInputField v-model="item.name" :errors="v$.name.$errors" class="col-span-12" label="Name" :name="'name'" placeholder="Name" />
+                        <FormInputField v-model="item.description" :errors="v$.description.$errors" class="col-span-12" label="Description" :name="'description'" placeholder="Description" type="textarea" />
+                        <FormInputField v-model="item.price" :errors="v$.price.$errors" class="col-span-12" label="Price" :name="'price'" placeholder="Price" type="number" />
+                        <FormInputField v-model="item.count" :errors="v$.count.$errors" class="col-span-12" label="Count" :name="'count'" placeholder="Count" type="number" />
+                        <FormInputField v-model="item.delegatesCount" :errors="v$.delegatesCount.$errors" class="col-span-12" label="Persons Count" :name="'delegates-count'" placeholder="Persons Count" type="number" />
+                        <FormSelectField v-model="item.type" labelvalue="name" keyvalue="id" :select-data="types" class="col-span-12 sm:col-span-6" label="Type" :name="'type'" placeholder="Type" />
+                        <FormInputField v-model="item.orderId" type="number" :errors="v$.orderId.$errors" class="col-span-12 sm:col-span-6" label="Position" :name="'order'" placeholder="Position" />
+                        <FormSwitch v-model="item.publicShow" :name="'public-show'" :errors="v$.publicShow.$errors" class="col-span-12 sm:col-span-6" label="Show in Hotel Page" />
+                        <FormSwitch v-model="item.active" :name="'active'" :errors="v$.active.$errors" class="col-span-12 sm:col-span-6" label="Active" />
                         <div class="lg:col-span-12 pt-5 border-t border-dashed mt-3">
                             <div class="form-label opacity-75">Room Features</div>
                             <div class="bg-white rounded-xl border p-5 mt-2">
