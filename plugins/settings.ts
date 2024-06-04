@@ -15,4 +15,5 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     await resources.fetchCertificates();
     await resources.fetchServices();
     await resources.fetchReferrals();
+    await resources.fetchDietaries();
 });

@@ -2,6 +2,7 @@ export const useResourceStore = defineStore('resource', () => {
     const countries = ref<Country[]>();
     const cities = ref<City[]>();
     const certificates = ref<Resource[]>();
+    const dietaries = ref<Resource[]>();
     const services = ref<Resource[]>();
     const referrals = ref<Resource[]>();
 
@@ -20,7 +21,9 @@ export const useResourceStore = defineStore('resource', () => {
     const setReferrals = (data?: Resource[]) => {
         referrals.value = data;
     };
-
+    const setDietaries = (data?: Resource[]) => {
+        dietaries.value = data;
+    };
     const fetchCountries = async () => {
         const { data: res, error } = await useApiFetch(`/api/country-public`, {
             lazy: true,
@@ -86,6 +89,19 @@ export const useResourceStore = defineStore('resource', () => {
             console.error(error);
         }
     };
+    const fetchDietaries = async () => {
+        const { data: res, error } = await useApiFetch(`/api/dietary-public`, {
+            lazy: true,
+            transform: (res) => (res as ApiResponse).data as Resource[],
+        });
+        if (res.value) {
+            setDietaries(res.value as Resource[]);
+        }
+        if (error && error.value) {
+            setDietaries();
+            console.error(error);
+        }
+    };
 
     return {
         countries,
@@ -103,5 +119,8 @@ export const useResourceStore = defineStore('resource', () => {
         cities,
         fetchCities,
         setCities,
+        dietaries,
+        setDietaries,
+        fetchDietaries,
     };
 });
