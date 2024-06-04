@@ -120,6 +120,7 @@ const item = ref({
     duration: null,
     logo: null,
     logoDark: null,
+    logoMobile: null,
     earlyBirdActive: false,
     earlyBirdEndDate: null,
     regDeadlineDate: null,
@@ -144,6 +145,7 @@ const rules = ref({
     duration: { required },
     logo: { required },
     logoDark: { required },
+    logoMobile: { required },
     earlyBirdActive: { required },
     earlyBirdEndDate: { required },
     regDeadlineDate: { required },
@@ -181,6 +183,7 @@ const resetItemValues = async () => {
         duration: null,
         logo: null,
         logoDark: null,
+        logoMobile: null,
         earlyBirdActive: false,
         earlyBirdEndDate: null,
         regDeadlineDate: null,
@@ -460,8 +463,9 @@ const formatDate = (dateStr) => {
             <template #content>
                 <div class="grid lg:grid-cols-12 gap-5 items-start">
                     <div class="lg:col-span-4">
-                        <FormUploader v-model="item.logo" :errors="v$.logo.$errors" :allowed-types="['image', 'svg']" label="Logo" name="image" />
-                        <FormUploader v-model="item.logoDark" :errors="v$.logoDark.$errors" :allowed-types="['image', 'svg']" label="Logo-dark" name="image" />
+                        <FormUploader v-model="item.logo" :errors="v$.logo.$errors" :allowed-types="['image', 'svg']" label="Logo" name="logo" />
+                        <FormUploader v-model="item.logoDark" :errors="v$.logoDark.$errors" :allowed-types="['image', 'svg']" label="Logo-dark" name="logo-dark" />
+                        <FormUploader v-model="item.logoMobile" :errors="v$.logoMobile.$errors" :allowed-types="['image', 'svg']" label="Logo-mobile" name="logo-mobile" />
                     </div>
                     <div class="lg:col-span-8 grid lg:grid-cols-12 gap-5 items-center">
                         <FormInputField v-model="item.name" :errors="v$.name.$errors" class="lg:col-span-12" label="Name" name="name" placeholder="Name" />
