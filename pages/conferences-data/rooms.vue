@@ -432,7 +432,7 @@ const removeFeatureRow = (index) => {
                 </template>
                 <template v-else>
                     <tr v-for="i in serverParams.perPage" :key="i">
-                        <td colspan="5">
+                        <td colspan="7">
                             <div class="h-12 !opacity-50 animate-pulse" />
                         </td>
                     </tr>
