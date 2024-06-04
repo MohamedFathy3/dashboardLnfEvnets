@@ -4,12 +4,12 @@
     <NuxtLayout>
         <div>
             <NuxtLoadingIndicator :duration="5000" :height="4" :throttle="0" class="z-[9999]" color="rgb(255 255 80)" />
-            <NuxtPage />
+            <LazyNuxtPage />
         </div>
     </NuxtLayout>
 </template>
 
-<style>
+<style lang="scss">
 .page-enter-active,
 .page-leave-active {
     transition: all 0.4s;
