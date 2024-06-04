@@ -33,9 +33,6 @@ export default defineNuxtConfig({
     site: {
         url: process.env.APP_URL ?? 'https://events-nuxt.test:4224',
     },
-    sitemap: {
-        exclude: ['/dashboard/**'],
-    },
     nitro: {
         routeRules: {
             '/backend/**': {
@@ -51,20 +48,7 @@ export default defineNuxtConfig({
         // '/dashboard/**': { ssr: false },
     },
     css: ['@/assets/css/main.scss'],
-    modules: [
-        'nuxt-lodash',
-        '@pinia/nuxt',
-        'nuxt-icon',
-        '@nuxtjs/eslint-module',
-        '@nuxtjs/color-mode',
-        '@nuxt/image',
-        'nuxt-swiper',
-        'nuxt-headlessui',
-        '@morev/vue-transitions/nuxt',
-        'nuxt-simple-sitemap',
-        '@unlok-co/nuxt-stripe',
-        'nuxt-tiptap-editor',
-    ],
+    modules: ['nuxt-lodash', '@pinia/nuxt', 'nuxt-icon', '@nuxtjs/eslint-module', '@nuxtjs/color-mode', '@nuxt/image', 'nuxt-swiper', 'nuxt-headlessui', '@morev/vue-transitions/nuxt', '@unlok-co/nuxt-stripe', 'nuxt-tiptap-editor'],
     image: {
         inject: true,
         quality: 65,
