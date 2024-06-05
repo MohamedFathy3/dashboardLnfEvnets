@@ -345,6 +345,13 @@ const menuItems = ref([
                 subMenus: [],
             },
             {
+                name: 'Privacy Policy',
+                path: '/conferences-page/privacy-policy',
+                icon: 'solar:notification-unread-lines-linear',
+                permission: ['list-conference-page', 'edit-conference-page'],
+                subMenus: [],
+            },
+            {
                 name: 'Login Page',
                 path: '/conferences-page/login',
                 icon: 'solar:login-3-line-duotone',

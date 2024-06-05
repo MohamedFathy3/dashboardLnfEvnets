@@ -16,8 +16,8 @@ const filter = ref({
 
 const serverParams = ref({
     filters: {},
-    orderBy: 'id',
-    orderByDirection: 'desc',
+    orderBy: 'date',
+    orderByDirection: 'asc',
     perPage: 25,
     page: 1,
     paginate: true,
@@ -31,8 +31,8 @@ const resetServerParams = async () => {
     };
     serverParams.value = {
         filters: {},
-        orderBy: 'id',
-        orderByDirection: 'desc',
+        orderBy: 'date',
+        orderByDirection: 'asc',
         perPage: 25,
         page: 1,
         paginate: true,

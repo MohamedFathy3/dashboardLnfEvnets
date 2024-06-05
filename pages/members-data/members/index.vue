@@ -48,8 +48,6 @@ const serverParams = ref({
     deleted: false,
 });
 const resources = useResourceStore();
-const formLoading = ref(false);
-const isOpen = ref(false);
 const showFilter = ref(false);
 
 function toggleShowMoreFilterOptions() {

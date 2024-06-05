@@ -10,10 +10,5 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     await settings.getActiveNetworks();
 
     const resources = useResourceStore();
-    await resources.fetchCountries();
-    await resources.fetchCities();
-    await resources.fetchCertificates();
-    await resources.fetchServices();
-    await resources.fetchReferrals();
-    await resources.fetchDietaries();
+    await resources.fetchResources();
 });

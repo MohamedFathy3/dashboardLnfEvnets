@@ -24,80 +24,25 @@ export const useResourceStore = defineStore('resource', () => {
     const setDietaries = (data?: Resource[]) => {
         dietaries.value = data;
     };
-    const fetchCountries = async () => {
-        const { data: res, error } = await useApiFetch(`/api/country-public`, {
+    const fetchResources = async () => {
+        const { data: res, error } = await useApiFetch(`/api/fetch-event-resources`, {
             lazy: true,
-            transform: (res) => (res as ApiResponse).data as Country[],
+            transform: (res) => (res as ApiResponse).data as any,
         });
         if (res.value) {
-            setCountries(res.value as Country[]);
+            setCountries((res.value as any).countries as Country[]);
+            setCities((res.value as any).cities as City[]);
+            setCertificates((res.value as any).certificates as Resource[]);
+            setServices((res.value as any).services as Resource[]);
+            setReferrals((res.value as any).referrals as Resource[]);
+            setDietaries((res.value as any).dietaries as Resource[]);
         }
         if (error && error.value) {
             setCountries();
-            console.error(error);
-        }
-    };
-    const fetchCities = async () => {
-        const { data: res, error } = await useApiFetch(`/api/city-public`, {
-            lazy: true,
-            transform: (res) => (res as ApiResponse).data as City[],
-        });
-        if (res.value) {
-            setCities(res.value as City[]);
-        }
-        if (error && error.value) {
             setCities();
-            console.error(error);
-        }
-    };
-    const fetchCertificates = async () => {
-        const { data: res, error } = await useApiFetch(`/api/certificate-public`, {
-            lazy: true,
-            transform: (res) => (res as ApiResponse).data as Resource[],
-        });
-        if (res.value) {
-            setCertificates(res.value as Resource[]);
-        }
-        if (error && error.value) {
             setCertificates();
-            console.error(error);
-        }
-    };
-    const fetchServices = async () => {
-        const { data: res, error } = await useApiFetch(`/api/service-public`, {
-            lazy: true,
-            transform: (res) => (res as ApiResponse).data as Resource[],
-        });
-        if (res.value) {
-            setServices(res.value as Resource[]);
-        }
-        if (error && error.value) {
             setServices();
-            console.error(error);
-        }
-    };
-    const fetchReferrals = async () => {
-        const { data: res, error } = await useApiFetch(`/api/referral-public`, {
-            lazy: true,
-            transform: (res) => (res as ApiResponse).data as Resource[],
-        });
-        if (res.value) {
-            setReferrals(res.value as Resource[]);
-        }
-        if (error && error.value) {
             setReferrals();
-            console.error(error);
-        }
-    };
-    const fetchDietaries = async () => {
-        const { data: res, error } = await useApiFetch(`/api/dietary-public`, {
-            lazy: true,
-            transform: (res) => (res as ApiResponse).data as Resource[],
-        });
-        if (res.value) {
-            setDietaries(res.value as Resource[]);
-        }
-        if (error && error.value) {
             setDietaries();
             console.error(error);
         }
@@ -106,21 +51,16 @@ export const useResourceStore = defineStore('resource', () => {
     return {
         countries,
         setCountries,
-        fetchCountries,
         certificates,
         setCertificates,
-        fetchCertificates,
         services,
         setServices,
-        fetchServices,
         referrals,
         setReferrals,
-        fetchReferrals,
         cities,
-        fetchCities,
         setCities,
         dietaries,
         setDietaries,
-        fetchDietaries,
+        fetchResources,
     };
 });
