@@ -151,7 +151,7 @@ onMounted(async () => {
                     <FormInputField v-model="item.name" :errors="v$.name.$errors" class="lg:col-span-8" label="Name" name="name" placeholder="Name" />
                     <FormInputField v-model="item.jobTitle" :errors="v$.jobTitle.$errors" class="lg:col-span-6" label="Job Title" name="job-title" placeholder="Job Title" />
                     <FormInputField v-model="item.email" :errors="v$.email.$errors" class="lg:col-span-6" label="Email" name="email" placeholder="Email" />
-                    <FormInputField v-model="item.unhashedPassword" :errors="v$.unhashedPassword.$errors" class="lg:col-span-6" label="Email" name="email" placeholder="Email" />
+                    <FormInputField v-model="item.unhashedPassword" :errors="v$.unhashedPassword.$errors" class="lg:col-span-6" label="Password" name="password" placeholder="Password" />
                     <FormSelectField v-model="item.tshirtSizeId" :errors="v$.tshirtSizeId.$errors" labelvalue="name" keyvalue="id" :select-data="resources.shirts" class="lg:col-span-6" name="shirt" placeholder="T-Shirt Size" label="T-Shirt Size" />
                 </div>
                 <FormSelectField
@@ -182,7 +182,7 @@ onMounted(async () => {
                     placeholder="Country Key"
                 />
                 <FormInputField v-model="item.cell" :errors="v$.cell.$errors" class="lg:col-span-3" label="Cell Number" name="person-cell-number" placeholder="Company Cell Number" />
-                <div class="sm:col-span-12">
+                <div class="lg:col-span-12">
                     <div class="form-label">Dietaries</div>
                     <fieldset :class="[v$.dietaries.$errors.length > 0 ? '!border-danger' : '', 'box !bg-opacity-50 shadow-sm p-4 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3']">
                         <template v-for="dietary in resources.dietaries" :key="dietary.id">
@@ -213,6 +213,7 @@ onMounted(async () => {
                         </ul>
                     </template>
                 </div>
+                <FormUploader v-model="item.bc" :allowed-types="['image']" label="Business Card" name="bc" class="lg:col-span-12" />
             </div>
             <div v-else class="p-5 text-center animate-pulse">Loading Data...</div>
         </template>
