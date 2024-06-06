@@ -168,7 +168,7 @@ async function openModal(id = null) {
 }
 
 async function updateItem() {
-    const { data, error } = await useApiFetch(`/api/city/${item.value.id}`, {
+    const { data, error } = await useApiFetch(`/api/city/${item.value?.id}`, {
         method: 'PATCH',
         body: item,
         lazy: true,

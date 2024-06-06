@@ -56,17 +56,19 @@ export const useResourceStore = defineStore('resource', () => {
 
     return {
         countries,
-        setCountries,
-        certificates,
-        setCertificates,
-        services,
-        setServices,
-        referrals,
-        setReferrals,
         cities,
-        setCities,
+        certificates,
         dietaries,
+        services,
+        referrals,
+        shirts,
+        setCountries,
+        setCities,
+        setCertificates,
+        setServices,
+        setReferrals,
         setDietaries,
+        setShirts,
         fetchResources,
     };
 });

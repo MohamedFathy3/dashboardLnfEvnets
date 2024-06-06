@@ -394,6 +394,7 @@ const config = useRuntimeConfig();
                 <div class="grid lg:grid-cols-12 gap-5 items-start">
                     <FormInputField v-model="item.name" :errors="v$.name.$errors" class="lg:col-span-6" label="Name" name="name" placeholder="Name" />
                     <FormInputField v-model="item.slug" :errors="v$.slug.$errors" class="lg:col-span-6" label="Slug" name="slug" placeholder="Slug" />
+                    <FormInputField v-model="item.subject" :errors="v$.subject.$errors" class="lg:col-span-12" label="Subject" name="subject" placeholder="Subject" />
                     <FormInputField v-model="item.bcc" :errors="v$.bcc.$errors" class="lg:col-span-6" label="BCC" name="bcc" placeholder="BCC" />
                     <FormRichTextEditor v-model="item.body" :errors="v$.body.$errors" label="Message" class="lg:col-span-12" />
                 </div>
