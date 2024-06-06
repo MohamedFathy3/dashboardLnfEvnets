@@ -31,7 +31,6 @@ const isOpen = ref(false);
 const resetServerParams = async () => {
     filter.value = {
         name: null,
-        email: null,
     };
     serverParams.value = {
         filters: {},
@@ -115,7 +114,6 @@ const resources = useResourceStore();
         <!-- Filter & Search -->
         <div class="grid lg:grid-cols-12 gap-5 items-center p-5 bg-white border rounded-2xl">
             <FormInputField v-model="filter.name" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Name" />
-            <FormInputField v-model="filter.email" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Email" />
             <FormInputField v-model="serverParams.relationFilter.companyName" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Company" />
             <FormSelectField
                 id="get-members-by-country-form"
