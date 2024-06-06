@@ -155,7 +155,7 @@ async function openModal(id = null) {
 }
 
 async function updateItem() {
-    const { data, error } = await useApiFetch(`/api/dietary/${item.value.id}`, {
+    const { data, error } = await useApiFetch(`/api/dietary/${item.value?.id}`, {
         method: 'PATCH',
         body: item,
         lazy: true,

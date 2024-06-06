@@ -419,7 +419,7 @@ function getLastOrderDetails(id) {
                             </td>
                             <td class="text-right">
                                 <div>
-                                    <NuxtLink :to="'/members-data/members/' + row.id">
+                                    <NuxtLink :to="'/conferences-attendees/registered-members/' + row.id">
                                         <button class="btn btn-secondary btn-rounded btn-sm gap-3">
                                             <Icon name="solar:eye-outline" class="size-4" />
                                             View

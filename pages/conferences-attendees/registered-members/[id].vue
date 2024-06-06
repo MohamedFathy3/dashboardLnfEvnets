@@ -18,41 +18,10 @@ function openUpdateModal() {
 function closeUpdateModal() {
     updateModalOpen.value = false;
 }
-const { data: company, refresh } = await useApiFetch(`/api/user/${route.params.id}`, {
+const { data: company, refresh } = await useApiFetch(`/api/dashboard/member/${route.params.id}`, {
     lazy: true,
     transform: (company) => company.data,
 });
-
-const sendWelcomeEmail = async () => {
-    const { data, error } = await useApiFetch('/api/email-approved', {
-        lazy: true,
-        method: 'POST',
-        body: {
-            userId: company.value.id,
-        },
-    });
-    if (data.value) {
-        useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
-    }
-    if (error.value) {
-        useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
-    }
-};
-const sendResetPasswordEmail = async () => {
-    const { data, error } = await useApiFetch('/api/email-reset-password', {
-        lazy: true,
-        method: 'POST',
-        body: {
-            userId: company.value.id,
-        },
-    });
-    if (data.value) {
-        useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
-    }
-    if (error.value) {
-        useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
-    }
-};
 </script>
 <template>
     <div v-if="company" class="flex flex-col gap-5">
@@ -79,18 +48,6 @@ const sendResetPasswordEmail = async () => {
                                         <div class="flex items-center gap-3 px-2 py-1.5 cursor-pointer hover:bg-slate-100 rounded-full transition-all">
                                             <Icon name="solar:add-circle-linear" class="size-5 opacity-75" />
                                             <span>Add Network</span>
-                                        </div>
-                                    </HeadlessMenuItem>
-                                    <HeadlessMenuItem as="li" class="py-0.5" @click="sendWelcomeEmail">
-                                        <div class="flex items-center gap-3 px-2 py-1.5 cursor-pointer hover:bg-slate-100 rounded-full transition-all">
-                                            <Icon name="solar:streets-navigation-linear" class="size-5 opacity-75" />
-                                            <span>Send Welcome Email</span>
-                                        </div>
-                                    </HeadlessMenuItem>
-                                    <HeadlessMenuItem as="li" class="py-0.5" @click="sendResetPasswordEmail">
-                                        <div class="flex items-center gap-3 px-2 py-1.5 cursor-pointer hover:bg-slate-100 rounded-full transition-all">
-                                            <Icon name="solar:password-minimalistic-input-broken" class="size-5 opacity-75" />
-                                            <span>Reset Password</span>
                                         </div>
                                     </HeadlessMenuItem>
                                 </ul>
@@ -123,6 +80,7 @@ const sendResetPasswordEmail = async () => {
                         </div>
                     </div>
                 </div>
+
                 <template v-if="company.currentNetworkStatus">
                     <UiMemberStatusBox class="lg:col-span-4" :data="company.currentNetworkStatus.status" />
                     <UiMemberIDBox v-if="company.currentNetworkStatus.status !== 'pending'" class="lg:col-span-4" :data="company.wsaId" />
@@ -130,6 +88,7 @@ const sendResetPasswordEmail = async () => {
                     <UiMemberFPPBox class="lg:col-span-4" :data="company.currentNetworkStatus.fpp" />
                 </template>
                 <div v-else class="lg:col-span-12 p-5 text-base text-center bg-white border-2 border-dashed font-medium opacity-75">This member is not assigned to any network</div>
+                <MemberOrdersCard class="lg:col-span-12" :member="company" />
                 <div class="lg:col-span-12">
                     <div class="intro-y block sm:flex items-center h-10">
                         <h2 class="font-normal text-base truncate mr-5 flex items-center">
@@ -272,12 +231,6 @@ const sendResetPasswordEmail = async () => {
                         </div>
                     </div>
                 </div>
-                <div class="lg:col-span-12">
-                    <MemberServicesCard :services="company.services" :extra="company.otherServices" />
-                </div>
-                <div class="lg:col-span-12">
-                    <MemberCertificatesCard :certificates="company.certificates" :extra="company.otherCertificates" />
-                </div>
             </div>
             <div class="lg:col-span-4 flex flex-col gap-5">
                 <!-- Networks Details -->
@@ -292,8 +245,9 @@ const sendResetPasswordEmail = async () => {
                     <div v-else class="lg:col-span-12 p-5 text-base text-center bg-white border-2 border-dashed font-medium opacity-75">This member is not assigned to any network</div>
                 </div>
                 <MemberExtraInfoCard :member="company" />
-                <MemberContactPersonCard :contact-persons="company.contactPersons" :member-id="company.id" @refresh="refresh" />
-                <MemberTradeReferancesCard :trade-references="company.tradeReferences" />
+                <MemberDelegatesCard :delegates="company.delegates" @refresh="refresh" />
+                <MemberSpousesCard :spouses="company.spouses" @refresh="refresh" />
+                <MemberRoomsCard :rooms="company.rooms" />
             </div>
         </div>
         <MemberNetworkModal v-if="networkModalOpen" :open="networkModalOpen" :member-id="company.id" @close="closeNetworkModal" @refresh="refresh" />
