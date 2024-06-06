@@ -213,6 +213,7 @@ onMounted(async () => {
                         </ul>
                     </template>
                 </div>
+                <FormInputField v-model="item.extraDietaries" :errors="v$.extraDietaries.$errors" class="lg:col-span-12" label="Extra Dietaries" name="extraDietaries" placeholder="Extra Dietaries" />
                 <FormUploader v-model="item.bc" :allowed-types="['image']" label="Business Card" name="bc" class="lg:col-span-12" />
             </div>
             <div v-else class="p-5 text-center animate-pulse">Loading Data...</div>
