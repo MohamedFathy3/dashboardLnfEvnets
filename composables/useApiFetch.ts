@@ -36,5 +36,12 @@ export function useApiFetch<T>(path: string, options: UseFetchOptions<T> = {}) {
             ...headers,
             ...options?.headers,
         },
+        onResponseError({ response }) {
+            if (response.status === 401) {
+                userStore.setToken();
+                userStore.setUser();
+                navigateTo('/login');
+            }
+        },
     });
 }

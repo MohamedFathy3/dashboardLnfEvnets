@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
-    ssr: true,
+    ssr: false,
     devtools: { enabled: true },
     typescript: {
         tsConfig: {
@@ -29,9 +29,6 @@ export default defineNuxtConfig({
     },
     build: {
         transpile: ['@vuepic/vue-datepicker'],
-    },
-    site: {
-        url: process.env.APP_URL ?? 'https://events-nuxt.test:4224',
     },
     nitro: {
         routeRules: {

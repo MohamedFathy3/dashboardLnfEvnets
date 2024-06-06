@@ -5,6 +5,7 @@ export const useResourceStore = defineStore('resource', () => {
     const dietaries = ref<Resource[]>();
     const services = ref<Resource[]>();
     const referrals = ref<Resource[]>();
+    const shirts = ref<Resource[]>();
 
     const setCountries = (data?: Country[]) => {
         countries.value = data;
@@ -24,6 +25,9 @@ export const useResourceStore = defineStore('resource', () => {
     const setDietaries = (data?: Resource[]) => {
         dietaries.value = data;
     };
+    const setShirts = (data?: Resource[]) => {
+        shirts.value = data;
+    };
     const fetchResources = async () => {
         const { data: res, error } = await useApiFetch(`/api/fetch-event-resources`, {
             lazy: true,
@@ -36,6 +40,7 @@ export const useResourceStore = defineStore('resource', () => {
             setServices((res.value as any).services as Resource[]);
             setReferrals((res.value as any).referrals as Resource[]);
             setDietaries((res.value as any).dietaries as Resource[]);
+            setShirts((res.value as any).shirts as Resource[]);
         }
         if (error && error.value) {
             setCountries();
@@ -44,6 +49,7 @@ export const useResourceStore = defineStore('resource', () => {
             setServices();
             setReferrals();
             setDietaries();
+            setShirts();
             console.error(error);
         }
     };
