@@ -16,7 +16,7 @@ const serverParams = ref({
     filters: {},
     relationFilter: {
         memberType: null,
-        orderStatus: [],
+        orderStatus: ['approved_online_payment', 'approved_bank_transfer'],
         companyName: null,
         companyCountryId: null,
     },
@@ -38,7 +38,7 @@ const resetServerParams = async () => {
         filters: {},
         relationFilter: {
             memberType: null,
-            orderStatus: [],
+            orderStatus: ['approved_online_payment', 'approved_bank_transfer'],
             companyName: null,
             companyCountryId: null,
         },
@@ -103,6 +103,13 @@ async function openModal(id) {
     formLoading.value = false;
 }
 const resources = useResourceStore();
+const orderStatuses = ref([
+    { name: 'Application Form', value: 'in_application_form' },
+    { name: 'Pending Payment', value: 'pending_payment' },
+    { name: 'Pending Bank Transfer', value: 'pending_bank_transfer' },
+    { name: 'Approved Online Payment', value: 'approved_online_payment' },
+    { name: 'Approved Bank Transfer', value: 'approved_bank_transfer' },
+]);
 </script>
 <template>
     <div class="flex flex-col gap-8">
@@ -118,6 +125,37 @@ const resources = useResourceStore();
             <FormInputField v-model="filter.name" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Name" />
             <FormInputField v-model="filter.email" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Email" />
             <FormInputField v-model="serverParams.relationFilter.companyName" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Company" />
+            <div class="lg:col-span-12">
+                <div class="border border-slate-100 bg-slate-50/50 rounded-lg grid grid-cols-12 p-5 gap-5">
+                    <div class="sm:col-span-12">
+                        <fieldset class="px-5 grid lg:grid-cols-3 sm:grid-cols-2 gap-5 grid-cols-1 duration-300 ease-in-out">
+                            <div v-for="option in orderStatuses" :key="option.value" class="relative flex items-start">
+                                <div class="flex items-center h-6">
+                                    <input
+                                        :id="option.value"
+                                        v-model="serverParams.relationFilter.orderStatus"
+                                        :checked="orderStatuses.includes(option.value)"
+                                        :aria-describedby="option.value + '-description'"
+                                        :name="option.value"
+                                        :value="option.value"
+                                        type="checkbox"
+                                        class="focus:ring-primary h-5 w-5 rounded text-primary border-slate-500 disabled:read-only:opacity-50 disabled:read-only:cursor-not-allowed"
+                                    />
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label
+                                        :for="option.value"
+                                        :class="[serverParams.relationFilter.orderStatus.includes(option.value) ? ' font-medium opacity-75' : 'font-light']"
+                                        class="disabled:read-only:opacity-25 font-sm ease-in-out duration-150"
+                                    >
+                                        {{ option.name }}
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
             <FormSelectField
                 id="get-members-by-country-form"
                 v-model="serverParams.relationFilter.companyCountryId"
