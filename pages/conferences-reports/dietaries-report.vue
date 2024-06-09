@@ -3,7 +3,7 @@ definePageMeta({
     middleware: 'auth',
 });
 const loadingPage = ref(true);
-const { data, execute } = await useApiFetch(`/api/dashboard/report/persons-dietaries`, {
+const { data, execute, refresh } = await useApiFetch(`/api/dashboard/report/persons-dietaries`, {
     lazy: true,
     transform: (data) => data.data,
     immediate: false,
@@ -14,11 +14,32 @@ onMounted(async () => {
     await execute();
     loadingPage.value = false;
 });
+const config = useRuntimeConfig();
+
 const resources = useResourceStore();
 </script>
 <template>
     <div>
         <div v-if="!loadingPage">
+            <!-- Page Title & Action Buttons -->
+            <div class="md:flex md:items-center md:justify-between md:gap-5">
+                <div class="flex items-center gap-2">
+                    <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
+                    <div>T-Shirts Sizes Report</div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a :href="config.public.apiUrl + '/export-excel/dietary-delegate/export'" target="_blank">
+                        <button type="button" class="btn btn-dark btn-rounded btn-sm w-full justify-between gap-3">
+                            <span class="items-center flex">
+                                <Icon name="solar:t-shirt-outline" class="w-5 h-5 mr-2" />
+                                <span>Export Dietaries</span>
+                            </span>
+                            <Icon name="solar:download-outline" class="w-5 h-5 mr-2" />
+                        </button>
+                    </a>
+                    <ConferenceSwitcher @reload="refresh" />
+                </div>
+            </div>
             <div class="overflow-x-scroll w-full">
                 <!-- Persons Table -->
                 <table class="table table-report font-light">

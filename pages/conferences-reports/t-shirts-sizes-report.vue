@@ -39,6 +39,7 @@ onMounted(async () => {
     await initShirtData();
     loadingPage.value = false;
 });
+const config = useRuntimeConfig();
 
 async function changeSelectedTabIndex(index) {
     selectedTabIndex.value = index;
@@ -56,6 +57,15 @@ async function changeSelectedTabIndex(index) {
                 <div class="opacity-75 text-sm">Total</div>
             </div>
             <div class="flex items-center gap-3">
+                <a :href="config.public.apiUrl + '/export-excel/tshirt-Size-delegate/export'" target="_blank">
+                    <button type="button" class="btn btn-dark btn-rounded btn-sm w-full justify-between gap-3">
+                        <span class="items-center flex">
+                            <Icon name="solar:t-shirt-outline" class="w-5 h-5 mr-2" />
+                            <span>Export T-Shirts Sizes</span>
+                        </span>
+                        <Icon name="solar:download-outline" class="w-5 h-5 mr-2" />
+                    </button>
+                </a>
                 <ConferenceSwitcher @reload="refreshShirtData" />
             </div>
         </div>
