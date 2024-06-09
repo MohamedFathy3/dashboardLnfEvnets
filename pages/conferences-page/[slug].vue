@@ -425,7 +425,7 @@ onMounted(async () => {
                                 <div class="font-light text-sm opacity-75">{{ section.slug }}</div>
                             </td>
                             <td>
-                                <FormSwitch :id="'section-active-' + section.id" v-model="section.active" @change="useToggleSwitch(children.id, 'active', 'event-section-page')" />
+                                <FormSwitch :id="'section-active-' + section.id" v-model="section.active" @change="useToggleSwitch(section.id, 'active', 'event-section-page')" />
                             </td>
                             <td class="text-right">
                                 <div>
