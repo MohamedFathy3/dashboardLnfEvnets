@@ -10,16 +10,8 @@ const sortByList = ref([
     { name: 'Sort By Country', value: 'country_id' },
 ]);
 const filter = ref({
-    name: null,
-    countryId: null,
-    wsaId: null,
-    companyEmail: null,
-    email: null,
-});
-const networkFilter = ref({
-    name: null,
-    countryId: null,
-    email: null,
+    uuid: null,
+    status: [],
 });
 const membershipTypes = ref([
     { name: 'Member', value: 'member' },
@@ -40,7 +32,6 @@ const serverParams = ref({
     filters: {},
     relationFilter: {
         memberType: [],
-        lastOrderStatus: [],
         sponsorshipItemName: null,
         packageName: null,
     },
@@ -50,7 +41,6 @@ const serverParams = ref({
     page: 1,
     paginate: true,
 });
-const resources = useResourceStore();
 const showFilter = ref(false);
 
 function toggleShowMoreFilterOptions() {
@@ -58,17 +48,13 @@ function toggleShowMoreFilterOptions() {
 }
 const resetServerParams = async () => {
     filter.value = {
-        name: null,
-        countryId: null,
-        wsaId: null,
-        companyEmail: null,
-        email: null,
+        uuid: null,
+        status: [],
     };
     serverParams.value = {
         filters: {},
         relationFilter: {
             memberType: [],
-            lastOrderStatus: [],
             sponsorshipItemName: null,
             packageName: null,
         },
@@ -104,40 +90,7 @@ watch(
     },
     { deep: true },
 );
-watch(
-    networkFilter,
-    (newVal) => {
-        for (const key in newVal) {
-            const value = newVal[key];
-            if (value) {
-                serverParams.value.relationFilter[key] = value;
-            } else {
-                delete serverParams.value.relationFilter[key];
-            }
-        }
-    },
-    { deep: true },
-);
 
-const isSelected = (id) => {
-    return selectedRows.value.some((r) => r === id);
-};
-const allSelected = computed(() => {
-    return rows?.value?.data.every((row) => selectedRows.value.includes(row.id));
-});
-const selectAllRows = () => {
-    const allSelected = rows.value.data.every((row) => isSelected(row.id));
-    if (allSelected) {
-        selectedRows.value = [];
-    } else {
-        rows.value.data.forEach((row) => {
-            const id = row.id;
-            if (!isSelected(id)) {
-                selectedRows.value.push(id);
-            }
-        });
-    }
-};
 const changePage = async (value) => {
     const pageNumber = parseInt(value);
     if (!isNaN(pageNumber)) {
@@ -148,19 +101,11 @@ const changePage = async (value) => {
     selectedRows.value = [];
     await refresh();
 };
-const toggleRowSelection = (id) => {
-    const index = selectedRows.value.indexOf(id);
-    if (index === -1) {
-        selectedRows.value.push(id);
-    } else {
-        selectedRows.value.splice(index, 1);
-    }
-};
 
-async function deleteItems() {
+async function deleteItems(id) {
     const confirmed = confirm('Are you sure you want to delete this item?');
     if (confirmed) {
-        const { data, error } = await useApiFetch(`/api/user/delete`, {
+        const { data, error } = await useApiFetch(`/api/dashboard/order/${id}/delete`, {
             body: { items: selectedRows.value },
             method: 'DELETE',
             lazy: true,
@@ -214,22 +159,6 @@ async function prepareInfoBoxes() {
 onMounted(() => {
     prepareInfoBoxes();
 });
-
-function getLastOrderDetails(id) {
-    const row = rows.value.data.find((row) => row.id === id);
-    if (!row) return null;
-
-    let lastOrderStatusFromOrders = null;
-    // Check if there are pending orders
-    if (row.pendingOrder && row.pendingOrder.status) {
-        lastOrderStatusFromOrders = row.pendingOrder.status;
-    } else if (row.orders && row.orders.length > 0) {
-        // If no pending orders, check if there are orders
-        const lastOrderIndex = row.orders.length - 1;
-        lastOrderStatusFromOrders = row.orders[lastOrderIndex].status;
-    }
-    return lastOrderStatusFromOrders;
-}
 </script>
 <template>
     <div class="flex flex-col gap-8">
@@ -239,32 +168,14 @@ function getLastOrderDetails(id) {
                 <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
                 <div>Orders</div>
             </div>
-            <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
-                <template v-if="selectedRows.length > 0">
-                    <button class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
-                        <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
-                        Delete Items
-                    </button>
-                </template>
-            </div>
         </div>
         <!-- Network Members Statistics -->
         <UiInfoBox :data="conferenceInfoBoxes" />
         <!-- Filter & Search -->
         <div class="grid lg:grid-cols-12 gap-5 items-center p-5 bg-white border rounded-2xl">
-            <FormInputField v-model="filter.name" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Company Name" />
-            <FormSelectField
-                id="add-member-country-filter"
-                v-model="filter.countryId"
-                name="add-member-country-filter"
-                class="lg:col-span-4 xl:col-span-4"
-                placeholder="Please select a country..."
-                :select-data="resources.countries"
-                labelvalue="name"
-                keyvalue="id"
-                imgvalue="imageUrl"
-            />
-            <FormInputField v-model="filter.email" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Login Email" />
+            <FormInputField v-model="filter.uuid" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Order UUID/Code" />
+            <FormInputField v-model="serverParams.relationFilter.sponsorshipItemName" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Sponsorship Item Name" />
+            <FormInputField v-model="serverParams.relationFilter.packageName" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Package Name" />
             <TransitionExpand>
                 <div v-if="showFilter" class="lg:col-span-12 grid lg:grid-cols-12 gap-5 items-center">
                     <div class="lg:col-span-12">
@@ -306,7 +217,7 @@ function getLastOrderDetails(id) {
                                         <div class="flex items-center h-6">
                                             <input
                                                 :id="option.value"
-                                                v-model="serverParams.relationFilter.lastOrderStatus"
+                                                v-model="filter.status"
                                                 :checked="orderStatuses.includes(option.value)"
                                                 :aria-describedby="option.value + '-description'"
                                                 :name="option.value"
@@ -316,11 +227,7 @@ function getLastOrderDetails(id) {
                                             />
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label
-                                                :for="option.value"
-                                                :class="[serverParams.relationFilter.lastOrderStatus.includes(option.value) ? ' font-medium opacity-75' : 'font-light']"
-                                                class="disabled:read-only:opacity-25 font-sm ease-in-out duration-150"
-                                            >
+                                            <label :for="option.value" :class="[filter.status.includes(option.value) ? ' font-medium opacity-75' : 'font-light']" class="disabled:read-only:opacity-25 font-sm ease-in-out duration-150">
                                                 {{ option.name }}
                                             </label>
                                         </div>
@@ -329,8 +236,6 @@ function getLastOrderDetails(id) {
                             </div>
                         </div>
                     </div>
-                    <FormInputField v-model="serverParams.relationFilter.sponsorshipItemName" rounded class="xl:col-span-6 lg:col-span-6" placeholder="Sponsorship Item Name" />
-                    <FormInputField v-model="serverParams.relationFilter.packageName" rounded class="xl:col-span-6 lg:col-span-6" placeholder="Package Name" />
                     <FormSelectField v-model="serverParams.orderBy" :clearable="false" class="xl:col-span-6 lg:col-span-6" labelvalue="name" keyvalue="value" placeholder="Sort Direction" :select-data="sortByList" />
                     <FormSelectField
                         v-model="serverParams.orderByDirection"
@@ -360,73 +265,72 @@ function getLastOrderDetails(id) {
             </button>
         </div>
         <!-- Table -->
-        <div>
+        <div class="overflow-x-auto">
             <table class="table table-report font-light">
                 <thead>
                     <tr class="uppercase text-sm">
-                        <th class="text-left">
-                            <input v-model="allSelected" type="checkbox" class="form-check-input" @change="selectAllRows" />
-                        </th>
                         <th>Order</th>
-                        <th>Details</th>
+                        <th>Amount</th>
                         <th>Company</th>
                         <th>Sponsorship</th>
-                        <th>Package</th>
+                        <th class="text-center">Package</th>
                         <th class="text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <template v-if="!pending && rows">
                         <tr v-for="row in rows.data" :key="row.id" class="text-sm">
-                            <td>
-                                <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
-                            </td>
                             <td class="whitespace-nowrap">
                                 <div class="font-medium">{{ row.uuid }}</div>
                                 <div class="font-light text-xs mt-0.5">{{ row.createdAt }}</div>
-                            </td>
-                            <td>
-                                <div class="font-medium">{{ row.amount }}<span class="font-light ml-0.5 opacity-75">USD</span></div>
-                                <div class="mt-0.5">
+                                <div class="mt-1.5 text-xs">
                                     <UiEventOrderStatusBadge :data="row.status" />
                                 </div>
                             </td>
                             <td class="text-sm font-normal whitespace-nowrap">
                                 <div class="flex items-center gap-3">
-                                    <NuxtImg :src="row.user.imageUrl" class="h-10 !rounded-md w-16 object-contain p-1 shrink-0" />
+                                    <NuxtImg v-if="row.user.imageUrl" :src="row.user.imageUrl" class="h-10 !rounded-md w-16 object-contain p-1 shrink-0" />
                                     <div class="flex flex-col gap-0.5">
                                         <div class="flex items-center gap-1.5">
                                             <span class="truncate 2xl:max-w-64 max-w-44">{{ row.user.name }}</span>
                                         </div>
                                         <div class="flex items-center text-xs whitespace-nowrap">
-                                            <NuxtImg :src="row.user.countryFlag" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
-                                            <div class="opacity-75 font-semibold">{{ row.user.countryName }}</div>
-                                            <span class="capitalize font-light opacity-80">, {{ row.user.city.toLowerCase() }}</span>
+                                            <NuxtImg v-if="row.user.imageUrl" :src="row.user.countryFlag" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
+                                            <div class="opacity-75 font-semibold truncate">{{ row.user.countryName }}</div>
+                                            <span class="capitalize font-light opacity-80 truncate">, {{ row.user.city.toLowerCase() }}</span>
                                         </div>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <div>Items</div>
+                                <div class="font-medium">{{ row.amount }}<span class="font-light ml-0.5 opacity-75">USD</span></div>
                             </td>
                             <td>
-                                <div>Package</div>
+                                <template v-for="item in row.sponsorshipItems" :key="item.id">
+                                    <NuxtImg v-if="item.imageUrl" :src="item.imageUrl" :alt="item.name" :title="item.name" class="bg-primary size-10 !rounded-full p-1" />
+                                </template>
+                            </td>
+                            <td>
+                                <div class="text-xs font-normal text-center">{{ row.package?.name }}</div>
                             </td>
                             <td class="text-right">
-                                <div>
-                                    <NuxtLink :to="'/conferences-attendees/order/' + row.id">
+                                <div class="flex items-center gap-3">
+                                    <NuxtLink :to="'/conferences-attendees/orders/' + row.id">
                                         <button class="btn btn-secondary btn-rounded btn-sm gap-3">
                                             <Icon name="solar:eye-outline" class="size-4" />
                                             View
                                         </button>
                                     </NuxtLink>
+                                    <div class="p-1.5 text-danger hover:scale-[103%] transition-all cursor-pointer" @click="deleteItems(row.id)">
+                                        <Icon name="solar:trash-bin-minimalistic-linear" class="size-5" />
+                                    </div>
                                 </div>
                             </td>
                         </tr>
                     </template>
                     <template v-else>
                         <tr v-for="i in serverParams.perPage" :key="i">
-                            <td colspan="5">
+                            <td colspan="7">
                                 <div class="h-12 !opacity-50 animate-pulse" />
                             </td>
                         </tr>
