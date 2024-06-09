@@ -374,7 +374,7 @@ const menuItems = ref([
         permission: ['list-conference-member', 'list-conference-delegate', 'list-conference-spouse', 'list-conference-order'],
         subMenus: [
             {
-                name: 'Registered members',
+                name: 'Registered Companies',
                 path: '/conferences-attendees/registered-members',
                 icon: 'solar:suitcase-linear',
                 subMenus: [],

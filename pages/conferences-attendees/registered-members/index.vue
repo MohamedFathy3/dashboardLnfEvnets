@@ -239,6 +239,7 @@ function getLastOrderAmount(id) {
     }
     return lastOrderAmountFromOrders;
 }
+const config = useRuntimeConfig();
 </script>
 <template>
     <div class="flex flex-col gap-8">
@@ -248,13 +249,25 @@ function getLastOrderAmount(id) {
                 <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
                 <div>Registered Members</div>
             </div>
-            <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
+            <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5 intro-x">
                 <template v-if="selectedRows.length > 0">
                     <button class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
                         <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
                         Delete Items
                     </button>
                 </template>
+                <div class="flex items-center gap-3">
+                    <a :href="config.public.apiUrl + '/export-excel/report-attendee/export'" target="_blank">
+                        <button type="button" class="btn btn-dark btn-rounded btn-sm w-full justify-between gap-3">
+                            <span class="items-center flex">
+                                <Icon name="solar:users-group-two-rounded-linear" class="w-5 h-5 mr-2" />
+                                <span>Export Attendees</span>
+                            </span>
+                            <Icon name="solar:download-outline" class="w-5 h-5 mr-2" />
+                        </button>
+                    </a>
+                    <ConferenceSwitcher @reload="refresh" />
+                </div>
             </div>
         </div>
         <!-- Network Members Statistics -->
