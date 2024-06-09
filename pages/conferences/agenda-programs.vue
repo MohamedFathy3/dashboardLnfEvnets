@@ -414,7 +414,7 @@ const generateTimeOptions = computed(() => {
                     <FormInputField v-model="item.description" :errors="v$.description.$errors" class="col-span-12" label="Description" name="description" placeholder="Description" type="textarea" />
                     <FormSwitch v-model="item.active" :errors="v$.active.$errors" class="lg:col-span-4" label="Active" name="active-input" />
                     <FormSelectField v-model="item.dayId" :errors="v$.dayId.$errors" labelvalue="name" keyvalue="id" :select-data="days.data" class="lg:col-span-4" label="Event Day" name="day-id" placeholder="Event Day" />
-                    <FormInputField v-model="item.dressCode" :errors="v$.dressCode.$errors" class="col-span-12" label="Dress Code" name="dress-code" placeholder="Dress Code" />
+                    <FormInputField v-model="item.dressCode" :errors="v$.dressCode.$errors" class="col-span-4" label="Dress Code" name="dress-code" placeholder="Dress Code" />
                 </div>
             </template>
             <template #footer>
