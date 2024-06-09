@@ -18,7 +18,7 @@ const filter = ref({
 });
 const networkFilter = ref({
     name: null,
-    country_id: null,
+    countryId: null,
     email: null,
 });
 const membershipTypes = ref([
@@ -28,12 +28,6 @@ const membershipTypes = ref([
     { name: 'Vendor', value: 'vendor' },
     { name: 'Non Member', value: 'non_member' },
     { name: 'WSA Team', value: 'wsa_team' },
-]);
-const membershipStatuses = ref([
-    // { name: 'Pending', value: 'pending' },
-    { name: 'Approved', value: 'approved' },
-    { name: 'Suspended', value: 'suspended' },
-    { name: 'Blacklisted', value: 'blacklisted' },
 ]);
 const orderStatuses = ref([
     { name: 'Application Form', value: 'in_application_form' },
@@ -116,9 +110,9 @@ watch(
         for (const key in newVal) {
             const value = newVal[key];
             if (value) {
-                serverParams.value.networkFilter[key] = value;
+                serverParams.value.relationFilter[key] = value;
             } else {
-                delete serverParams.value.networkFilter[key];
+                delete serverParams.value.relationFilter[key];
             }
         }
     },
