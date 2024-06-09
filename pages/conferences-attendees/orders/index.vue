@@ -306,9 +306,11 @@ onMounted(() => {
                                 <div class="font-medium">{{ row.amount }}<span class="font-light ml-0.5 opacity-75">USD</span></div>
                             </td>
                             <td>
-                                <template v-for="item in row.sponsorshipItems" :key="item.id">
-                                    <NuxtImg v-if="item.imageUrl" :src="item.imageUrl" :alt="item.name" :title="item.name" class="bg-primary size-10 !rounded-full p-1" />
-                                </template>
+                                <div class="flex items-center -space-x-4">
+                                    <template v-for="item in row.sponsorshipItems" :key="item.id">
+                                        <NuxtImg v-if="item.imageUrl" :src="item.imageUrl" :alt="item.name" :title="item.name" class="bg-primary size-10 !rounded-full p-1" />
+                                    </template>
+                                </div>
                             </td>
                             <td>
                                 <div class="text-xs font-normal text-center">{{ row.package?.name }}</div>
