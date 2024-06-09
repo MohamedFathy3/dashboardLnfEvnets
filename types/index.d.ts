@@ -43,6 +43,8 @@ type Company = {
     phone: string;
     phoneKeyId: number;
     phoneKey: string;
+    orders: Order[];
+    pendingOrder: Order;
     fax: string;
     faxKeyId: number;
     faxKey: string;
@@ -65,6 +67,54 @@ type Company = {
     networks: MemberNetwork[];
     currentNetworkStatus: MemberNetwork;
     pendingNetworkStatus: MemberNetwork[];
+};
+
+type Order = {
+    id: number;
+    uuid: string;
+    total: number;
+    amount: number;
+    packageId: number;
+    packagePrice: number;
+    totalDelegatesPrice: number;
+    totalSpousesPrice: number;
+    totalPriceSponsorshipItems: number;
+    coupon: string | null;
+    company: Company;
+    package: Package;
+    delegates: Delegate[];
+    spouses: Spouse[];
+    sponsorshipItems: SponsorshipItem[];
+    rooms: RoomDetails[];
+    status: string;
+    updatedAt: string;
+    createdAt: string;
+};
+
+type Person = {
+    id: number;
+    name: string;
+    type: string;
+    title: string;
+    jobTitle: string | null;
+    userId: number;
+    orderId: number;
+    imageUrl: string;
+};
+
+type RoomDetails = {
+    room: Room;
+    orderComplete: boolean;
+    persons: Person[];
+    recordId: number;
+    bedType: string;
+    roomId: number;
+    totalPrice: number;
+    startDate: string;
+    endDate: string;
+    startDateFormatted: string;
+    endDateFormatted: string;
+    date: string[];
 };
 
 type ContactPerson = {
@@ -361,4 +411,90 @@ type NetworkSetting = {
     name: string;
     type: string;
     value: any | null;
+};
+
+type Package = {
+    id: number;
+    name: string;
+    price: number;
+    delegateCount: number;
+    earlybirdPrice: number;
+};
+
+type Dietary = {
+    id: number;
+    name: string;
+    slug: string;
+    active: boolean;
+    orderId: number;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    deleted: boolean;
+};
+
+type BC = {
+    id: number;
+    name: string;
+    mimeType: string;
+    size: number;
+    authorId: number | null;
+    previewUrl: string;
+    fullUrl: string;
+    createdAt: string;
+};
+
+type Delegate = {
+    id: number;
+    name: string;
+    type: string;
+    title: string;
+    jobTitle: string;
+    email: string;
+    userId: number;
+    tshirtSize: string;
+    phone: string;
+    cell: string;
+    phoneKeyId: number;
+    phoneKey: string;
+    cellKeyId: number;
+    cellKey: string;
+    extraDietaries: string | null;
+    dietaries: Dietary[];
+    imageUrl: string;
+    bcUrl: string;
+    bc: BC | null;
+    orderComplete: boolean;
+};
+
+type Spouse = {
+    id: number;
+    name: string;
+    title: string;
+    type: string;
+    userId: number;
+    delegateId: number;
+    delegate: string;
+    tshirtSizeId: number;
+    tshirtSize: string;
+    orderId: number;
+    extraDietaries: string;
+    dietaries: Dietary[];
+    imageUrl: string;
+    image: Media | null;
+    orderComplete: boolean;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    deleted: boolean;
+};
+
+type SponsorshipItem = {
+    id: number;
+    name: string;
+    price: number;
+    description: string;
+    earlybirdPrice: number;
+    priceUsed: number;
+    imageUrl: string;
 };

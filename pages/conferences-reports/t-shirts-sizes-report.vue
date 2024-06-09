@@ -92,7 +92,7 @@ async function changeSelectedTabIndex(index) {
                                         <div class="ml-2">
                                             <div class="truncate">{{ person.company?.name }}</div>
                                             <div class="text-xs mt-0.5 truncate capitalize">
-                                                <span v-if="person.company?.countryName" class="">{{ person.company?.countryName }}</span>
+                                                <span v-if="person.company?.countryName">{{ person.company?.countryName }}</span>
                                                 <span v-if="person.company?.city">, {{ person.company?.city }}</span>
                                             </div>
                                         </div>

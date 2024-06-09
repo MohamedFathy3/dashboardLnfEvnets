@@ -16,10 +16,11 @@ const props = defineProps({
         <div class="flex items-center justify-between gap-5 mb-3">
             <div class="font-medium text-base flex items-center gap-2 whitespace-nowrap">
                 <Icon name="solar:bed-outline" class="size-5 opacity-75" />
-                Rooms
+                <span>Rooms</span>
+                <span class="px-2.5 py-0.5 bg-white rounded-full border">{{ props.rooms.length }}</span>
             </div>
         </div>
-        <ul v-if="props.rooms.length > 0" :class="['grid lg:grid-cols-' + props.grid + ' gap-3']">
+        <ul v-if="props.rooms.length > 0" :class="['grid 2xl:grid-cols-3 lg:grid-cols-' + props.grid + ' gap-3']">
             <li v-for="room in props.rooms" :key="room.id" class="flex flex-col gap-3 bg-white rounded-xl p-5 shadow-sm">
                 <div class="flex items-center gap-3">
                     <NuxtImg :src="room.room.imageUrl" :title="room.room.name" :alt="room.room.name" class="size-14 shrink-0 rounded-md object-cover ring-2 ring-slate-500/25" />

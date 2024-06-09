@@ -26,7 +26,7 @@ function closeModal() {
 }
 </script>
 <template>
-    <div class="">
+    <div>
         <div class="flex items-center justify-between gap-5 mb-3">
             <div class="font-medium flex items-center gap-1.5 whitespace-nowrap">
                 <Icon name="solar:users-group-two-rounded-outline" class="size-5 opacity-75" />

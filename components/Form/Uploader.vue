@@ -255,7 +255,7 @@ onMounted(async () => {
                         <p class="pl-1">or drag and drop</p>
                     </div>
                     <div class="text-xs text-slate-400 text-center">
-                        <span v-for="(allowedType, index) in props.allowedTypes" :key="index" class="">
+                        <span v-for="(allowedType, index) in props.allowedTypes" :key="index">
                             <template v-for="(mimeType, mimeIndex) in getSubtypes(allowedType)" :key="mimeIndex">
                                 <span class="uppercase font-light">{{ mimeType }}{{ mimeIndex < getSubtypes(allowedType).length - 1 ? ', ' : '' }}</span>
                             </template>
