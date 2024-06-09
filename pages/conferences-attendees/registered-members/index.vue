@@ -224,6 +224,21 @@ function getLastOrderDetails(id) {
     }
     return lastOrderStatusFromOrders;
 }
+function getLastOrderAmount(id) {
+    const row = rows.value.data.find((row) => row.id === id);
+    if (!row) return null;
+
+    let lastOrderAmountFromOrders = null;
+    // Check if there are pending orders
+    if (row.pendingOrder && row.pendingOrder.amount) {
+        lastOrderAmountFromOrders = row.pendingOrder.amount;
+    } else if (row.orders && row.orders.length > 0) {
+        // If no pending orders, check if there are orders
+        const lastOrderIndex = row.orders.length - 1;
+        lastOrderAmountFromOrders = row.orders[lastOrderIndex].amount;
+    }
+    return lastOrderAmountFromOrders;
+}
 </script>
 <template>
     <div class="flex flex-col gap-8">
@@ -396,6 +411,10 @@ function getLastOrderDetails(id) {
                                     <div>
                                         <UiNetworkTypeBadge v-if="row.membershipType" :data="row.membershipType" />
                                         <span v-else>---</span>
+                                        <div class="mt-2 font-medium flex items-center gap-1">
+                                            <icon name="solar:dollar-linear" class="size-4 shrink-0 opacity-50" />
+                                            <span class="text-sm opacity-75">{{ getLastOrderAmount(row.id) }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </td>
