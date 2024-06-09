@@ -284,21 +284,21 @@ onMounted(() => {
         <div class="grid lg:grid-cols-12 gap-5 items-center p-5 bg-white border rounded-2xl">
             <FormInputField v-model="filter.name" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Company Name" />
             <FormInputField v-model="filter.wsaId" rounded class="xl:col-span-4 lg:col-span-4" placeholder="WSA ID" type="number" />
-            <FormInputField v-model="filter.email" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Login Email" />
+            <FormSelectField
+                id="add-member-country-filter"
+                v-model="filter.countryId"
+                name="add-member-country-filter"
+                class="lg:col-span-4 xl:col-span-4"
+                placeholder="Please select a country..."
+                :select-data="resources.countries"
+                labelvalue="name"
+                keyvalue="id"
+                imgvalue="imageUrl"
+            />
             <TransitionExpand>
                 <div v-if="showFilter" class="lg:col-span-12 grid lg:grid-cols-12 gap-5 items-center">
+                    <FormInputField v-model="filter.email" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Login Email" />
                     <FormInputField v-model="filter.companyEmail" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Company Email" />
-                    <FormSelectField
-                        id="add-member-country-filter"
-                        v-model="filter.countryId"
-                        name="add-member-country-filter"
-                        class="lg:col-span-4 xl:col-span-4"
-                        placeholder="Please select a country..."
-                        :select-data="resources.countries"
-                        labelvalue="name"
-                        keyvalue="id"
-                        imgvalue="imageUrl"
-                    />
                     <FormSelectField
                         id="add-member-active-filter"
                         v-model="networkFilter.active"
