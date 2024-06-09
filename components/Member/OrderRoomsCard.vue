@@ -27,10 +27,6 @@ const props = defineProps({
                     <div>
                         <div class="text-sm font-medium opacity-85 line-clamp-1">
                             {{ room.room.name }}
-                            <span
-                                :class="!room.orderComplete ? 'text-xs font-normal bg-success/25 !border-success/25 text-success rounded-full px-2 py-0.5 border ml-4' : 'text-xs font-normal bg-slate-100 rounded-full px-2 py-0.5 border ml-4'"
-                                v-html="room.orderComplete ? 'Pending' : 'Approved'"
-                            />
                         </div>
                         <div class="font-light mt-0.5 text-xs capitalize line-clamp-1">{{ room.room.type }}</div>
                         <div class="text-xs mt-0.5 font-light flex items-center gap-2">
