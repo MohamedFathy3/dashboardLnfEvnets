@@ -73,11 +73,11 @@ async function changeSelectedTabIndex(index) {
                 </ul>
                 <div class="mt-5 bg-white rounded-xl shadow-sm p-5">
                     <ul v-if="selectedContent.persons.length > 0" class="divide-y divide-dashed divide-slate-300">
-                        <li v-for="person in selectedContent.persons" :key="person.id" class="md:py-2 py-4 intro-x">
+                        <li v-for="person in selectedContent.persons" :key="person.id" class="md:py-2 py-4 intro-x text-sm">
                             <div class="grid md:grid-cols-12 gap-5 items-center">
                                 <div class="md:col-span-4">
                                     <div class="inline-flex text-left items-center">
-                                        <img class="h-10 w-10 !rounded-full ring-2 -ring-offset-2 ring-slate-500/10 object-cover bg-white" :src="person.image_url" :alt="person.name" :title="person.name" />
+                                        <NuxtImg class="h-10 w-10 !rounded-full ring-2 -ring-offset-2 ring-slate-500/10 object-cover bg-white" :src="person.imageUrl" :alt="person.name" :title="person.name" />
                                         <div class="ml-2">
                                             <div class="truncate">{{ person.name }}</div>
                                             <div class="text-xs mt-0.5 truncate capitalize">
@@ -88,7 +88,7 @@ async function changeSelectedTabIndex(index) {
                                 </div>
                                 <div class="md:col-span-5">
                                     <div class="inline-flex text-left items-center">
-                                        <img class="h-10 w-20 !rounded-sm p-1 ring-2 -ring-offset-2 ring-slate-500/10 object-contain bg-white" :src="person.company?.image_url" :alt="person.company?.name" :title="person.company?.name" />
+                                        <img class="h-10 w-20 !rounded-sm p-1 ring-2 -ring-offset-2 ring-slate-500/10 object-contain bg-white" :src="person.company?.imageUrl" :alt="person.company?.name" :title="person.company?.name" />
                                         <div class="ml-2">
                                             <div class="truncate">{{ person.company?.name }}</div>
                                             <div class="text-xs mt-0.5 truncate capitalize">
