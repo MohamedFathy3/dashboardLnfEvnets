@@ -22,6 +22,22 @@ const { data: company, refresh } = await useApiFetch(`/api/dashboard/member/${ro
     lazy: true,
     transform: (company) => company.data,
 });
+async function resendPassword() {
+    const { data, error } = await useApiFetch(`/api/event/email-reset-password`, {
+        method: 'POST',
+        body: {
+            type: 'company',
+            personId: route.params.id,
+        },
+        lazy: true,
+    });
+    if (data.value) {
+        useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
+    }
+    if (error.value) {
+        useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
+    }
+}
 </script>
 <template>
     <div v-if="company" class="flex flex-col gap-5">
@@ -48,6 +64,12 @@ const { data: company, refresh } = await useApiFetch(`/api/dashboard/member/${ro
                                         <div class="flex items-center gap-3 px-2 py-1.5 cursor-pointer hover:bg-slate-100 rounded-full transition-all">
                                             <Icon name="solar:add-circle-linear" class="size-5 opacity-75" />
                                             <span>Add Network</span>
+                                        </div>
+                                    </HeadlessMenuItem>
+                                    <HeadlessMenuItem as="li" class="py-0.5" @click="resendPassword">
+                                        <div class="flex items-center gap-3 px-2 py-1.5 cursor-pointer hover:bg-slate-100 rounded-full transition-all">
+                                            <Icon name="solar:circle-top-up-linear" class="size-5 opacity-75" />
+                                            <span>Resend Password</span>
                                         </div>
                                     </HeadlessMenuItem>
                                 </ul>
