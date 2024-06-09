@@ -305,7 +305,7 @@ async function deleteItems() {
                         <td>
                             <div>
                                 <div class="font-normal"><span class="mr-2">Count:</span>{{ row.count }}</div>
-                                <div v-if="row.available" class="text-success"><span class="font-light mr-2">Used:</span>{{ row.availableCount }}</div>
+                                <div v-if="row.available" class="text-success"><span class="font-light mr-2">Available:</span>{{ row.availableCount }}</div>
                                 <div v-else class="text-danger font-medium">Totally Used</div>
                             </div>
                         </td>
