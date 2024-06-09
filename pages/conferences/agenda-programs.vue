@@ -127,6 +127,7 @@ const item = ref({
     description: null,
     active: true,
     defaultStatus: true,
+    dressCode: null,
     dayId: null,
 });
 const rules = ref({
@@ -136,6 +137,7 @@ const rules = ref({
     location: {},
     description: {},
     active: {},
+    dressCode: {},
     defaultStatus: {},
     dayId: { required },
 });
@@ -158,6 +160,7 @@ const resetItemValues = async () => {
         name: null,
         location: null,
         description: null,
+        dressCode: null,
         active: true,
         defaultStatus: true,
         dayId: null,
@@ -411,6 +414,7 @@ const generateTimeOptions = computed(() => {
                     <FormInputField v-model="item.description" :errors="v$.description.$errors" class="col-span-12" label="Description" name="description" placeholder="Description" type="textarea" />
                     <FormSwitch v-model="item.active" :errors="v$.active.$errors" class="lg:col-span-4" label="Active" name="active-input" />
                     <FormSelectField v-model="item.dayId" :errors="v$.dayId.$errors" labelvalue="name" keyvalue="id" :select-data="days.data" class="lg:col-span-4" label="Event Day" name="day-id" placeholder="Event Day" />
+                    <FormInputField v-model="item.dressCode" :errors="v$.dressCode.$errors" class="col-span-12" label="Dress Code" name="dress-code" placeholder="Dress Code" />
                 </div>
             </template>
             <template #footer>
