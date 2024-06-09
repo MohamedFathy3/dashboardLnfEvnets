@@ -383,10 +383,12 @@ async function deleteItems() {
                         <div v-if="item?.totalUsedCompanies?.length > 0">
                             <div>Used for these Companies</div>
                             <ul class="mt-3 list-inside">
-                                <li v-for="(company, index) in item?.totalUsedCompanies" :key="company.id" class="font-semibold p-3 grid lg:grid-cols-12 items-center odd:bg-slate-100 rounded-md my-0.5">
+                                <li v-for="(company, index) in item?.totalUsedCompanies" :key="company.id" class="text-sm font-medium py-3 grid lg:grid-cols-12 items-center odd:bg-slate-100 rounded-full px-6 my-0.5">
                                     <div class="font-light text-primary">{{ index + 1 }}.</div>
                                     <div class="lg:col-span-5">{{ company.name }}</div>
-                                    <div class="lg:col-span-3 font-medium">{{ company.countryName }}, {{ company.city }}</div>
+                                    <div class="lg:col-span-3 font-normal">
+                                        {{ company.countryName }}, <span class="font-light">{{ company.city }}</span>
+                                    </div>
                                     <div class="lg:col-span-3">{{ company.email }}</div>
                                 </li>
                             </ul>
