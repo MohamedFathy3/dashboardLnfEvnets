@@ -272,7 +272,7 @@ onMounted(() => {
                         <th>Order</th>
                         <th>Company</th>
                         <th>Amount</th>
-                        <th>Sponsorship</th>
+                        <th>Items</th>
                         <th class="text-center">Package</th>
                         <th class="text-right">Action</th>
                     </tr>
@@ -288,7 +288,7 @@ onMounted(() => {
                                 </div>
                             </td>
                             <td class="text-sm font-normal whitespace-nowrap">
-                                <div class="flex items-center gap-3">
+                                <div class="flex items-start gap-3">
                                     <NuxtImg v-if="row.user?.imageUrl" :src="row.user?.imageUrl" class="h-10 !rounded-md w-16 object-contain p-1 shrink-0" />
                                     <div class="flex flex-col gap-0.5">
                                         <div class="flex items-center gap-1.5">
@@ -296,14 +296,14 @@ onMounted(() => {
                                         </div>
                                         <div class="flex items-center text-xs whitespace-nowrap max-w-36">
                                             <NuxtImg v-if="row.user?.imageUrl" :src="row.user.countryFlag" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
-                                            <div class="opacity-75 font-semibold truncate">{{ row.user?.countryName }}</div>
-                                            <span class="capitalize font-light opacity-80 truncate">, {{ row.user?.city.toLowerCase() }}</span>
+                                            <div class="text-xs opacity-75 font-semibold truncate">{{ row.user?.countryName }}</div>
                                         </div>
+                                        <span class="capitalize text-xs font-light opacity-80 truncate">{{ row.user?.city.toLowerCase() }}</span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <div class="font-medium">{{ row.amount }}<span class="font-light ml-0.5 opacity-75">USD</span></div>
+                                <div class="font-medium">$ {{ row.amount }}</div>
                             </td>
                             <td>
                                 <div v-if="row.sponsorshipItems.length > 0" class="flex items-center -space-x-4">
@@ -320,12 +320,11 @@ onMounted(() => {
                             <td class="text-right">
                                 <div class="flex items-center gap-3">
                                     <NuxtLink :to="'/conferences-attendees/orders/' + row.id">
-                                        <button class="btn btn-secondary btn-rounded btn-sm gap-3">
-                                            <Icon name="solar:eye-outline" class="size-4" />
-                                            View
-                                        </button>
+                                        <div class="p-1.5 bg-slate-100 !rounded-md text-slate-500 hover:scale-[103%] transition-all cursor-pointer" @click="deleteItems(row.id)">
+                                            <Icon name="solar:eye-outline" class="size-5" />
+                                        </div>
                                     </NuxtLink>
-                                    <div class="p-1.5 text-danger hover:scale-[103%] transition-all cursor-pointer" @click="deleteItems(row.id)">
+                                    <div class="p-1.5 bg-slate-100 !rounded-md text-danger hover:scale-[103%] transition-all cursor-pointer" @click="deleteItems(row.id)">
                                         <Icon name="solar:trash-bin-minimalistic-linear" class="size-5" />
                                     </div>
                                 </div>
