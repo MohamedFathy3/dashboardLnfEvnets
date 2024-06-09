@@ -251,6 +251,6 @@ const { data: company, refresh } = await useApiFetch(`/api/dashboard/member/${ro
             </div>
         </div>
         <MemberNetworkModal v-if="networkModalOpen" :open="networkModalOpen" :member-id="company.id" @close="closeNetworkModal" @refresh="refresh" />
-        <MemberUpdateModal v-if="updateModalOpen" :open="updateModalOpen" :member="company" @close="closeUpdateModal" @refresh="refresh" />
+        <MemberUpdateMemberEventModal v-if="updateModalOpen" :open="updateModalOpen" :member="company" @close="closeUpdateModal" @refresh="refresh" />
     </div>
 </template>

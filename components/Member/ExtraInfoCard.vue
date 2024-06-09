@@ -18,12 +18,12 @@ const resources = useResourceStore();
             </div>
         </div>
         <ul class="pt-3 divide-y divide-dashed !divide-slate-100 text-sm">
-            <li v-if="props.member?.eventRegisterDate" class="py-1.5 flex items-center justify-between min-h-10">
+            <li v-if="props.member?.eventRegisterDate" class="py-1.5 flex flex-col justify-between min-h-10">
                 <div class="flex items-center gap-1.5">
                     <Icon name="solar:calendar-linear" class="size-4 opacity-75" />
                     Reg. Date
                 </div>
-                <div class="font-medium">{{ props.member.eventRegisterDate }}</div>
+                <div class="font-medium ml-6">{{ props.member.eventRegisterDate }}</div>
             </li>
             <li v-if="props.member?.membershipType" class="py-1.5 flex items-center justify-between min-h-10">
                 <div class="flex items-center gap-1.5">
@@ -40,7 +40,7 @@ const resources = useResourceStore();
                 <UiCompanyTypeBadge v-if="props.member.typeCompany" :data="props.member.typeCompany" />
                 <div v-else class="font-light ml-6">---</div>
             </li>
-            <li :class="[props.member.referralId && 'flex-col', 'py-1.5 flex  justify-between min-h-10']">
+            <li :class="[props.member.referralId && 'flex-col', 'py-1.5 flex justify-between min-h-10']">
                 <div class="flex items-center gap-1.5">
                     <Icon name="solar:multiple-forward-left-linear" class="size-4 opacity-75" />
                     Referral
@@ -59,7 +59,7 @@ const resources = useResourceStore();
                 <div v-if="props.member?.ref" class="font-medium ml-6">{{ props.member.ref?.name }}</div>
                 <div v-else class="font-light ml-6">---</div>
             </li>
-            <li class="py-1.5 flex justify-between min-h-10">
+            <li class="py-1.5 flex flex-col justify-between min-h-10">
                 <div class="flex items-center gap-1.5">
                     <Icon name="solar:globus-linear" class="size-4 opacity-75" />
                     Detected Country

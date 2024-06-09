@@ -270,8 +270,8 @@ onMounted(() => {
                 <thead>
                     <tr class="uppercase text-sm">
                         <th>Order</th>
-                        <th>Amount</th>
                         <th>Company</th>
+                        <th>Amount</th>
                         <th>Sponsorship</th>
                         <th class="text-center">Package</th>
                         <th class="text-right">Action</th>
@@ -292,9 +292,9 @@ onMounted(() => {
                                     <NuxtImg v-if="row.user?.imageUrl" :src="row.user?.imageUrl" class="h-10 !rounded-md w-16 object-contain p-1 shrink-0" />
                                     <div class="flex flex-col gap-0.5">
                                         <div class="flex items-center gap-1.5">
-                                            <span class="truncate 2xl:max-w-64 max-w-44">{{ row.user?.name }}</span>
+                                            <span class="truncate 2xl:max-w-64 max-w-36">{{ row.user?.name }}</span>
                                         </div>
-                                        <div class="flex items-center text-xs whitespace-nowrap">
+                                        <div class="flex items-center text-xs whitespace-nowrap max-w-36">
                                             <NuxtImg v-if="row.user?.imageUrl" :src="row.user.countryFlag" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
                                             <div class="opacity-75 font-semibold truncate">{{ row.user?.countryName }}</div>
                                             <span class="capitalize font-light opacity-80 truncate">, {{ row.user?.city.toLowerCase() }}</span>
@@ -306,14 +306,16 @@ onMounted(() => {
                                 <div class="font-medium">{{ row.amount }}<span class="font-light ml-0.5 opacity-75">USD</span></div>
                             </td>
                             <td>
-                                <div class="flex items-center -space-x-4">
+                                <div v-if="row.sponsorshipItems.length > 0" class="flex items-center -space-x-4">
                                     <template v-for="item in row.sponsorshipItems" :key="item.id">
                                         <NuxtImg v-if="item.imageUrl" :src="item.imageUrl" :alt="item.name" :title="item.name" class="bg-primary size-10 !rounded-full p-1" />
                                     </template>
                                 </div>
+                                <div v-else>---</div>
                             </td>
                             <td>
-                                <div class="text-xs font-normal text-center">{{ row.package?.name }}</div>
+                                <div v-if="row.package" class="text-xs font-normal text-center">{{ row.package?.name }}</div>
+                                <div v-else>---</div>
                             </td>
                             <td class="text-right">
                                 <div class="flex items-center gap-3">

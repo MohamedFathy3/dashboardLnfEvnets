@@ -97,6 +97,22 @@ async function updateItem() {
         useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
     }
 }
+async function resendPassword() {
+    const { data, error } = await useApiFetch(`/api/event/email-reset-password`, {
+        method: 'POST',
+        body: {
+            type: 'delegate',
+            personId: item.value?.id,
+        },
+        lazy: true,
+    });
+    if (data.value) {
+        useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
+    }
+    if (error.value) {
+        useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
+    }
+}
 async function handleModalSubmit() {
     formLoading.value = true;
     const result = await v$.value.$validate();
@@ -219,15 +235,21 @@ onMounted(async () => {
             <div v-else class="p-5 text-center animate-pulse">Loading Data...</div>
         </template>
         <template #footer>
-            <div class="w-full flex items-center justify-end gap-5">
-                <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-danger px-4" type="button" @click="closeModal">
-                    <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
-                    <span>Close</span>
+            <div class="w-full flex items-center justify-between gap-5">
+                <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-warning px-4" type="button" @click="resendPassword">
+                    <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:circle-top-up-linear'" class="w-5 h-5 mr-2" />
+                    <span>Resend Password</span>
                 </button>
-                <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit">
-                    <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
-                    <span v-html="'update'" />
-                </button>
+                <div class="flex items-center justify-end gap-5">
+                    <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-danger px-4" type="button" @click="closeModal">
+                        <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
+                        <span>Close</span>
+                    </button>
+                    <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit">
+                        <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
+                        <span v-html="'update'" />
+                    </button>
+                </div>
             </div>
         </template>
     </TheModal>

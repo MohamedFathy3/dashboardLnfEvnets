@@ -118,7 +118,6 @@ watch(
     },
     { deep: true },
 );
-
 const isSelected = (id) => {
     return selectedRows.value.some((r) => r === id);
 };
@@ -156,7 +155,6 @@ const toggleRowSelection = (id) => {
         selectedRows.value.splice(index, 1);
     }
 };
-
 async function deleteItems() {
     const confirmed = confirm('Are you sure you want to delete this item?');
     if (confirmed) {
@@ -174,13 +172,11 @@ async function deleteItems() {
         }
     }
 }
-
 const conferenceInfoBoxes = ref([]);
 const { data: conferenceStatistics, execute: fetchConferenceStatistics } = await useApiFetch('/api/event/dashboard/report', {
     immediate: false,
     lazy: true,
 });
-
 async function prepareInfoBoxes() {
     await fetchConferenceStatistics();
     conferenceInfoBoxes.value = [
@@ -210,7 +206,6 @@ async function prepareInfoBoxes() {
         },
     ];
 }
-
 onMounted(() => {
     prepareInfoBoxes();
 });

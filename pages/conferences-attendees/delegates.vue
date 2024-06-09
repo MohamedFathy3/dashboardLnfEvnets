@@ -151,72 +151,72 @@ const resources = useResourceStore();
             </button>
         </div>
         <!-- Table -->
-        <table class="table table-report font-light">
-            <thead>
-                <tr class="uppercase text-sm">
-                    <th>Delegate</th>
-                    <th>Company</th>
-                    <th>Membership</th>
-                    <th>Order Status</th>
-                    <th v-if="serverParams.deleted">Deleted At</th>
-                    <th class="text-right">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <template v-if="!pending && rows">
-                    <tr v-for="row in rows.data" :key="row.id" class="text-sm">
-                        <td class="font-normal">
-                            <div class="flex items-center gap-3">
-                                <NuxtImg :src="row.imageUrl" :alt="row.name" :title="row.name" class="size-14 !rounded-full object-cover" />
+        <div class="overflow-x-auto">
+            <table class="table table-report font-light">
+                <thead>
+                    <tr class="uppercase text-sm">
+                        <th>Delegate</th>
+                        <th>Company</th>
+                        <th>Membership</th>
+                        <th>Order Status</th>
+                        <th v-if="serverParams.deleted">Deleted At</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template v-if="!pending && rows">
+                        <tr v-for="row in rows.data" :key="row.id" class="text-sm">
+                            <td class="font-normal">
+                                <div class="flex items-center gap-3">
+                                    <NuxtImg :src="row.imageUrl" :alt="row.name" :title="row.name" class="size-10 !rounded-full object-cover" />
+                                    <div>
+                                        <div class="max-w-36 truncate">{{ row.name }}</div>
+                                        <div class="font-normal mt-0.5 text-xs opacity-75 truncate max-w-36">{{ row.jobTitle }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-sm font-normal">
+                                <div class="flex items-center gap-3">
+                                    <NuxtImg :src="row.company.imageUrl" class="h-10 !rounded-md w-16 object-contain p-0.5 shrink-0" />
+                                    <div class="flex flex-col gap-0.5">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="truncate 2xl:max-w-64 max-w-36">{{ row.company.name }}</span>
+                                        </div>
+                                        <div class="flex items-center text-xs whitespace-nowrap truncate">
+                                            <NuxtImg :src="row.company.countryFlag" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
+                                            <div class="opacity-75 font-semibold truncate">{{ row.company.countryName }}</div>
+                                            <span class="capitalize font-light opacity-80">, {{ row.company.city.toLowerCase() }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <UiNetworkTypeBadge :data="row.company.membershipType" />
+                            </td>
+                            <td>
+                                <UiEventOrderStatusBadge :data="row.orderStatus" />
+                            </td>
+                            <td v-if="serverParams.deleted" class="text-sm">{{ row.deletedAt }}</td>
+                            <td class="text-right">
                                 <div>
-                                    <div>{{ row.name }}</div>
-                                    <div class="font-normal mt-0.5 text-xs opacity-75 truncate max-w-[15rem]">{{ row.jobTitle }}</div>
-                                    <div class="font-light mt-0.5 text-xs opacity-75 truncate max-w-[15rem]">{{ row.email }}</div>
+                                    <button :disabled="serverParams.deleted" class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
+                                        <Icon name="solar:pen-new-round-outline" class="size-4" />
+                                        Edit
+                                    </button>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="text-sm font-normal whitespace-nowrap">
-                            <div class="flex items-center gap-3">
-                                <NuxtImg :src="row.company.imageUrl" class="h-12 !rounded-md w-20 object-contain p-1 shrink-0" />
-                                <div class="flex flex-col gap-0.5">
-                                    <div class="flex items-center gap-1.5">
-                                        <span class="truncate 2xl:max-w-64 max-w-44">{{ row.company.name }}</span>
-                                    </div>
-                                    <div class="flex items-center text-xs whitespace-nowrap">
-                                        <NuxtImg :src="row.company.countryFlag" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
-                                        <div class="opacity-75 font-semibold">{{ row.company.countryName }}</div>
-                                        <span class="capitalize font-light opacity-80">, {{ row.company.city.toLowerCase() }}</span>
-                                    </div>
-                                    <div class="font-light mt-0.5 text-xs opacity-75 truncate max-w-[15rem]">{{ row.company.email }}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <UiNetworkTypeBadge :data="row.company.membershipType" />
-                        </td>
-                        <td>
-                            <UiEventOrderStatusBadge :data="row.orderStatus" />
-                        </td>
-                        <td v-if="serverParams.deleted" class="text-sm">{{ row.deletedAt }}</td>
-                        <td class="text-right">
-                            <div>
-                                <button :disabled="serverParams.deleted" class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
-                                    <Icon name="solar:pen-new-round-outline" class="size-4" />
-                                    Edit
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </template>
-                <template v-else>
-                    <tr v-for="i in serverParams.perPage" :key="i">
-                        <td colspan="5">
-                            <div class="h-12 !opacity-50 animate-pulse" />
-                        </td>
-                    </tr>
-                </template>
-            </tbody>
-        </table>
+                            </td>
+                        </tr>
+                    </template>
+                    <template v-else>
+                        <tr v-for="i in serverParams.perPage" :key="i">
+                            <td colspan="5">
+                                <div class="h-12 !opacity-50 animate-pulse" />
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
         <!-- Pagination -->
         <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
         <MemberDelegateModal v-if="isOpen" :open="isOpen" :person-id="selectedId" @close="closeModal" @refresh="refresh" />

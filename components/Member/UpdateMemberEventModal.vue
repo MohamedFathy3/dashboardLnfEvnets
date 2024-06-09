@@ -38,17 +38,9 @@ const item = ref({
     branches: props.member?.branches,
     employeesNum: props.member?.employeesNum,
     businessEst: props.member?.businessEst,
-    otherCertificates: props.member?.otherCertificates,
-    certificates: props.member?.certificates,
-    otherServices: props.member?.otherServices,
-    services: props.member?.services,
-    referralId: props.member?.referralId,
     refValue: props.member?.refValue,
-    tosAcceptance: props.member?.tosAcceptance,
     wsaId: props.member?.wsaId,
     unhashedPassword: props.member?.unhashedPassword,
-    mapLong: props.member?.mapLong,
-    mapLat: props.member?.mapLat,
     typeCompany: props.member?.typeCompany,
 });
 onMounted(() => {
@@ -74,17 +66,9 @@ onMounted(() => {
         item.value.branches = props.member?.branches;
         item.value.employeesNum = props.member?.employeesNum;
         item.value.businessEst = props.member?.businessEst;
-        item.value.otherCertificates = props.member?.otherCertificates;
-        item.value.certificates = props.member?.certificates;
-        item.value.otherServices = props.member?.otherServices;
-        item.value.services = props.member?.services;
-        item.value.referralId = props.member?.referralId;
         item.value.refValue = props.member?.refValue;
-        item.value.tosAcceptance = props.member?.tosAcceptance;
         item.value.wsaId = props.member?.wsaId;
         item.value.unhashedPassword = props.member?.unhashedPassword;
-        item.value.mapLong = props.member?.mapLong;
-        item.value.mapLat = props.member?.mapLat;
         item.value.typeCompany = props.member?.typeCompany;
     }
 });
@@ -108,18 +92,10 @@ const rules = ref({
     branches: {},
     employeesNum: {},
     businessEst: {},
-    otherCertificates: {},
-    certificates: {},
-    otherServices: {},
-    services: {},
-    referralId: {},
     refValue: {},
-    tosAcceptance: {},
     wsaId: { numeric },
     email: { required, email },
     unhashedPassword: {},
-    mapLong: {},
-    mapLat: {},
     typeCompany: {},
 });
 const v$ = useVuelidate(rules, item);
@@ -147,17 +123,9 @@ const resetMemberValues = async () => {
         branches: null,
         employeesNum: null,
         businessEst: null,
-        otherCertificates: null,
-        certificates: [],
-        otherServices: null,
-        services: [],
-        referralId: null,
         refValue: null,
-        tosAcceptance: true,
         wsaId: null,
         unhashedPassword: null,
-        mapLong: null,
-        mapLat: null,
         typeCompany: null,
     };
 };
@@ -250,8 +218,6 @@ const companyTypes = ref([
                             placeholder="Company Type"
                         />
                         <FormInputField v-model="item.wsaId" :errors="v$.wsaId.$errors" class="col-span-12 lg:col-span-6" type="number" label="WSA ID" name="wsa-id" placeholder="WSA ID" />
-                        <FormInputField v-model="item.mapLat" :errors="v$.mapLat.$errors" class="col-span-12 lg:col-span-6" label="Latitude" name="company-map-lat" placeholder="Latitude" />
-                        <FormInputField v-model="item.mapLong" :errors="v$.mapLong.$errors" class="col-span-12 lg:col-span-6" label="Longitude" name="company-map-long" placeholder="Longitude" />
                     </div>
                 </div>
                 <div class="mt-6">
@@ -335,95 +301,6 @@ const companyTypes = ref([
                                 <FormInputField v-model="item.branches" :errors="v$.branches.$errors" class="mt-2 col-span-12" label="Branches Details" type="textarea" name="company-branches" placeholder="Branches Details" />
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="mt-6">
-                    <div class="font-medium text-sm ml-4">Services</div>
-                    <div class="mt-2 border border-slate-100 bg-slate-50/50 rounded-lg grid grid-cols-12 p-5 gap-5">
-                        <div class="sm:col-span-12">
-                            <fieldset class="px-4 grid lg:grid-cols-3 sm:grid-cols-2 gap-6 grid-cols-1 duration-300 ease-in-out">
-                                <div v-for="option in resources?.services" :key="option.id" class="relative flex items-start">
-                                    <div class="flex items-center h-6">
-                                        <input
-                                            :id="option.slug"
-                                            v-model="item.services"
-                                            :checked="item.services.includes(option.id)"
-                                            :aria-describedby="option.slug + '-description'"
-                                            :disabled="!option.active"
-                                            :name="option.slug"
-                                            :value="option.id"
-                                            type="checkbox"
-                                            class="focus:ring-primary h-5 w-5 rounded text-primary border-slate-500 disabled:read-only:opacity-50 disabled:read-only:cursor-not-allowed"
-                                        />
-                                    </div>
-                                    <div class="ml-3 text-sm">
-                                        <label class="disabled:read-only:opacity-25 font-sm ease-in-out duration-150" :for="option.slug">
-                                            {{ option.name }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
-                        <div v-if="checkSlugs(item.services, resources.services, 'others')" class="sm:col-span-12">
-                            <FormInputField v-model="item.otherServices" :errors="v$.otherServices.$errors" class="col-span-12 lg:col-span-6" label="Services" name="company-email" placeholder="Services" />
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-6">
-                    <div class="font-medium text-sm ml-4">Certificates</div>
-                    <div class="mt-2 border border-slate-100 bg-slate-50/50 rounded-lg grid grid-cols-12 p-5 gap-5">
-                        <div class="sm:col-span-12">
-                            <fieldset class="px-4 grid lg:grid-cols-3 sm:grid-cols-2 gap-6 grid-cols-1 duration-300 ease-in-out">
-                                <div v-for="option in resources.certificates" :key="option.id" class="relative flex items-start">
-                                    <div class="flex items-center h-6">
-                                        <input
-                                            :id="option.slug"
-                                            v-model="item.certificates"
-                                            :checked="item.certificates.includes(option.id)"
-                                            :aria-describedby="option.slug + '-description'"
-                                            :disabled="!option.active"
-                                            :name="option.slug"
-                                            :value="option.id"
-                                            type="checkbox"
-                                            class="focus:ring-primary h-5 w-5 rounded text-primary border-slate-500 disabled:read-only:opacity-50 disabled:read-only:cursor-not-allowed"
-                                        />
-                                    </div>
-                                    <div class="ml-3 text-sm">
-                                        <label :class="['disabled:read-only:opacity-25']" :for="option.slug" class="font-sm ease-in-out duration-150">
-                                            {{ option.name }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
-                        <div v-if="checkSlugs(item.certificates, resources.certificates, 'others')" class="sm:col-span-12">
-                            <FormInputField v-model="item.otherCertificates" :errors="v$.otherCertificates.$errors" class="col-span-12 lg:col-span-6" label="Certificates" name="company-email" placeholder="Certificates" />
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-6">
-                    <div class="font-medium text-sm ml-4">Referral</div>
-                    <div class="mt-2 border border-slate-100 bg-slate-50/50 rounded-lg grid grid-cols-12 p-5 gap-5">
-                        <FormSelectField
-                            v-model="item.referralId"
-                            :errors="v$.referralId.$errors"
-                            labelvalue="name"
-                            keyvalue="id"
-                            :select-data="resources?.referrals"
-                            :class="[!['event', 'wsa-member'].includes(resources.referrals.find((r) => r.id === item.referralId)?.slug) ? '' : 'lg:col-span-9', 'col-span-12']"
-                            label="Where did you first hear about us? Please choose one"
-                            name="company-referral"
-                            placeholder="Where did you first hear about us? Please choose one"
-                        />
-                        <FormInputField
-                            v-if="['event', 'wsa-member'].includes(resources.referrals.find((r) => r.id === item.referralId)?.slug)"
-                            v-model="item.refValue"
-                            name="ref-value"
-                            class="col-span-12 lg:col-span-3"
-                            :label="resources.referrals.find((r) => r.id === item.referralId)?.slug === 'event' ? 'Event Name' : 'Company'"
-                            :placeholder="resources.referrals.find((r) => r.id === item.referralId)?.slug === 'event' ? 'Event Name' : 'Company'"
-                            type="text"
-                        />
                     </div>
                 </div>
             </div>
