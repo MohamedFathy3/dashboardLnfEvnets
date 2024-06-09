@@ -320,7 +320,7 @@ onMounted(() => {
                             <td class="text-right">
                                 <div class="flex items-center gap-3">
                                     <NuxtLink :to="'/conferences-attendees/orders/' + row.id">
-                                        <div class="p-1.5 bg-slate-100 !rounded-md text-slate-500 hover:scale-[103%] transition-all cursor-pointer" @click="deleteItems(row.id)">
+                                        <div class="p-1.5 bg-slate-100 !rounded-md text-slate-500 hover:scale-[103%] transition-all cursor-pointer">
                                             <Icon name="solar:eye-outline" class="size-5" />
                                         </div>
                                     </NuxtLink>
