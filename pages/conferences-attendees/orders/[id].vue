@@ -47,10 +47,13 @@ const getDaysAndNightsValues = (datesArray) => {
                     <Icon name="solar:buildings-outline" class="size-5 opacity-75" />
                     <div>
                         <div>{{ order.uuid }}</div>
-                        <div class="text-sm opacity-75">{{ order.createdAt }}</div>
+                        <div class="text-xs opacity-75">{{ order.createdAt }}</div>
                     </div>
                 </div>
-                <ConferenceOrderStatusSwitch :order-id="order.id" :order-status="order.status" @reload="refresh" />
+                <div class="flex items-center gap-3">
+                    <UiNetworkTypeBadge :data="order.company.membershipType" />
+                    <ConferenceOrderStatusSwitch :order-id="order.id" :order-status="order.status" @reload="refresh" />
+                </div>
             </div>
         </div>
         <div>
@@ -63,18 +66,18 @@ const getDaysAndNightsValues = (datesArray) => {
                         <div class="line-clamp-1">{{ order.company.name }}</div>
                         <div class="font-light text-sm mt-0.5 lowercase hover:text-warning cursor-pointer transition-all" @click="useClipboard(order.company.email.toLowerCase())">{{ order.company.email.toLowerCase() }}</div>
                     </div>
-                    <div class="border-t mt-1.5 pt-1.5 border-dashed">
-                        <div class="flex items-center line-clamp-1 whitespace-nowrap">
+                    <ul class="border-t mt-1.5 pt-1.5 border-dashed">
+                        <li class="flex items-center line-clamp-1 whitespace-nowrap">
                             <NuxtImg :src="order.company.countryFlag" :alt="order.company.countryName" :title="order.company.countryName" class="w-6 h-4 mr-2 object-contain" />
                             <div v-if="order.company.countryName" class="font-medium opacity-75">{{ order.company.countryName }}</div>
                             <div v-if="order.company.state" class="opacity-75 truncate">, {{ order.company.state }}</div>
                             <div v-if="order.company.city" class="opacity-75 truncate">, {{ order.company.city }}</div>
-                        </div>
-                        <div class="mt-1.5 pt-1.5 border-t border-dashed opacity-75">
+                        </li>
+                        <li class="mt-1.5 pt-1.5 border-t border-dashed opacity-75">
                             <span v-if="order.company.addressLine1">{{ order.company.addressLine1 }}</span>
                             <span v-if="order.company.addressLine2">, {{ order.company.addressLine2 }}</span>
-                        </div>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
                 <div class="bg-white shadow-sm p-5 rounded-xl lg:col-span-3 border-2 border-dashed h-full flex items-center place-content-center">
                     <div v-if="!order.packageId" class="text-center font-normal opacity-75">No Package for this order</div>
