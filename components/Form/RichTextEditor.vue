@@ -37,6 +37,8 @@ const editor = useEditor({
         TiptapLink.configure({
             openOnClick: false,
         }),
+        TipTapTextStyle,
+        TiptapColor,
     ],
 });
 const emit = defineEmits(['update:model-value']);
@@ -89,13 +91,15 @@ onBeforeUnmount(() => {
                 <!--            <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('paragraph') }" @click="editor.chain().focus().setParagraph().run()">-->
                 <!--                <Icon name="oui:token-parameter" class="size-5" />-->
                 <!--            </button>-->
-                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()">h1</button>
-                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()">h2</button>
-                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()">h3</button>
-                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }" @click="editor.chain().focus().toggleHeading({ level: 4 }).run()">h4</button>
-                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }" @click="editor.chain().focus().toggleHeading({ level: 5 }).run()">h5</button>
-                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }" @click="editor.chain().focus().toggleHeading({ level: 6 }).run()">h6</button>
-                <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }" @click="editor.chain().focus().setTextAlign('left').run()">
+                <input type="color" class="editor-button size-8 !p-0" :value="editor.getAttributes('textStyle').color" @input="editor.chain().focus().setColor($event.target.value).run()" />
+                <button type="button" class="editor-button !h-8 text-xs" @click="editor.chain().focus().unsetColor().run()">Remove Color</button>
+                <button type="button" class="editor-button !size-8" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()">h1</button>
+                <button type="button" class="editor-button !size-8" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()">h2</button>
+                <button type="button" class="editor-button !size-8" :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()">h3</button>
+                <button type="button" class="editor-button !size-8" :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }" @click="editor.chain().focus().toggleHeading({ level: 4 }).run()">h4</button>
+                <button type="button" class="editor-button !size-8" :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }" @click="editor.chain().focus().toggleHeading({ level: 5 }).run()">h5</button>
+                <button type="button" class="editor-button !size-8" :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }" @click="editor.chain().focus().toggleHeading({ level: 6 }).run()">h6</button>
+                <button type="button" class="editor-button !size-8" :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }" @click="editor.chain().focus().setTextAlign('left').run()">
                     <Icon name="oui:editor-align-left" class="size-5" />
                 </button>
                 <button type="button" class="editor-button" :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }" @click="editor.chain().focus().setTextAlign('center').run()">

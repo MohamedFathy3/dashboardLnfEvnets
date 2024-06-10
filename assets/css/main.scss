@@ -80,6 +80,7 @@ body {
 @import "./components/_full-calendar.css";
 @import "./components/_pristine.css";
 @import "./components/_file.css";
+@import "vue3-colorpicker/style.css";
 
 .page-container {
   @apply relative rounded-t-2xl bg-gradient-to-b from-white via-white to-slate-100 dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 -mt-24 max-w-7xl p-5 xl:mx-auto;
