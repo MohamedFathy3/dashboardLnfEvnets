@@ -238,6 +238,7 @@ const resources = useResourceStore();
                     </th>
                     <th>Location</th>
                     <th>Visit</th>
+                    <th>Date</th>
                     <th class="text-right">Action</th>
                 </tr>
             </thead>
@@ -262,6 +263,11 @@ const resources = useResourceStore();
                                     <span v-else class="text-xs font-normal bg-slate-100 rounded-full px-2 border py-0.5">Guest</span>
                                 </div>
                                 <div class="text-xs font-normal mt-0.5">{{ row.path }}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <span class="font-normal opacity-75">{{ row.createdAt }}</span>
                             </div>
                         </td>
                         <td class="text-right">
