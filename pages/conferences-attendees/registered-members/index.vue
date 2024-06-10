@@ -190,7 +190,7 @@ async function prepareInfoBoxes() {
             title: 'Registered Companies',
             icon: 'solar:case-minimalistic-line-duotone',
             value: conferenceStatistics.value.totalRegisteredCompanies,
-            description: 'Members',
+            description: 'Companies',
         },
         {
             title: 'Approved Delegates',
