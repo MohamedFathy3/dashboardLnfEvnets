@@ -246,8 +246,11 @@ const config = useRuntimeConfig();
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
-                <div>Registered Members</div>
+                <Icon name="solar:users-group-two-rounded-outline" class="size-5 opacity-75" />
+                <div>
+                    <span>Registered Members</span>
+                    <span class="text-sm ml-3 bg-white border px-3 py-1 rounded-full">{{ rows.meta.total }} Members</span>
+                </div>
             </div>
             <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5 intro-x">
                 <template v-if="selectedRows.length > 0">
@@ -260,7 +263,6 @@ const config = useRuntimeConfig();
                     <a :href="config.public.apiUrl + '/export-excel/report-attendee/export'" target="_blank">
                         <button type="button" class="btn btn-dark btn-rounded btn-sm w-full justify-between gap-3">
                             <span class="items-center flex">
-                                <Icon name="solar:users-group-two-rounded-linear" class="w-5 h-5 mr-2" />
                                 <span>Export Attendees</span>
                             </span>
                             <Icon name="solar:download-outline" class="w-5 h-5 mr-2" />
