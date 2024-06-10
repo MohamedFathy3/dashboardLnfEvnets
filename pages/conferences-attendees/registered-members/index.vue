@@ -187,7 +187,7 @@ async function prepareInfoBoxes() {
             description: 'USD',
         },
         {
-            title: 'Registered Companies',
+            title: 'Approved Companies',
             icon: 'solar:case-minimalistic-line-duotone',
             value: conferenceStatistics.value.totalRegisteredCompanies,
             description: 'Companies',
@@ -249,7 +249,7 @@ const config = useRuntimeConfig();
                 <Icon name="solar:users-group-two-rounded-outline" class="size-5 opacity-75" />
                 <div>
                     <span>Registered Companies</span>
-                    <span class="text-sm ml-3 bg-white border px-3 py-1 rounded-full">{{ rows.meta.total }} Members</span>
+                    <span class="text-sm ml-3 bg-white border px-3 py-1 rounded-full">{{ rows.meta.total }} Companies</span>
                 </div>
             </div>
             <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5 intro-x">
