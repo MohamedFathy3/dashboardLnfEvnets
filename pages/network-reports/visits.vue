@@ -230,65 +230,67 @@ const resources = useResourceStore();
             </button>
         </div>
         <!-- Table -->
-        <table class="table table-report font-light">
-            <thead>
-                <tr class="uppercase text-sm">
-                    <th class="text-left">
-                        <input v-model="allSelected" type="checkbox" class="form-check-input" @change="selectAllRows" />
-                    </th>
-                    <th>Location</th>
-                    <th>Visit</th>
-                    <th>Date</th>
-                    <th class="text-right">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <template v-if="!pending && rows">
-                    <tr v-for="row in rows.data" :key="row.id" class="text-sm">
-                        <td>
-                            <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
-                        </td>
-                        <td class="font-normal">
-                            <div>{{ row.ip }}</div>
-                            <div class="flex items-center text-xs whitespace-nowrap mt-0.5">
-                                <NuxtImg :src="row.country?.imageUrl" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
-                                <div class="opacity-75 font-semibold">{{ row.country?.name }}</div>
-                                <span class="capitalize font-light opacity-80">, {{ row.city?.toLowerCase() }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div>
-                                <div>
-                                    <span v-if="row.person" class="text-xs font-normal bg-success/25 text-success !border-success/25 rounded-full px-2 border py-0.5">{{ row.person.name }}</span>
-                                    <span v-else class="text-xs font-normal bg-slate-100 rounded-full px-2 border py-0.5">Guest</span>
+        <div class="overflow-x-auto">
+            <table class="table table-report font-light">
+                <thead>
+                    <tr class="uppercase text-sm">
+                        <th class="text-left">
+                            <input v-model="allSelected" type="checkbox" class="form-check-input" @change="selectAllRows" />
+                        </th>
+                        <th>Location</th>
+                        <th>Visit</th>
+                        <th>Date</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template v-if="!pending && rows">
+                        <tr v-for="row in rows.data" :key="row.id" class="text-sm">
+                            <td>
+                                <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
+                            </td>
+                            <td class="font-normal">
+                                <div>{{ row.ip }}</div>
+                                <div class="flex items-center text-xs whitespace-nowrap mt-0.5">
+                                    <NuxtImg :src="row.country?.imageUrl" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
+                                    <div class="opacity-75 font-semibold">{{ row.country?.name }}</div>
+                                    <span class="capitalize font-light opacity-80">, {{ row.city?.toLowerCase() }}</span>
                                 </div>
-                                <div class="text-xs font-normal mt-0.5 line-clamp-1 truncate w-36">{{ row.path }}</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div>
-                                <span class="font-normal text-sm opacity-75">{{ row.createdAt }}</span>
-                            </div>
-                        </td>
-                        <td class="text-right">
-                            <div>
-                                <button :disabled="serverParams.deleted" class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
-                                    <Icon name="solar:eye-outline" class="size-4" />
-                                    View
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </template>
-                <template v-else>
-                    <tr v-for="i in serverParams.perPage" :key="i">
-                        <td colspan="5">
-                            <div class="h-12 !opacity-50 animate-pulse" />
-                        </td>
-                    </tr>
-                </template>
-            </tbody>
-        </table>
+                            </td>
+                            <td>
+                                <div>
+                                    <div>
+                                        <span v-if="row.person" class="text-xs font-normal bg-success/25 text-success !border-success/25 rounded-full px-2 border py-0.5">{{ row.person.name }}</span>
+                                        <span v-else class="text-xs font-normal bg-slate-100 rounded-full px-2 border py-0.5">Guest</span>
+                                    </div>
+                                    <div class="text-xs font-normal mt-0.5 line-clamp-1 truncate w-36">{{ row.path }}</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <span class="font-normal text-sm opacity-75">{{ row.createdAt }}</span>
+                                </div>
+                            </td>
+                            <td class="text-right">
+                                <div>
+                                    <button :disabled="serverParams.deleted" class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
+                                        <Icon name="solar:eye-outline" class="size-4" />
+                                        View
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
+                    <template v-else>
+                        <tr v-for="i in serverParams.perPage" :key="i">
+                            <td colspan="5">
+                                <div class="h-12 !opacity-50 animate-pulse" />
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
         <!-- Pagination -->
         <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
 
