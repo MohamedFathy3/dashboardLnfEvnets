@@ -263,7 +263,7 @@ const resources = useResourceStore();
                                         <span v-if="row.person" class="text-xs font-normal bg-success/25 text-success !border-success/25 rounded-full px-2 border py-0.5">{{ row.person.name }}</span>
                                         <span v-else class="text-xs font-normal bg-slate-100 rounded-full px-2 border py-0.5">Guest</span>
                                     </div>
-                                    <div class="text-xs font-normal mt-0.5 line-clamp-1 truncate w-36">{{ row.path }}</div>
+                                    <div class="text-xs font-normal mt-0.5 whitespace-nowrap truncate w-44">{{ row.path }}</div>
                                 </div>
                             </td>
                             <td>
