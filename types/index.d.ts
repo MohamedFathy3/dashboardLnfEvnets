@@ -186,6 +186,7 @@ type ConferenceStatisticsBox = {
     totalApprovedDelegates: number;
     totalBookedRooms: number;
     totalRegisteredCompanies: number;
+    totalApprovedCompanies: number;
 };
 type NetworkStatisticsBox = {
     totalApproved: number;

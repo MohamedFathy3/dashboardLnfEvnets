@@ -189,7 +189,7 @@ async function prepareInfoBoxes() {
         {
             title: 'Approved Companies',
             icon: 'solar:case-minimalistic-line-duotone',
-            value: conferenceStatistics.value.totalRegisteredCompanies,
+            value: conferenceStatistics.value.totalApprovedCompanies,
             description: 'Companies',
         },
         {

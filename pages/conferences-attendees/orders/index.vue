@@ -136,10 +136,10 @@ async function prepareInfoBoxes() {
             description: 'USD',
         },
         {
-            title: 'Registered Members',
+            title: 'Approved Companies',
             icon: 'solar:case-minimalistic-line-duotone',
-            value: conferenceStatistics.value.totalRegisteredCompanies,
-            description: 'Members',
+            value: conferenceStatistics.value.totalApprovedCompanies,
+            description: 'Companies',
         },
         {
             title: 'Approved Delegates',
