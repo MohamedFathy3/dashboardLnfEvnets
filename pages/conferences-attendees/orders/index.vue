@@ -11,7 +11,6 @@ const sortByList = ref([
 ]);
 const filter = ref({
     uuid: null,
-    status: [],
 });
 const membershipTypes = ref([
     { name: 'Member', value: 'member' },
@@ -31,6 +30,7 @@ const orderStatuses = ref([
 const serverParams = ref({
     filters: {},
     relationFilter: {
+        orderStatus: [],
         memberType: [],
         sponsorshipItemName: null,
         packageName: null,
@@ -49,12 +49,12 @@ function toggleShowMoreFilterOptions() {
 const resetServerParams = async () => {
     filter.value = {
         uuid: null,
-        status: [],
     };
     serverParams.value = {
         filters: {},
         relationFilter: {
             memberType: [],
+            orderStatus: [],
             sponsorshipItemName: null,
             packageName: null,
         },
@@ -159,6 +159,11 @@ async function prepareInfoBoxes() {
 onMounted(() => {
     prepareInfoBoxes();
 });
+
+async function refreshFilterData() {
+    serverParams.value.page = 1;
+    await refresh();
+}
 </script>
 <template>
     <div class="flex flex-col gap-8">
@@ -217,7 +222,7 @@ onMounted(() => {
                                         <div class="flex items-center h-6">
                                             <input
                                                 :id="option.value"
-                                                v-model="filter.status"
+                                                v-model="serverParams.relationFilter.orderStatus"
                                                 :checked="orderStatuses.includes(option.value)"
                                                 :aria-describedby="option.value + '-description'"
                                                 :name="option.value"
@@ -227,7 +232,11 @@ onMounted(() => {
                                             />
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label :for="option.value" :class="[filter.status.includes(option.value) ? ' font-medium opacity-75' : 'font-light']" class="disabled:read-only:opacity-25 font-sm ease-in-out duration-150">
+                                            <label
+                                                :for="option.value"
+                                                :class="[serverParams.relationFilter.orderStatus.includes(option.value) ? ' font-medium opacity-75' : 'font-light']"
+                                                class="disabled:read-only:opacity-25 font-sm ease-in-out duration-150"
+                                            >
                                                 {{ option.name }}
                                             </label>
                                         </div>
@@ -251,7 +260,7 @@ onMounted(() => {
                     />
                 </div>
             </TransitionExpand>
-            <button class="xl:col-span-4 lg:col-span-4 btn btn-rounded btn-sm btn-primary gap-3 w-full" @click="refresh">
+            <button class="xl:col-span-4 lg:col-span-4 btn btn-rounded btn-sm btn-primary gap-3 w-full" @click="refreshFilterData">
                 <Icon name="solar:rounded-magnifer-line-duotone" class="size-5 shrink-0" />
                 Filter
             </button>
