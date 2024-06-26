@@ -18,12 +18,8 @@ const filter = ref({
 
 const serverParams = ref({
     filters: {},
-    orderBy: 'created_at',
-    orderByDirection: 'desc',
     perPage: 25,
     page: 1,
-    paginate: true,
-    deleted: false,
 });
 const formLoading = ref(false);
 const isOpen = ref(false);
@@ -36,12 +32,8 @@ const resetServerParams = async () => {
     };
     serverParams.value = {
         filters: {},
-        orderBy: 'created_at',
-        orderByDirection: 'desc',
         perPage: 25,
         page: 1,
-        paginate: true,
-        deleted: false,
     };
     selectedRows.value = [];
     await refresh();
@@ -50,9 +42,8 @@ const {
     data: rows,
     pending,
     refresh,
-} = await useApiFetch('/api/visit/index', {
-    method: 'POST',
-    body: serverParams,
+} = await useApiFetch('/api/visit/index/ip', {
+    params: serverParams,
     lazy: true,
 });
 watch(
@@ -171,6 +162,21 @@ async function deleteItems() {
     }
 }
 const resources = useResourceStore();
+
+function getUniquePersons(paths) {
+    const uniquePersonsMap = new Map();
+
+    paths.forEach((item) => {
+        if (item.person) {
+            const key = `${item.person.id}-${item.person.accountType}`;
+            if (!uniquePersonsMap.has(key)) {
+                uniquePersonsMap.set(key, item.person);
+            }
+        }
+    });
+
+    return Array.from(uniquePersonsMap.values());
+}
 </script>
 <template>
     <div class="flex flex-col gap-8">
@@ -179,18 +185,6 @@ const resources = useResourceStore();
             <div class="flex items-center gap-2">
                 <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
                 <div>{{ serverParams.deleted ? 'Deleted Visits' : 'Visits' }}</div>
-            </div>
-            <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
-                <template v-if="selectedRows.length > 0">
-                    <button class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
-                        <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
-                        Delete Items
-                    </button>
-                </template>
-                <button :disabled="serverParams.deleted" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
-                    <Icon name="solar:add-square-linear" class="size-5 opacity-75" />
-                    Add New
-                </button>
             </div>
         </div>
         <!-- Filter & Search -->
@@ -238,8 +232,8 @@ const resources = useResourceStore();
                             <input v-model="allSelected" type="checkbox" class="form-check-input" @change="selectAllRows" />
                         </th>
                         <th>Location</th>
-                        <th>Visit</th>
-                        <th>Date</th>
+                        <th>Total Visits</th>
+                        <th>Last Visit</th>
                         <th class="text-right">Action</th>
                     </tr>
                 </thead>
@@ -251,7 +245,7 @@ const resources = useResourceStore();
                             </td>
                             <td class="font-normal">
                                 <div>{{ row.ip }}</div>
-                                <div class="flex items-center text-xs whitespace-nowrap mt-0.5">
+                                <div class="flex items-center text-xs whitespace-nowrap mt-1">
                                     <NuxtImg :src="row.country?.imageUrl" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
                                     <div class="opacity-75 font-semibold">{{ row.country?.name }}</div>
                                     <span class="capitalize font-light opacity-80">, {{ row.city?.toLowerCase() }}</span>
@@ -260,15 +254,29 @@ const resources = useResourceStore();
                             <td>
                                 <div>
                                     <div>
-                                        <span v-if="row.person" class="text-xs font-normal bg-success/25 text-success !border-success/25 rounded-full px-2 border py-0.5">{{ row.person.name }}</span>
+                                        <span v-if="getUniquePersons(row.paths).length > 0" class="flex items-center gap-1.5 flex-wrap">
+                                            <span
+                                                v-for="(p, index) in getUniquePersons(row.paths)"
+                                                :key="index"
+                                                :class="p.accountType === 'company' ? 'bg-success/25 text-success !border-success/25' : 'bg-warning/25 text-orange-900 !border-warning/25'"
+                                                class="text-xs font-normal rounded-full px-2 border py-0.5"
+                                            >
+                                                <span v-if="p.accountType === 'delegate'" class="capitalize">{{ p.name.toLowerCase() }}</span>
+                                                <span v-else>{{ p.name }}</span>
+                                            </span>
+                                        </span>
                                         <span v-else class="text-xs font-normal bg-slate-100 rounded-full px-2 border py-0.5">Guest</span>
                                     </div>
-                                    <div class="text-xs font-normal mt-0.5 whitespace-nowrap truncate w-44">{{ row.path }}</div>
+                                    <div class="text-xs font-normal mt-1 whitespace-nowrap truncate w-44">
+                                        <span class="mr-1.5 font-light">Total visits:</span>
+                                        {{ row.paths.length }}
+                                    </div>
                                 </div>
                             </td>
                             <td>
                                 <div>
-                                    <span class="font-normal text-sm opacity-75">{{ row.createdAt }}</span>
+                                    <div class="text-xs font-normal mt-1 whitespace-nowrap truncate w-44 opacity-75">{{ row.paths[0].path }}</div>
+                                    <div class="font-normal text-sm opacity-75 mt-1">{{ row.paths[0].createdAt }}</div>
                                 </div>
                             </td>
                             <td class="text-right">
@@ -302,7 +310,36 @@ const resources = useResourceStore();
                 </div>
             </template>
             <template #content>
-                <div class="grid lg:grid-cols-12 gap-5 items-start">Data</div>
+                <div v-if="item && item.id">
+                    <ul class="divide-y divide-dashed">
+                        <li class="py-2 grid lg:grid-cols-12 gap-5 items-start">
+                            <div class="lg:col-span-4 font-light">IP</div>
+                            <div class="lg:col-span-8">{{ item.ip }}</div>
+                        </li>
+                        <li class="py-2 grid lg:grid-cols-12 gap-5 items-start">
+                            <div class="lg:col-span-4 font-light">Location</div>
+                            <div class="lg:col-span-8 flex items-center">
+                                <NuxtImg :src="item.country?.imageUrl" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
+                                <div class="opacity-75 font-semibold">{{ item.country?.name }}</div>
+                                <span class="capitalize font-light opacity-80">, {{ item.state }}</span>
+                                <span class="capitalize font-light opacity-80">, {{ item.city }}</span>
+                            </div>
+                        </li>
+                        <li class="py-2 grid lg:grid-cols-12 gap-5 items-start">
+                            <div class="lg:col-span-4 font-light">Total Visits Count</div>
+                            <div class="lg:col-span-8">{{ item.paths.length }} Visits</div>
+                        </li>
+                    </ul>
+                    <div class="border-t mt-5 pt-5">
+                        <ul>
+                            <li v-for="(path, index) in item.paths" :key="index" class="font-light text-sm p-2.5 rounded-full odd:bg-slate-100 grid lg:grid-cols-12 gap-5 items-start">
+                                <div class="lg:col-span-4 truncate">{{ path.path }}</div>
+                                <div class="lg:col-span-4">{{ path.createdAt }}</div>
+                                <div class="lg:col-span-4">{{ path.person?.name }}</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </template>
             <template #footer>
                 <div class="w-full flex items-center justify-end gap-5">
