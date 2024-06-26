@@ -143,24 +143,6 @@ async function openModal(id = null) {
     formLoading.value = false;
     isOpen.value = true;
 }
-
-async function deleteItems() {
-    const confirmed = confirm('Are you sure you want to delete this item?');
-    if (confirmed) {
-        const { data, error } = await useApiFetch(`/api/visit/delete`, {
-            body: { items: selectedRows.value },
-            method: 'DELETE',
-            lazy: true,
-        });
-        if (data.value) {
-            useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
-            await refresh();
-        }
-        if (error.value) {
-            useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
-        }
-    }
-}
 const resources = useResourceStore();
 
 function getUniquePersons(paths) {
@@ -201,19 +183,6 @@ function getUniquePersons(paths) {
                 imgvalue="imageUrl"
             />
             <FormInputField v-model="filter.city" rounded class="xl:col-span-4 lg:col-span-4" placeholder="City" />
-            <FormSelectField v-model="serverParams.orderBy" :clearable="false" class="xl:col-span-6 lg:col-span-6" labelvalue="name" keyvalue="value" placeholder="Sort Direction" :select-data="sortByList" />
-            <FormSelectField
-                v-model="serverParams.orderByDirection"
-                class="xl:col-span-6 lg:col-span-6"
-                :clearable="false"
-                labelvalue="name"
-                keyvalue="value"
-                placeholder="Sort Direction"
-                :select-data="[
-                    { name: 'Z : A', value: 'desc' },
-                    { name: 'A : Z', value: 'asc' },
-                ]"
-            />
             <button class="xl:col-span-6 lg:col-span-6 btn btn-rounded btn-sm btn-primary gap-3 w-full" @click="refresh">
                 <Icon name="solar:rounded-magnifer-line-duotone" class="size-5 shrink-0" />
                 Filter
