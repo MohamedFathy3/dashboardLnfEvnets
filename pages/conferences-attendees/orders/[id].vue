@@ -37,6 +37,11 @@ const getDaysAndNightsValues = (datesArray) => {
 
     return `${nights} Nights and ${days} Days`;
 };
+
+const bedTypes = ref([
+    { name: 'Twin Bed', value: 'twin' },
+    { name: 'King Size Bed', value: 'king_size' },
+]);
 </script>
 <template>
     <div v-if="order" class="flex flex-col gap-5">
@@ -174,7 +179,7 @@ const getDaysAndNightsValues = (datesArray) => {
                                         <template v-if="order.delegates.length > 0">
                                             <li v-for="(delegate, delegateIndex) in order.delegates" :key="delegateIndex" class="flex items-center justify-between gap-5 py-1.5 first:mt-0 last:mb-0">
                                                 <div>
-                                                    <span>{{ delegate.name }}</span>
+                                                    <span class="capitalize">{{ delegate.name.toLowerCase() }}</span>
                                                     <span class="text-xs ml-2 text-slate-400">Delegate</span>
                                                 </div>
                                                 <div>
@@ -189,7 +194,7 @@ const getDaysAndNightsValues = (datesArray) => {
                                         <template v-if="order.spouses.length > 0">
                                             <li v-for="(spouse, spouseIndex) in order.spouses" :key="spouseIndex" class="flex items-center justify-between gap-5 py-1.5 first:mt-0 last:mb-0">
                                                 <div>
-                                                    <span>{{ spouse.name }}</span>
+                                                    <span class="capitalize">{{ spouse.name.toLowerCase() }}</span>
                                                     <span class="text-xs ml-2 text-slate-400">Spouse</span>
                                                 </div>
                                                 <div>
@@ -209,9 +214,12 @@ const getDaysAndNightsValues = (datesArray) => {
                                         <li v-for="(room, roomIndex) in order.rooms" :key="roomIndex" class="flex items-start justify-between gap-5 py-1.5 first:mt-0 last:mb-0">
                                             <div>
                                                 <div class="flex items-center gap-2">
-                                                    <div>{{ room.room.name }}</div>
+                                                    <div class="capitalize">{{ room.room.name.toLowerCase() }}</div>
                                                     <div class="capitalize">
                                                         <span class="px-2 py-0.5 font-medium rounded-md bg-slate-200 text-xs">{{ room.room.type }}</span>
+                                                    </div>
+                                                    <div class="capitalize">
+                                                        <span class="px-2 py-0.5 font-medium rounded-md bg-slate-200 text-xs">{{ bedTypes.find((t) => t.value === room.bedType).name }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="items-center flex space-x-2 mt-1">

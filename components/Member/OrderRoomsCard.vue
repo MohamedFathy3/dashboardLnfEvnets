@@ -10,6 +10,11 @@ const props = defineProps({
         default: 1,
     },
 });
+
+const bedTypes = ref([
+    { name: 'Twin Bed', value: 'twin' },
+    { name: 'King Size Bed', value: 'king_size' },
+]);
 </script>
 <template>
     <div>
@@ -23,13 +28,15 @@ const props = defineProps({
         <ul v-if="props.rooms.length > 0" :class="['grid 2xl:grid-cols-3 lg:grid-cols-' + props.grid + ' gap-3']">
             <li v-for="room in props.rooms" :key="room.id" class="flex flex-col gap-3 bg-white rounded-xl p-5 shadow-sm">
                 <div class="flex items-center gap-3">
-                    <NuxtImg :src="room.room.imageUrl" :title="room.room.name" :alt="room.room.name" class="size-14 shrink-0 rounded-md object-cover ring-2 ring-slate-500/25" />
+                    <NuxtImg :src="room.room.imageUrl" :title="room.room.name" :alt="room.room.name" class="size-16 shrink-0 rounded-md object-cover ring-2 ring-slate-500/25" />
                     <div>
-                        <div class="text-sm font-medium opacity-85 line-clamp-1">
-                            {{ room.room.name }}
+                        <div class="text-base font-medium opacity-85 line-clamp-1 capitalize">
+                            {{ room.room.name.toLowerCase() }}
                         </div>
-                        <div class="font-light mt-0.5 text-xs capitalize line-clamp-1">{{ room.room.type }}</div>
-                        <div class="text-xs mt-0.5 font-light flex items-center gap-2">
+                        <div class="font-light mt-1 text-sm capitalize line-clamp-1">
+                            {{ room.room.type }}, <span class="font-medium">{{ bedTypes.find((t) => t.value === room.bedType).name }}</span>
+                        </div>
+                        <div class="text-xs mt-1 font-light flex items-center gap-2">
                             <div>{{ room.startDateFormatted }}</div>
                             <Icon name="solar:double-alt-arrow-right-line-duotone" class="size-4" />
                             <div>{{ room.endDateFormatted }}</div>

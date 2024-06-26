@@ -10,6 +10,11 @@ const props = defineProps({
         default: 1,
     },
 });
+
+const bedTypes = ref([
+    { name: 'Twin Bed', value: 'twin' },
+    { name: 'King Size Bed', value: 'king_size' },
+]);
 </script>
 <template>
     <div>
@@ -31,7 +36,9 @@ const props = defineProps({
                                 v-html="room.orderComplete ? 'Pending' : 'Approved'"
                             />
                         </div>
-                        <div class="font-light mt-0.5 text-xs capitalize line-clamp-1">{{ room.room.type }}</div>
+                        <div class="font-light mt-0.5 text-xs capitalize line-clamp-1">
+                            {{ room.room.type }}, <span class="font-medium">{{ bedTypes.find((t) => t.value === room.bedType).name }}</span>
+                        </div>
                         <div class="text-xs mt-0.5 font-light flex items-center gap-2">
                             <div>{{ room.startDateFormatted }}</div>
                             <Icon name="solar:double-alt-arrow-right-line-duotone" class="size-4" />

@@ -25,8 +25,8 @@ const props = defineProps({
                 <div class="flex items-center gap-3">
                     <NuxtImg :src="delegate.imageUrl" :title="delegate.name" :alt="delegate.name" class="size-10 shrink-0 rounded-full object-cover ring-2 ring-slate-500/25" />
                     <div>
-                        <div class="text-sm font-medium opacity-85 line-clamp-1">
-                            {{ delegate.name }}
+                        <div class="text-sm font-medium opacity-85 line-clamp-1 capitalize">
+                            {{ delegate.name.toLowerCase() }}
                         </div>
                         <div class="font-light mt-0.5 line-clamp-1 lowercase">{{ delegate.email }}</div>
                     </div>
