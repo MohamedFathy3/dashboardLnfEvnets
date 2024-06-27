@@ -9,8 +9,10 @@ const credentials = ref({
 });
 const userStore = useUserStore();
 
+const route = useRoute();
+const redirectPath = route.query?.redirect;
 async function login() {
-    await userStore.login(credentials.value);
+    await userStore.login(credentials.value, redirectPath);
 }
 </script>
 <template>

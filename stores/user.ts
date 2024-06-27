@@ -1,3 +1,5 @@
+import type { LocationQueryValue } from 'vue-router';
+
 export const useUserStore = defineStore('user', () => {
     const user = ref<Admin>();
     const token = useCookie('WSA_ADMIN_AUTH_TOKEN', { maxAge: 60 * 60 * 2 });
@@ -5,7 +7,7 @@ export const useUserStore = defineStore('user', () => {
     const setToken = (data?: string) => (token.value = data);
     const setUser = (data?: Admin) => (user.value = data);
 
-    const login = async (data: Credentials) => {
+    const login = async (data: Credentials, path?: LocationQueryValue) => {
         await useApiFetch('/sanctum/csrf-cookie');
         const { data: userData, error } = await useApiFetch(`/api/admin/login`, {
             method: 'POST',
@@ -15,7 +17,12 @@ export const useUserStore = defineStore('user', () => {
         if (userData.value) {
             setUser((userData.value as ApiResponse).data as Admin);
             setToken((userData.value as ApiResponse).token as string);
-            navigateTo('/');
+            console.log(path);
+            if (path) {
+                navigateTo(path);
+            } else {
+                navigateTo('/');
+            }
             useToast({ title: 'Welcome', message: 'Logged in Successfully', type: 'success', duration: 5000 });
         }
         if (error.value) {
