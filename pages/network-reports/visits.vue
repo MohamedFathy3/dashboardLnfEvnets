@@ -6,10 +6,6 @@ definePageMeta({
     middleware: 'auth',
 });
 const selectedRows = ref([]);
-const sortByList = ref([
-    { name: 'Sort By ID', value: 'id' },
-    { name: 'Sort By Date', value: 'created_at' },
-]);
 const filter = ref({
     ip: null,
     countryId: null,
