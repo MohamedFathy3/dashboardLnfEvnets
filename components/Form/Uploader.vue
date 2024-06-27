@@ -398,34 +398,59 @@ const resetImages = async () => {
 };
 
 const toggleMediaSelection = (selectedMediaItem) => {
-    const index = selectedMediaFiles.value.findIndex((item) => item.id === selectedMediaItem.id);
-    if (index === -1) {
+    if (props.limit === 1) {
+        selectedMediaFiles.value = [];
         selectedMediaFiles.value.push(selectedMediaItem);
-    } else {
-        selectedMediaFiles.value.splice(index, 1);
+    } else if (props.limit > 1) {
+        const index = selectedMediaFiles.value.findIndex((item) => item.id === selectedMediaItem.id);
+        if (index === -1) {
+            selectedMediaFiles.value.push(selectedMediaItem);
+        } else {
+            selectedMediaFiles.value.splice(index, 1);
+        }
     }
 };
 
-const isSelected = (id) => selectedMediaFiles.value.some(({ id: mediaId }) => mediaId === id);
-const isOriginal = (id) => value.value.some(({ id: mediaId }) => mediaId === id);
+const isSelected = (id) => {
+    if (props.limit === 1) {
+        return selectedMediaFiles.value.length > 0 && selectedMediaFiles.value[0].id === id;
+    }
+    return selectedMediaFiles.value.some(({ id: mediaId }) => mediaId === id);
+};
+
+const isOriginal = (id) => {
+    if (props.limit === 1) {
+        return value.value === id;
+    }
+    return value.value.some(({ id: mediaId }) => mediaId === id);
+};
 
 const insertMedia = async () => {
-    if (selectedMediaFiles.value.length > 0) {
-        const newFiles = selectedMediaFiles.value;
-        const existingFiles = value.value || [];
-        const existingFileIds = new Set(existingFiles.map((file) => file.id));
+    if (props.limit === 1) {
+        if (selectedMediaFiles.value.length > 0) {
+            file.value = selectedMediaFiles.value[0];
+            value.value = selectedMediaFiles.value[0];
+            emit('update:model-value', value.value);
+            await closeModal();
+        }
+    } else if (props.limit > 1) {
+        if (selectedMediaFiles.value.length > 0) {
+            const newFiles = selectedMediaFiles.value;
+            const existingFiles = value.value || [];
+            const existingFileIds = new Set(existingFiles.map((file) => file.id));
 
-        // Merge new files with existing ones, avoiding duplicates
-        newFiles.forEach((file) => {
-            if (!existingFileIds.has(file.id)) {
-                existingFiles.push(file);
-                existingFileIds.add(file.id);
-            }
-        });
-        file.value = existingFiles;
-        value.value = existingFiles;
-        emit('update:model-value', value.value);
-        await closeModal();
+            // Merge new files with existing ones, avoiding duplicates
+            newFiles.forEach((file) => {
+                if (!existingFileIds.has(file.id)) {
+                    existingFiles.push(file);
+                    existingFileIds.add(file.id);
+                }
+            });
+            file.value = existingFiles;
+            value.value = existingFiles;
+            emit('update:model-value', value.value);
+            await closeModal();
+        }
     }
 };
 </script>
@@ -457,6 +482,10 @@ const insertMedia = async () => {
                         <span class="font-semibold">Update Image</span>
                         <input :id="name + '-update-file'" :name="name + '-update-file'" type="file" class="sr-only" @change="onUploadFile" />
                     </label>
+                    <button type="button" class="btn btn-dark gap-2 btn-sm btn-rounded whitespace-nowrap" @click="openModal">
+                        <Icon name="solar:folder-open-outline" class="size-4 shrink-0" />
+                        Media Library
+                    </button>
                     <button type="button" class="btn btn-danger btn-sm btn-rounded group btn-sm" @click="removeFile">
                         <Icon name="clarity:close-line" class="mr-2 w-4 h-4" />
                         <span>Remove</span>
