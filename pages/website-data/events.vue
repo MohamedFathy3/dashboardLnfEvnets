@@ -144,7 +144,7 @@ const rules = ref({
     urlPath: {},
     startDate: { required },
     endDate: { required },
-    delegates: { required },
+    delegates: { numeric },
     sessions: { numeric },
     companies: { numeric },
     countries: { numeric },
@@ -544,6 +544,7 @@ async function restoreItems() {
                             type="number"
                         />
                     </div>
+                    <FormUploader v-model="item.gallery" :errors="v$.gallery.$errors" :allowed-types="['image']" :limit="200" label="Gallery" name="gallery" class="lg:col-span-12" />
                 </div>
             </template>
             <template #footer>

@@ -456,7 +456,7 @@ onMounted(async () => {
             <template #content>
                 <div class="grid grid-cols-12 gap-5">
                     <template v-if="['home_slider'].includes(children.slug)">
-                        <FormUploader v-model="children.gallery" :errors="s$.gallery.$errors" class="col-span-12" label="Gallery" :max="24" />
+                        <FormUploader v-model="children.gallery" :allowed-types="['image']" :limit="100" :errors="s$.gallery.$errors" class="col-span-12" label="Gallery" :max="24" />
                     </template>
                     <template v-else>
                         <template v-if="!['home_cta', 'home_video'].includes(children.slug)">
