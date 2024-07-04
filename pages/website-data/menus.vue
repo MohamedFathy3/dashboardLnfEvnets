@@ -501,7 +501,7 @@ async function handleChildModalSubmit() {
                                     <Icon name="solar:hamburger-menu-line-duotone" class="w-6 h-6 opacity-75" />
                                     <div class="uppercase opacity-75">menu Items</div>
                                 </div>
-                                <button class="btn btn-primary btn-rounded btn-sm gap-3" @click="openChildModal()">
+                                <button class="btn btn-primary btn-rounded btn-sm gap-3" type="button" @click="openChildModal()">
                                     <Icon name="solar:add-circle-outline" class="w-5 h-5" />
                                     <span>Add Menu Item</span>
                                 </button>
