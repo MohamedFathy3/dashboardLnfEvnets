@@ -437,7 +437,7 @@ async function restoreItems() {
                             <div class="flex items-center gap-3">
                                 <NuxtImg v-if="row.image" :src="row.imageUrl" class="h-10 !rounded-md w-20 object-cover shrink-0" />
                                 <div>
-                                    <div class="font-normal">{{ row.title }}</div>
+                                    <div class="font-normal">{{ useStripHtml(row.title) }}</div>
                                     <div class="text-sm opacity-75 mt-0.5">{{ sectionTypes.find((t) => t.value === row.type).name }}</div>
                                 </div>
                             </div>
