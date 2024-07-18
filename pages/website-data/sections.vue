@@ -480,7 +480,7 @@ async function restoreItems() {
                     <FormSelectField v-model="item.type" :errors="v$.type.$errors" labelvalue="name" keyvalue="value" :select-data="sectionTypes" class="lg:col-span-9" label="Type" name="section-type" placeholder="Select Section Type" />
                     <FormSwitch v-model="item.active" label="Active" class="lg:col-span-3" name="active-input" />
                     <template v-if="item.type">
-                        <template v-if="item.type !== 'network-directory' || item.type === 'about-left-image' || item.type === 'about-right-image' || item.type === 'image-banner-section' || item.type === 'grid-home-section' || item.type === 'intro'">
+                        <template v-if="item.type === 'network-directory' || item.type === 'about-left-image' || item.type === 'about-right-image' || item.type === 'image-banner-section' || item.type === 'grid-home-section' || item.type === 'intro'">
                             <FormUploader v-model="item.image" :allowed-types="['image', 'svg']" label="Image" name="image" class="lg:col-span-12" />
                         </template>
 
