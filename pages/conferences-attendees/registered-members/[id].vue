@@ -214,7 +214,7 @@ async function resendPassword() {
                                             <span v-if="company.city">{{ company.city }}</span>
                                         </div>
                                         <div class="mt-1 opacity-75">
-                                            <span class="font-normal mr-2">City:</span>
+                                            <span class="font-normal mr-2">State:</span>
                                             <span v-if="company.state">{{ company.state }}</span>
                                             <span v-else class="text-warning text-xs"> N/A </span>
                                         </div>
