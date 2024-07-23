@@ -42,6 +42,7 @@ const item = ref({
     wsaId: props.member?.wsaId,
     unhashedPassword: props.member?.unhashedPassword,
     typeCompany: props.member?.typeCompany,
+    membershipType: props.member?.membershipType,
 });
 onMounted(() => {
     if (props.member !== null) {
@@ -70,6 +71,7 @@ onMounted(() => {
         item.value.wsaId = props.member?.wsaId;
         item.value.unhashedPassword = props.member?.unhashedPassword;
         item.value.typeCompany = props.member?.typeCompany;
+        item.value.membershipType = props.member?.membershipType;
     }
 });
 const rules = ref({
@@ -97,6 +99,7 @@ const rules = ref({
     email: { required, email },
     unhashedPassword: {},
     typeCompany: {},
+    membershipType: {},
 });
 const v$ = useVuelidate(rules, item);
 const emit = defineEmits(['refresh', 'close']);
@@ -127,8 +130,23 @@ const resetMemberValues = async () => {
         wsaId: null,
         unhashedPassword: null,
         typeCompany: null,
+        membershipType: null,
     };
 };
+const nonMembershipTypes = ref([
+    { name: 'Vendor', value: 'vendor' },
+    { name: 'Non Member', value: 'non_member' },
+    { name: 'WSA Team', value: 'wsa_team' },
+]);
+const membershipTypes = ref([
+    { name: 'Member', value: 'member' },
+    { name: 'Founder', value: 'founder' },
+    { name: 'Partner', value: 'partner' },
+    { name: 'Vendor', value: 'vendor' },
+    { name: 'Non Member', value: 'non_member' },
+    { name: 'WSA Team', value: 'wsa_team' },
+]);
+
 async function closeModal() {
     emit('close');
     v$.value.$reset();
@@ -143,7 +161,7 @@ async function updateMember() {
         useToast({ title: 'Error', message: 'Please complete all required fields', type: 'error', duration: 5000 });
         return false;
     }
-    const { data, error } = await useApiFetch(`/api/user/${props.member.id}`, {
+    const { data, error } = await useApiFetch(`/api/dashboard/member/update/${props.member.id}`, {
         lazy: true,
         method: 'PATCH',
         body: item,
@@ -212,12 +230,24 @@ const companyTypes = ref([
                             labelvalue="name"
                             keyvalue="value"
                             :select-data="companyTypes"
-                            class="col-span-12 lg:col-span-6"
+                            class="col-span-12 lg:col-span-4"
                             label="Company Type"
                             name="company-type-company"
                             placeholder="Company Type"
                         />
-                        <FormInputField v-model="item.wsaId" :errors="v$.wsaId.$errors" class="col-span-12 lg:col-span-6" type="number" label="WSA ID" name="wsa-id" placeholder="WSA ID" />
+                        <FormSelectField
+                            v-model="item.membershipType"
+                            :errors="v$.membershipType.$errors"
+                            labelvalue="name"
+                            keyvalue="value"
+                            :clearable="false"
+                            :select-data="props.member.networks.length === 0 ? nonMembershipTypes : membershipTypes"
+                            class="col-span-12 lg:col-span-4"
+                            label="Membership Type"
+                            name="company-membership-type"
+                            placeholder="Membership Type"
+                        />
+                        <FormInputField v-model="item.wsaId" :errors="v$.wsaId.$errors" class="col-span-12 lg:col-span-4" type="number" label="WSA ID" name="wsa-id" placeholder="WSA ID" />
                     </div>
                 </div>
                 <div class="mt-6">
