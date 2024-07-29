@@ -123,7 +123,7 @@ const item = ref({
 });
 const rules = ref({
     code: { required },
-    discountValue: { numeric, required },
+    discountValue: { required },
     discountType: { required },
     couponType: { required },
     count: { required, numeric },
@@ -311,8 +311,8 @@ async function deleteItems() {
                         </td>
                         <td>
                             <div class="font-normal">
-                                <span v-if="row.discountType === 'fixed'" class="mr-0.5">-</span>
-                                <span>{{ row.discountValue }}</span>
+                                <span v-if="row.discountType === 'fixed' && !row.discountValue.startsWith('-')" class="mr-0.5">-</span>
+                                <span>{{ row.discountValue.startsWith('-') ? '+ ' + row.discountValue.slice(1) : row.discountValue }}</span>
                                 <span v-if="row.discountType !== 'fixed'" class="ml-0.5">%</span>
                             </div>
                             <div class="text-xs italic">{{ discountTypes.find((i) => i.id === row.discountType).name }}</div>
