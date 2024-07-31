@@ -272,7 +272,7 @@ const generateTimeOptions = computed(() => {
 
     // End time
     const endTime = new Date();
-    endTime.setHours(18);
+    endTime.setHours(22);
     endTime.setMinutes(0);
 
     // Loop through each interval and generate time values
@@ -294,7 +294,7 @@ const generateTimeOptions = computed(() => {
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
                 <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
-                <div>Time Slots</div>
+                <div>Agenda Programs</div>
             </div>
             <div class="flex items-center gap-3">
                 <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
