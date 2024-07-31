@@ -246,7 +246,9 @@ function getUniquePersons(paths) {
                                 </div>
                             </td>
                             <td>
-                                <span class="text-xs font-semibold px-1.5 py-0.5 capitalize bg-slate-100 rounded-full border">{{ row?.website }}</span>
+                                <span :class="row?.website === 'event' ? 'bg-blue-200 !border-blue-300 text-blue-800' : 'bg-slate-100 text-slate-800'" class="text-xs font-semibold px-1.5 py-0.5 capitalize rounded-full border">
+                                    {{ row?.website }}
+                                </span>
                             </td>
                             <td class="text-right">
                                 <div>
