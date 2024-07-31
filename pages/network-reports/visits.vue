@@ -199,6 +199,7 @@ function getUniquePersons(paths) {
                         <th>Location</th>
                         <th>Total Visits</th>
                         <th>Last Visit</th>
+                        <th>Website</th>
                         <th class="text-right">Action</th>
                     </tr>
                 </thead>
@@ -243,6 +244,9 @@ function getUniquePersons(paths) {
                                     <div class="text-xs font-normal mt-1 whitespace-nowrap truncate w-44 opacity-75">{{ row.paths[0].path }}</div>
                                     <div class="font-normal text-sm opacity-75 mt-1">{{ row.paths[0].createdAt }}</div>
                                 </div>
+                            </td>
+                            <td>
+                                <div class="text-xs font-semibold px-1.5 py-0.5 capitalize bg-slate-50 rounded-full">{{ row?.website }}</div>
                             </td>
                             <td class="text-right">
                                 <div>
