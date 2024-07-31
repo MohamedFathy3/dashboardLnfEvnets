@@ -261,7 +261,7 @@ const generateTimeOptions = computed(() => {
 
     // End time
     const endTime = new Date();
-    endTime.setHours(18);
+    endTime.setHours(22);
     endTime.setMinutes(0);
 
     // Loop through each interval and generate time values
