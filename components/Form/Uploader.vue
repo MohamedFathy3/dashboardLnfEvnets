@@ -576,7 +576,7 @@ const insertMedia = async () => {
                         <div class="text-sm space-y-2">
                             <label :for="name" class="relative btn btn-sm btn-primary whitespace-nowrap">
                                 <span>Upload a file</span>
-                                <input :id="name" :name="name" type="file" class="sr-only" @change="onUploadFile" />
+                                <input :id="name" :name="name" type="file" class="sr-only" multiple @change="onUploadFiles" />
                             </label>
                             <p class="pl-1">or drag and drop</p>
                         </div>
