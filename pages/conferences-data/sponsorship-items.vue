@@ -117,7 +117,7 @@ const item = ref({
     image: null,
     price: 0,
     earlybirdPrice: null,
-    delegateCount: null,
+    isFeatured: false,
     features: [],
     orderId: null,
 });
@@ -128,7 +128,7 @@ const rules = ref({
     count: { required: requiredIf(() => item.value.isInfinity) },
     isInfinity: {},
     orderId: { numeric, required },
-    delegateCount: { numeric, required },
+    isFeatured: {},
     active: {},
     image: {},
     earlybirdPrice: {},
@@ -158,7 +158,7 @@ const resetItemValues = async () => {
         image: null,
         price: 0,
         earlybirdPrice: null,
-        delegateCount: null,
+        isFeatured: false,
         features: [],
         orderId: null,
     };
@@ -462,7 +462,7 @@ const removeFeatureRow = (index) => {
                         <FormInputField v-model="item.earlybirdPrice" :errors="v$.earlybirdPrice.$errors" class="col-span-12 sm:col-span-6" label="Early Bird price" :name="'earlybird-price'" placeholder="Early Bird price" type="number" />
                         <FormInputField v-model="item.count" :disabled="item.isInfinity" :errors="v$.count.$errors" class="col-span-12 sm:col-span-6" label="Count" :name="'count'" placeholder="Count" type="number" />
                         <FormSwitch v-model="item.isInfinity" :name="'is-infinity'" :errors="v$.isInfinity.$errors" class="col-span-12 sm:col-span-6" label="Unlimited" />
-                        <FormInputField v-model="item.delegateCount" :errors="v$.delegateCount.$errors" class="col-span-12 sm:col-span-6" label="Free Delegates Count" :name="'delegate-count'" placeholder="Free Delegates Count" type="number" />
+                        <FormSwitch v-model="item.isFeatured" :name="'is-infinity'" :errors="v$.isFeatured.$errors" class="col-span-12 sm:col-span-6" label="Featured Item (VIP table)" />
                         <FormInputField v-model="item.orderId" type="number" :errors="v$.orderId.$errors" class="col-span-12 sm:col-span-6" label="Position" :name="'order'" placeholder="Position" />
                         <FormSwitch v-model="item.active" :name="'active'" :errors="v$.active.$errors" class="col-span-12 sm:col-span-6" label="Active" />
                     </div>
