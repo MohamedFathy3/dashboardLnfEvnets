@@ -243,8 +243,9 @@ const resources = useResourceStore();
                     <th class="text-left">
                         <input v-model="allSelected" type="checkbox" class="form-check-input" @change="selectAllRows" />
                     </th>
-                    <th>Name</th>
                     <th>Company</th>
+                    <th>Person</th>
+                    <th>Reference To</th>
                     <th v-if="serverParams.deleted">Deleted At</th>
                     <th class="text-right">Action</th>
                 </tr>
@@ -254,6 +255,14 @@ const resources = useResourceStore();
                     <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
+                        </td>
+                        <td class="font-normal 2xl:max-w-64 max-w-44">
+                            <div class="truncate">{{ row.name }}</div>
+                            <div class="flex items-center text-xs whitespace-nowrap">
+                                <NuxtImg :src="row.country?.imageUrl" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
+                                <div class="opacity-75 font-semibold">{{ row.country?.name }}</div>
+                                <span class="capitalize font-light opacity-80">, {{ row.city?.toLowerCase() }}</span>
+                            </div>
                         </td>
                         <td class="font-normal">
                             <div>{{ row.person }}</div>
