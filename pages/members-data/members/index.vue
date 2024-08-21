@@ -1,4 +1,7 @@
 <script setup>
+import * as XLSX from 'xlsx';
+import FileSaver from 'file-saver';
+
 definePageMeta({
     middleware: 'auth',
 });
@@ -87,6 +90,26 @@ const {
     body: serverParams,
     lazy: true,
 });
+const onExport = async () => {
+    const exportServerParams = { ...serverParams.value };
+    exportServerParams.perPage = rows.value?.meta?.total || 25;
+    const { data: exportData, error: errorExport } = await useApiFetch('/api/user/index', {
+        method: 'POST',
+        body: exportServerParams,
+    });
+    if (exportData.value) {
+        const worksheet = XLSX.utils.json_to_sheet(exportData.value.data);
+        const workbook = XLSX.utils.book_new();
+        const fileName = `WSA_Members_${new Date().toLocaleDateString()}_${new Date().getHours()}_${new Date().getMinutes()}.xlsx`;
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+        const data = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+        saveAs(blob, fileName);
+    }
+    if (errorExport.value) {
+        console.error('Error exporting data:', errorExport.value);
+    }
+};
 watch(
     filter,
     (newVal) => {
@@ -258,6 +281,10 @@ onMounted(() => {
                 <div>{{ serverParams.deleted ? 'Deleted Members' : 'Members' }}</div>
             </div>
             <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
+                <button class="btn btn-dark btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" type="button" @click="onExport">
+                    <Icon name="solar:download-outline" class="size-5 opacity-75" />
+                    <span>Export XLSX</span>
+                </button>
                 <template v-if="selectedRows.length > 0">
                     <button v-if="serverParams.deleted" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
                         <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
