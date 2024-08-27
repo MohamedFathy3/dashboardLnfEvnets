@@ -507,7 +507,7 @@ onMounted(async () => {
                             :type="['home_sponsors', 'home_slider', 'home_video'].includes(children.slug) ? 'text' : 'textarea'"
                         />
                     </template>
-                    <template v-if="['home_slider', 'home_venue', 'home_cta', 'agenda_cta', 'pricing_cta', 'pricing_cta_bottom', 'visa_content', 'visa_cta', 'venue_content', 'venue_cta'].includes(children.slug)">
+                    <template v-if="['home_slider', 'home_venue', 'home_intro', 'home_cta', 'agenda_cta', 'pricing_cta', 'pricing_cta_bottom', 'visa_content', 'visa_cta', 'venue_content', 'venue_cta'].includes(children.slug)">
                         <FormSwitch v-model="children.buttonOneActive" flex-title class="col-span-12" label="Button One Active" :name="children.slug + '-button-one-active-' + children.id" />
                         <template v-if="children.buttonOneActive">
                             <div class="col-span-12 rounded-md p-5 border border-slate-100 grid grid-cols-12 gap-5 bg-slate-50">
@@ -537,7 +537,7 @@ onMounted(async () => {
                             </div>
                         </template>
                     </template>
-                    <template v-if="['home_venue', 'home_cta', 'agenda_cta', 'pricing_cta', 'pricing_cta_bottom', 'visa_content', 'visa_cta', 'venue_content', 'venue_cta'].includes(children.slug)">
+                    <template v-if="['home_slider', 'home_venue', 'home_intro', 'home_cta', 'agenda_cta', 'pricing_cta', 'pricing_cta_bottom', 'visa_content', 'visa_cta', 'venue_content', 'venue_cta'].includes(children.slug)">
                         <FormSwitch v-model="children.buttonTwoActive" flex-title class="col-span-12" label="Button Two Active" :name="children.slug + '-button-two-active-' + children.id" />
                         <template v-if="children.buttonTwoActive">
                             <div class="col-span-12 rounded-md p-5 border border-slate-100 grid grid-cols-12 gap-5 bg-slate-50">
