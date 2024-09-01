@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="usePermissionCheck(['conference_overview_list'])">
         <div v-if="!loadingOverview" class="grid lg:grid-cols-12 gap-5">
             <UiInfoBox :data="conferenceInfoBoxes" />
             <div class="lg:col-span-6 intro-x">
