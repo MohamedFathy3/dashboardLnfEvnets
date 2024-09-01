@@ -205,13 +205,13 @@ async function updateMembersStatus(members: CompanyVoteUpdateBody[]) {
 }
 </script>
 <template>
-    <div class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['network_report_vote_list'])" class="flex flex-col gap-8">
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
                 <Icon name="solar:chart-square-linear" class="size-5 opacity-75" />
                 <div>Votes Report</div>
             </div>
-            <div>
+            <div v-if="usePermissionCheck(['network_report_vote_update'])">
                 <button :disabled="formLoading" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal">
                     <Icon name="solar:chat-round-line-line-duotone" class="size-5 opacity-75" />
                     Member's Voting Status
