@@ -44,19 +44,19 @@ onMounted(async () => {
 const config = useRuntimeConfig();
 </script>
 <template>
-    <div>
+    <div v-if="usePermissionCheck(['conference_report_one_to_one_list'])">
         <div v-if="!loadingPage">
             <!-- Page Title & Action Buttons -->
             <div class="md:flex md:items-center md:justify-between md:gap-5">
                 <div class="flex items-center gap-2">
-                    <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
+                    <Icon name="solar:alarm-linear" class="size-5 opacity-75" />
                     <div>One to One Meetings</div>
                 </div>
                 <div class="flex items-center gap-3">
                     <ConferenceSwitcher @reload="refresh" />
                 </div>
             </div>
-            <div class="mt-8 bg-white p-5 rounded-xl border">
+            <div v-if="usePermissionCheck(['conference_report_one_to_one_export'])" class="mt-8 bg-white p-5 rounded-xl border">
                 <div class="font-medium pb-3 text-center mb-3">Export One to One Meetings</div>
                 <div class="flex items-center justify-between gap-5">
                     <template v-for="day in meetings" :key="day.id">

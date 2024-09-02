@@ -47,18 +47,18 @@ onMounted(async () => {
 });
 </script>
 <template>
-    <div>
+    <div v-if="usePermissionCheck(['conference_report_room_list'])">
         <div v-if="!loadingPage">
             <!-- Page Title & Action Buttons -->
             <div class="md:flex md:items-center md:justify-between md:gap-5">
                 <div class="flex items-center gap-2">
-                    <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
+                    <Icon name="solar:bed-line-duotone" class="size-5 opacity-75" />
                     <div>Booked Rooms Report</div>
                     <div class="bg-primary px-1.5 py-1 rounded-full aspect-1/1 text-white text-sm">{{ data.totalNightsUsed }}</div>
                     <div class="opacity-75 text-sm">Total Nights</div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <a :href="config.public.apiUrl + '/export-excel/room-delegate/export'" target="_blank">
+                    <a v-if="usePermissionCheck(['conference_report_room_export'])" :href="config.public.apiUrl + '/export-excel/room-delegate/export'" target="_blank">
                         <button type="button" class="btn btn-dark btn-rounded btn-sm w-full justify-between gap-3">
                             <span class="items-center flex">
                                 <Icon name="solar:bed-linear" class="w-5 h-5 mr-2" />
