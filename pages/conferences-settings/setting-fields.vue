@@ -44,7 +44,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/setting-event/index', {
     method: 'POST',
@@ -315,33 +315,43 @@ const { data: sections } = await useApiFetch('/api/setting-event/sections', {
 });
 </script>
 <template>
-    <div class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['conference_setting_field_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
+                <Icon name="solar:server-2-outline" class="size-5 opacity-75" />
                 <div>{{ serverParams.deleted ? 'Deleted Setting Fields' : 'Setting Fields' }}</div>
             </div>
             <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
                 <template v-if="selectedRows.length > 0">
-                    <button v-if="serverParams.deleted" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
-                        <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
-                        Delete Permanently
-                    </button>
-                    <button v-else class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
-                        <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
-                        Delete Items
-                    </button>
-                    <button v-if="serverParams.deleted" class="btn btn-success btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="restoreItems">
-                        <Icon name="solar:restart-circle-outline" class="size-5 opacity-75" />
-                        Restore Items
-                    </button>
+                    <template v-if="serverParams.deleted">
+                        <button v-if="usePermissionCheck(['conference_setting_field_force_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
+                            <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
+                            Delete Permanently
+                        </button>
+                    </template>
+                    <template v-else>
+                        <button v-if="usePermissionCheck(['conference_setting_field_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
+                            <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
+                            Delete Items
+                        </button>
+                    </template>
+                    <template v-if="serverParams.deleted">
+                        <button v-if="usePermissionCheck(['conference_setting_field_restore'])" class="btn btn-success btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="restoreItems">
+                            <Icon name="solar:restart-circle-outline" class="size-5 opacity-75" />
+                            Restore Items
+                        </button>
+                    </template>
                 </template>
-                <button :disabled="serverParams.deleted" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
+                <button v-if="usePermissionCheck(['conference_setting_field_create'])" :disabled="serverParams.deleted" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
                     <Icon name="solar:add-square-linear" class="size-5 opacity-75" />
                     Add New
                 </button>
-                <button class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
+                <button
+                    v-if="usePermissionCheck(['conference_setting_field_force_delete', 'conference_setting_field_delete', 'conference_setting_field_restore'])"
+                    class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5"
+                    @click="toggleDeleted"
+                >
                     <Icon :name="serverParams.deleted ? 'solar:hamburger-menu-line-duotone' : 'solar:trash-bin-minimalistic-line-duotone'" class="size-5 opacity-75" />
                     {{ serverParams.deleted ? 'Items List' : 'Deleted Items' }}
                 </button>
@@ -386,7 +396,7 @@ const { data: sections } = await useApiFetch('/api/setting-event/sections', {
                 </tr>
             </thead>
             <tbody>
-                <template v-if="!pending && rows">
+                <template v-if="status !== 'pending' && rows">
                     <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -421,7 +431,7 @@ const { data: sections } = await useApiFetch('/api/setting-event/sections', {
             </tbody>
         </table>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
 
         <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
             <template #header>
@@ -442,7 +452,15 @@ const { data: sections } = await useApiFetch('/api/setting-event/sections', {
                         <FormInputField v-model="item.class" :errors="v$.class.$errors" class="lg:col-span-4" label="Class" name="class" placeholder="Class" />
                         <FormInputField v-model="item.placeholder" :errors="v$.placeholder.$errors" class="lg:col-span-6" label="Placeholder" name="placeholder" placeholder="Placeholder" />
                         <template v-if="item.type === 'uploader'">
-                            <FormUploader v-model="item.image" :errors="v$.image.$errors" :allowed-types="['image', 'svg']" class="lg:col-span-12" label="Icon" name="image" />
+                            <FormUploader
+                                v-model="item.image"
+                                :edit="usePermissionCheck(['conference_setting_field_update', 'conference_setting_field_create'])"
+                                :errors="v$.image.$errors"
+                                :allowed-types="['image', 'svg']"
+                                class="lg:col-span-12"
+                                label="Icon"
+                                name="image"
+                            />
                         </template>
                         <template v-else>
                             <FormInputField v-model="item.value" :errors="v$.value.$errors" class="lg:col-span-6" label="Value" name="value" placeholder="Value" />
@@ -457,7 +475,7 @@ const { data: sections } = await useApiFetch('/api/setting-event/sections', {
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
                         <span>Close</span>
                     </button>
-                    <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit()">
+                    <button v-if="usePermissionCheck(['conference_setting_field_create', 'conference_setting_field_update'])" :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit()">
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                         <span v-html="editMode ? 'Update' : 'Save'" />
                     </button>

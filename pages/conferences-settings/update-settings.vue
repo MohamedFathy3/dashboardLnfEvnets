@@ -123,11 +123,11 @@ const handleModalSubmit = async () => {
 };
 </script>
 <template>
-    <div class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['conference_setting_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:settings-outline" class="size-5 opacity-75" />
+                <Icon name="solar:pen-new-square-outline" class="size-5 opacity-75" />
                 <div>Update Settings</div>
             </div>
         </div>
@@ -149,31 +149,56 @@ const handleModalSubmit = async () => {
                 <div class="grow flex flex-col gap-5">
                     <template v-for="field in selectedSection.children" :key="field.id">
                         <template v-if="field.type === 'text' || field.type === 'number' || field.type === 'textarea'">
-                            <FormInputField v-model="field.value" :label="field.label" class="intro-y" :name="field.name" :type="field.type" :placeholder="field.placeholder" />
+                            <FormInputField v-model="field.value" :disabled="!usePermissionCheck(['conference_setting_update'])" :label="field.label" class="intro-y" :name="field.name" :type="field.type" :placeholder="field.placeholder" />
                         </template>
                         <template v-if="field.type === 'boolean'">
-                            <FormSwitch v-model.number="field.value" :des="field.des" :label="field.label" :name="field.name" class="intro-y" />
+                            <FormSwitch v-model.number="field.value" :disabled="!usePermissionCheck(['conference_setting_update'])" :des="field.des" :label="field.label" :name="field.name" class="intro-y" />
                         </template>
                         <template v-if="field.type === 'select'">
-                            <FormSelectField v-model.number="field.value" class="intro-y" labelvalue="name" keyvalue="id" :select-data="getSelectData(field.data)" :label="field.label" :name="field.name" :placeholder="field.placeholder" />
+                            <FormSelectField
+                                v-model.number="field.value"
+                                :disabled="!usePermissionCheck(['conference_setting_update'])"
+                                class="intro-y"
+                                labelvalue="name"
+                                keyvalue="id"
+                                :select-data="getSelectData(field.data)"
+                                :label="field.label"
+                                :name="field.name"
+                                :placeholder="field.placeholder"
+                            />
                         </template>
                         <template v-if="field.type === 'uploader'">
-                            <FormUploader v-model="field.value" :label="field.label" class="intro-y" :name="field.name" :max="1" :allowed-types="['image', 'svg']" />
+                            <FormUploader v-model="field.value" :edit="usePermissionCheck(['conference_setting_update'])" :label="field.label" class="intro-y" :name="field.name" :max="1" :allowed-types="['image', 'svg']" />
                         </template>
                         <template v-if="field.type === 'color-picker'">
                             <div class="flex justify-between gap-6">
                                 <div class="form-label">{{ field.label }}</div>
-                                <ColorPicker v-model:pureColor="field.value" picker-type="chrome" format="rgb" shape="square" lang="En" :debounce="1" picker-container="div" />
+                                <ColorPicker v-model:pureColor="field.value" :disabled="!usePermissionCheck(['conference_setting_update'])" picker-type="chrome" format="rgb" shape="square" lang="En" :debounce="1" picker-container="div" />
                             </div>
                         </template>
                         <template v-if="field.type === 'button'">
                             <div class="intro-y">
                                 <div class="form-label opacity-75">{{ field.label }}</div>
                                 <div class="mt-3 rounded-xl p-5 border border-slate-100 grid grid-cols-12 gap-5 bg-slate-50">
-                                    <FormInputField v-model="field.value.label" class="col-span-12 lg:col-span-6" label="label" :name="field.slug + '-button-label-' + field.id" placeholder="label" />
-                                    <FormInputField v-model="field.value.icon" class="col-span-12 lg:col-span-6" label="Icon" :name="field.slug + '-button-icon-' + field.id" placeholder="Icon" />
+                                    <FormInputField
+                                        v-model="field.value.label"
+                                        :disabled="!usePermissionCheck(['conference_setting_update'])"
+                                        class="col-span-12 lg:col-span-6"
+                                        label="label"
+                                        :name="field.slug + '-button-label-' + field.id"
+                                        placeholder="label"
+                                    />
+                                    <FormInputField
+                                        v-model="field.value.icon"
+                                        :disabled="!usePermissionCheck(['conference_setting_update'])"
+                                        class="col-span-12 lg:col-span-6"
+                                        label="Icon"
+                                        :name="field.slug + '-button-icon-' + field.id"
+                                        placeholder="Icon"
+                                    />
                                     <FormSelectField
                                         v-model="field.value.style"
+                                        :disabled="!usePermissionCheck(['conference_setting_update'])"
                                         labelvalue="name"
                                         keyvalue="id"
                                         :select-data="buttonStyles"
@@ -184,6 +209,7 @@ const handleModalSubmit = async () => {
                                     />
                                     <FormSelectField
                                         v-model="field.value.target"
+                                        :disabled="!usePermissionCheck(['conference_setting_update'])"
                                         labelvalue="name"
                                         keyvalue="id"
                                         :select-data="buttonTargets"
@@ -192,7 +218,7 @@ const handleModalSubmit = async () => {
                                         :name="field.slug + '-button-target-' + field.id"
                                         placeholder="Target"
                                     />
-                                    <FormInputField v-model="field.value.url" class="lg:col-span-12" label="Link" :name="field.slug + '-button-url-' + field.id" placeholder="Link" />
+                                    <FormInputField v-model="field.value.url" :disabled="!usePermissionCheck(['conference_setting_update'])" class="lg:col-span-12" label="Link" :name="field.slug + '-button-url-' + field.id" placeholder="Link" />
                                 </div>
                             </div>
                         </template>
@@ -201,7 +227,7 @@ const handleModalSubmit = async () => {
                                 <div class="flex items-center justify-between gap-5">
                                     <div class="opacity-75 form-label">{{ field.label }}</div>
                                     <div>
-                                        <button type="button" class="btn btn-sm btn-primary btn-rounded" @click="openModal()">
+                                        <button :disabled="!usePermissionCheck(['conference_setting_update'])" type="button" class="btn btn-sm btn-primary btn-rounded" @click="openModal()">
                                             <Icon name="solar:add-circle-outline" class="w-4 h-4 mr-2" />
                                             <span>Add New</span>
                                         </button>
@@ -219,8 +245,8 @@ const handleModalSubmit = async () => {
                                                 <div :class="[item.active ? 'text-success' : 'text-danger', 'mt-1 text-xs font-semibold']" v-html="item.active ? 'Active' : 'Not Active'" />
                                             </div>
                                             <div class="lg:col-span-4 flex items-center space-x-4">
-                                                <button type="button" class="btn btn-sm group-hover:btn-dark btn-secondary grow" @click="openModal(item, field.id)">Update</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger" @click="removeItem(itemIndex, field.id)">
+                                                <button :disabled="!usePermissionCheck(['conference_setting_update'])" type="button" class="btn btn-sm group-hover:btn-dark btn-secondary grow" @click="openModal(item, field.id)">Update</button>
+                                                <button :disabled="!usePermissionCheck(['conference_setting_update'])" type="button" class="btn btn-sm btn-outline-danger" @click="removeItem(itemIndex, field.id)">
                                                     <Icon name="solar:close-circle-outline" class="w-4 h-4" />
                                                 </button>
                                             </div>
@@ -233,8 +259,13 @@ const handleModalSubmit = async () => {
                                                 <div :class="[item.active ? 'text-success' : 'text-danger', 'mt-1 text-xs font-semibold']" v-html="item.active ? 'Active' : 'Not Active'" />
                                             </div>
                                             <div class="lg:col-span-5 flex items-center space-x-4">
-                                                <button type="button" class="btn btn-sm btn-rounded btn-secondary grow" @click="openModal(item, field.id)">Update</button>
-                                                <button type="button" class="btn-sm hover:text-danger text-danger/75 transition-all btn-rounded aspect-1/1" @click="removeItem(itemIndex, field.id)">
+                                                <button :disabled="!usePermissionCheck(['conference_setting_update'])" type="button" class="btn btn-sm btn-rounded btn-secondary grow" @click="openModal(item, field.id)">Update</button>
+                                                <button
+                                                    :disabled="!usePermissionCheck(['conference_setting_update'])"
+                                                    type="button"
+                                                    class="btn-sm hover:text-danger text-danger/75 transition-all btn-rounded aspect-1/1"
+                                                    @click="removeItem(itemIndex, field.id)"
+                                                >
                                                     <Icon name="solar:close-circle-outline" class="size-5" />
                                                 </button>
                                             </div>
@@ -248,8 +279,13 @@ const handleModalSubmit = async () => {
                                                 <div :class="[item.active ? 'text-success' : 'text-danger', 'mt-1 text-xs font-semibold']" v-html="item.active ? 'Active' : 'Not Active'" />
                                             </div>
                                             <div class="lg:col-span-5 flex items-center space-x-4">
-                                                <button type="button" class="btn btn-sm btn-rounded btn-secondary grow" @click="openModal(item, field.id)">Update</button>
-                                                <button type="button" class="btn-sm hover:text-danger text-danger/75 transition-all btn-rounded aspect-1/1" @click="removeItem(itemIndex, field.id)">
+                                                <button :disabled="!usePermissionCheck(['conference_setting_update'])" type="button" class="btn btn-sm btn-rounded btn-secondary grow" @click="openModal(item, field.id)">Update</button>
+                                                <button
+                                                    :disabled="!usePermissionCheck(['conference_setting_update'])"
+                                                    type="button"
+                                                    class="btn-sm hover:text-danger text-danger/75 transition-all btn-rounded aspect-1/1"
+                                                    @click="removeItem(itemIndex, field.id)"
+                                                >
                                                     <Icon name="solar:close-circle-outline" class="size-5" />
                                                 </button>
                                             </div>
@@ -272,7 +308,7 @@ const handleModalSubmit = async () => {
                         </template>
                     </template>
                 </div>
-                <div>
+                <div v-if="usePermissionCheck(['conference_setting_update'])">
                     <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4 w-full" type="button" @click="handleModalSubmit()">
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                         <span v-html="'Update'" />
