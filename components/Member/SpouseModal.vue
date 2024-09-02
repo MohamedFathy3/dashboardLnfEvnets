@@ -106,7 +106,7 @@ onMounted(async () => {
         <template #content>
             <div v-if="!loadingModal" class="grid lg:grid-cols-12 gap-5 items-start">
                 <div class="lg:col-span-4">
-                    <FormUploader v-model="item.image" :allowed-types="['image']" label="Profile Image" name="image" />
+                    <FormUploader v-model="item.image" :edit="usePermissionCheck(['conference_spouse_update'])" :allowed-types="['image']" label="Profile Image" name="image" />
                 </div>
                 <div class="lg:col-span-8 grid lg:grid-cols-12 gap-5 items-center">
                     <FormSelectField
@@ -169,7 +169,7 @@ onMounted(async () => {
                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
                     <span>Close</span>
                 </button>
-                <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit">
+                <button v-if="usePermissionCheck(['conference_spouse_update'])" :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit">
                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                     <span v-html="'update'" />
                 </button>

@@ -83,7 +83,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/dashboard/event/all-member/index', {
     method: 'POST',
@@ -242,25 +242,25 @@ function getLastOrderAmount(id) {
 const config = useRuntimeConfig();
 </script>
 <template>
-    <div class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['conference_member_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
                 <Icon name="solar:users-group-two-rounded-outline" class="size-5 opacity-75" />
                 <div>
                     <span>Registered Companies</span>
-                    <span v-if="!pending && rows" class="text-sm ml-3 bg-white border px-3 py-1 rounded-full">{{ rows.meta?.total }} Companies</span>
+                    <span v-if="status !== 'pending' && rows" class="text-sm ml-3 bg-white border px-3 py-1 rounded-full">{{ rows.meta?.total }} Companies</span>
                 </div>
             </div>
             <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5 intro-x">
                 <template v-if="selectedRows.length > 0">
-                    <button class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
+                    <button v-if="usePermissionCheck(['conference_member_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
                         <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
                         Delete Items
                     </button>
                 </template>
                 <div class="flex items-center gap-3">
-                    <a :href="config.public.apiUrl + '/export-excel/report-attendee/export'" target="_blank">
+                    <a v-if="usePermissionCheck(['conference_member_export'])" :href="config.public.apiUrl + '/export-excel/report-attendee/export'" target="_blank">
                         <button type="button" class="btn btn-dark btn-rounded btn-sm w-full justify-between gap-3">
                             <span class="items-center flex">
                                 <span>Export Attendees</span>
@@ -398,7 +398,7 @@ const config = useRuntimeConfig();
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-if="!pending && rows">
+                    <template v-if="status !== 'pending' && rows">
                         <tr v-for="row in rows.data" :key="row.id">
                             <td>
                                 <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -463,6 +463,6 @@ const config = useRuntimeConfig();
             </table>
         </div>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
     </div>
 </template>

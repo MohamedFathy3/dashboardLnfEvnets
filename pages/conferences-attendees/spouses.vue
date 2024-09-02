@@ -103,12 +103,12 @@ async function openModal(id) {
 const resources = useResourceStore();
 </script>
 <template>
-    <div class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['conference_spouse_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
                 <Icon name="solar:users-group-two-rounded-line-duotone" class="size-5 opacity-75" />
-                <div>Delegates</div>
+                <div>Spouses</div>
             </div>
         </div>
         <!-- Filter & Search -->
@@ -168,7 +168,7 @@ const resources = useResourceStore();
                                 <div>
                                     <div>{{ row.name }}</div>
                                     <div class="font-normal mt-0.5 text-xs opacity-75 capitalize">{{ row.type }}</div>
-                                    <div class="font-light mt-0.5 text-xs opacity-75 truncate max-w-[15rem]">{{ row.delegate }}</div>
+                                    <div class="font-light mt-0.5 text-xs opacity-75 truncate max-w-[15rem] capitalize">{{ row.delegate }}</div>
                                 </div>
                             </div>
                         </td>

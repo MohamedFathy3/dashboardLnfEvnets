@@ -8,6 +8,10 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    disabled: {
+        type: Boolean,
+        required: false,
+    },
 });
 const orderStatuses = ref([
     { name: 'Application Form', value: 'in_application_form' },
@@ -47,7 +51,17 @@ const changeOrder = async (status) => {
 <template>
     <div>
         <div>
-            <FormSelectField id="status-selector" v-model="status" class="text-slate-800 cursor-pointer w-[18rem]" placeholder="Please select a status..." :clearable="false" :select-data="orderStatuses" labelvalue="name" keyvalue="value" />
+            <FormSelectField
+                id="status-selector"
+                v-model="status"
+                :disabled="disabled"
+                class="text-slate-800 cursor-pointer w-[18rem]"
+                placeholder="Please select a status..."
+                :clearable="false"
+                :select-data="orderStatuses"
+                labelvalue="name"
+                keyvalue="value"
+            />
         </div>
     </div>
 </template>

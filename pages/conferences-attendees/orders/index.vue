@@ -166,11 +166,11 @@ async function refreshFilterData() {
 }
 </script>
 <template>
-    <div class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['conference_order_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
+                <Icon name="solar:clipboard-list-linear" class="size-5 opacity-75" />
                 <div>Orders</div>
             </div>
         </div>
@@ -333,7 +333,7 @@ async function refreshFilterData() {
                                             <Icon name="solar:eye-outline" class="size-5" />
                                         </div>
                                     </NuxtLink>
-                                    <div class="p-1.5 bg-slate-100 !rounded-md text-danger hover:scale-[103%] transition-all cursor-pointer" @click="deleteItems(row.id)">
+                                    <div v-if="usePermissionCheck(['conference_order_delete'])" class="p-1.5 bg-slate-100 !rounded-md text-danger hover:scale-[103%] transition-all cursor-pointer" @click="deleteItems(row.id)">
                                         <Icon name="solar:trash-bin-minimalistic-linear" class="size-5" />
                                     </div>
                                 </div>

@@ -459,7 +459,7 @@ async function restoreItems() {
             <template #content>
                 <div class="grid lg:grid-cols-12 gap-5 items-start">
                     <div class="lg:col-span-4">
-                        <FormUploader v-model="item.image" :errors="v$.image.$errors" :allowed-types="['image']" label="Image" name="image" />
+                        <FormUploader v-model="item.image" :edit="usePermissionCheck(['network_event_create', 'network_event_update'])" :errors="v$.image.$errors" :allowed-types="['image']" label="Image" name="image" />
                     </div>
                     <div class="lg:col-span-8 grid lg:grid-cols-12 gap-5">
                         <FormInputField v-model="item.title" :errors="v$.title.$errors" class="lg:col-span-12" label="Title" name="title" placeholder="Title" />
@@ -552,7 +552,16 @@ async function restoreItems() {
                             type="number"
                         />
                     </div>
-                    <FormUploader v-model="item.gallery" :errors="v$.gallery.$errors" :allowed-types="['image']" :limit="200" label="Gallery" name="gallery" class="lg:col-span-12" />
+                    <FormUploader
+                        v-model="item.gallery"
+                        :edit="usePermissionCheck(['network_event_create', 'network_event_update'])"
+                        :errors="v$.gallery.$errors"
+                        :allowed-types="['image']"
+                        :limit="200"
+                        label="Gallery"
+                        name="gallery"
+                        class="lg:col-span-12"
+                    />
                 </div>
             </template>
             <template #footer>

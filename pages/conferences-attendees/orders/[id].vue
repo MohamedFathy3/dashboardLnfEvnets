@@ -49,7 +49,7 @@ const bedTypes = ref([
             <!-- Page Title & Action Buttons -->
             <div class="lg:flex lg:items-center lg:justify-between lg:gap-5">
                 <div class="flex items-start gap-2">
-                    <Icon name="solar:buildings-outline" class="size-5 opacity-75" />
+                    <Icon name="solar:clipboard-list-linear" class="size-5 opacity-75" />
                     <div>
                         <div>{{ order.uuid }}</div>
                         <div class="text-xs opacity-75">{{ order.createdAt }}</div>
@@ -57,11 +57,11 @@ const bedTypes = ref([
                 </div>
                 <div class="flex items-center gap-3">
                     <UiNetworkTypeBadge :data="order.company.membershipType" />
-                    <ConferenceOrderStatusSwitch :order-id="order.id" :order-status="order.status" @reload="refresh" />
+                    <ConferenceOrderStatusSwitch :disabled="!usePermissionCheck(['conference_order_update'])" :order-id="order.id" :order-status="order.status" @reload="refresh" />
                 </div>
             </div>
         </div>
-        <div>
+        <div v-if="usePermissionCheck(['conference_order_list'])">
             <div class="grid lg:grid-cols-12 gap-8 text-sm font-light items-start">
                 <div class="bg-white shadow-sm p-5 rounded-xl lg:col-span-3 flex items-center place-content-center h-full">
                     <NuxtImg class="w-full h-24 flex items-center my-auto object-contain hover:scale-105 ease-in-out duration-300" :src="order.company.imageUrl" :alt="order.company.name" :title="order.company.name" />

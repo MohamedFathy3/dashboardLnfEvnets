@@ -12,6 +12,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    edit: {
+        type: Boolean,
+        default: true,
+    },
     flexTitle: {
         type: Boolean,
         default: false,
@@ -349,7 +353,7 @@ const resetMediaGalleryParams = async () => {
 const {
     data: images,
     error,
-    pending,
+    status,
     refresh,
 } = await useApiFetch(`/api/media`, {
     immediate: false,
@@ -461,22 +465,24 @@ const insertMedia = async () => {
                 <span>{{ label }}</span>
                 <span v-if="label && required" class="ml-1 text-sm text-danger">*</span>
             </div>
-            <div v-if="limit > 1" class="flex items-center gap-5">
-                <FormSwitch v-model="allowRemovingFiles" flex-title label="Allow Removing files" />
-                <label :for="name + '-update-files'" class="btn btn-primary btn-sm btn-rounded whitespace-nowrap btn-sm gap-2">
-                    <Icon name="solar:gallery-send-broken" class="size-4 shrink-0" />
-                    <span class="font-semibold">Update Images</span>
-                    <input :id="name + '-update-files'" multiple :name="name + '-update-files'" type="file" class="sr-only" @change="onUploadFiles" />
-                </label>
-                <button type="button" class="btn btn-dark gap-2 btn-sm btn-rounded whitespace-nowrap" @click="openModal">
-                    <Icon name="solar:folder-open-outline" class="size-4 shrink-0" />
-                    Media Library
-                </button>
-            </div>
+            <template v-if="props.edit">
+                <div v-if="limit > 1" class="flex items-center gap-5">
+                    <FormSwitch v-model="allowRemovingFiles" flex-title label="Allow Removing files" />
+                    <label :for="name + '-update-files'" class="btn btn-primary btn-sm btn-rounded whitespace-nowrap btn-sm gap-2">
+                        <Icon name="solar:gallery-send-broken" class="size-4 shrink-0" />
+                        <span class="font-semibold">Update Images</span>
+                        <input :id="name + '-update-files'" multiple :name="name + '-update-files'" type="file" class="sr-only" @change="onUploadFiles" />
+                    </label>
+                    <button type="button" class="btn btn-dark gap-2 btn-sm btn-rounded whitespace-nowrap" @click="openModal">
+                        <Icon name="solar:folder-open-outline" class="size-4 shrink-0" />
+                        Media Library
+                    </button>
+                </div>
+            </template>
         </div>
         <template v-if="limit === 1">
             <div v-if="file && file.fullUrl" class="relative border-dashed border group bg-white flex justify-center ease-in-out duration-300 px-6 pt-5 pb-6 rounded-xl">
-                <div class="absolute inset-0 hidden group-hover:flex group-hover:flex-col items-center justify-center z-10 ease-in-out duration-300 group gap-5">
+                <div v-if="props.edit" class="absolute inset-0 hidden group-hover:flex group-hover:flex-col items-center justify-center z-10 ease-in-out duration-300 group gap-5">
                     <label :for="name + '-update-file'" class="btn btn-primary btn-sm btn-rounded whitespace-nowrap btn-sm">
                         <Icon name="solar:gallery-send-broken" class="h-4 w-4 mr-2" />
                         <span class="font-semibold">Update Image</span>
@@ -491,7 +497,7 @@ const insertMedia = async () => {
                         <span>Remove</span>
                     </button>
                 </div>
-                <NuxtImg :src="file.fullUrl" alt="company-logo" class="z-5 w-full h-36 group-hover:blur-md object-contain ease-in-out duration-300" />
+                <NuxtImg :src="file.fullUrl" alt="company-logo" :class="props.edit && 'group-hover:blur-md'" class="z-5 w-full h-36 object-contain ease-in-out duration-300" />
             </div>
             <div v-else-if="uploading" class="bg-white flex justify-center ease-in-out duration-300 px-6 pt-5 pb-6 rounded-xl min-h-36">
                 <Icon name="eos-icons:three-dots-loading" class="h-14 w-14" />
@@ -504,14 +510,14 @@ const insertMedia = async () => {
                         'border-2 flex justify-center ease-in-out duration-300 px-6 pt-5 pb-6 rounded-xl min-h-36',
                     ]"
                 >
-                    <div class="space-y-2 text-center">
+                    <div v-if="props.edit" class="space-y-2 text-center">
                         <Icon name="solar:gallery-send-broken" class="mx-auto h-12 w-12 text-slate-400" />
                         <div class="text-sm space-y-2">
                             <label :for="name" class="relative btn btn-sm btn-primary whitespace-nowrap">
                                 <span>Upload a file</span>
                                 <input :id="name" :name="name" type="file" class="sr-only" @change="onUploadFile" />
                             </label>
-                            <p class="pl-1">or drag and drop</p>
+                            <p class="pl-1">or drag and drop 2</p>
                         </div>
                         <div class="text-xs text-slate-400 text-center">
                             <span v-for="(allowedType, index) in props.allowedTypes" :key="index">
@@ -571,7 +577,7 @@ const insertMedia = async () => {
                         'border-2 flex justify-center ease-in-out duration-300 px-6 pt-5 pb-6 rounded-xl min-h-36',
                     ]"
                 >
-                    <div class="space-y-2 text-center">
+                    <div v-if="props.edit" class="space-y-2 text-center">
                         <Icon name="solar:gallery-send-broken" class="mx-auto h-12 w-12 text-slate-400" />
                         <div class="text-sm space-y-2">
                             <label :for="name" class="relative btn btn-sm btn-primary whitespace-nowrap">
@@ -633,7 +639,7 @@ const insertMedia = async () => {
                             <span v-html="'Reset'" />
                         </button>
                     </form>
-                    <div v-if="!pending" class="grid lg:grid-cols-8 sm:grid-cols-6 gap-5 items-start">
+                    <div v-if="status !== 'pending'" class="grid lg:grid-cols-8 sm:grid-cols-6 gap-5 items-start">
                         <template v-if="images.data.length > 0">
                             <div
                                 v-for="(img, i) in images.data"
@@ -659,7 +665,7 @@ const insertMedia = async () => {
                         </div>
                     </div>
                     <div v-else class="grid lg:grid-cols-8 sm:grid-cols-6 gap-5 items-start">
-                        <div v-for="(placeholder, i) in 24" :key="i" class="bg-slate-100 animate-pulse h-32 w-full rounded-xl border" />
+                        <div v-for="placeholder in 24" :key="placeholder" class="bg-slate-100 animate-pulse h-32 w-full rounded-xl border" />
                     </div>
                     <div v-if="images.data" class="flex items-center justify-between gap-5 text-sm mt-5 px-6">
                         <button type="button" :disabled="images.current_page === 1" class="btn-secondary btn" @click="changePage(mediaGalleryParams.page - 1)">

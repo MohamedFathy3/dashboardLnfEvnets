@@ -146,7 +146,7 @@ onMounted(async () => {
         <template #content>
             <div v-if="!loadingModal" class="grid lg:grid-cols-12 gap-5 items-start">
                 <div class="lg:col-span-4">
-                    <FormUploader v-model="item.image" :allowed-types="['image']" label="Profile Image" name="image" />
+                    <FormUploader v-model="item.image" :edit="usePermissionCheck(['conference_delegate_update'])" :allowed-types="['image']" label="Profile Image" name="image" />
                 </div>
                 <div class="lg:col-span-8 grid lg:grid-cols-12 gap-5 items-center">
                     <FormSelectField
@@ -230,13 +230,13 @@ onMounted(async () => {
                     </template>
                 </div>
                 <FormInputField v-model="item.extraDietaries" :errors="v$.extraDietaries.$errors" class="lg:col-span-12" label="Extra Dietaries" name="extraDietaries" placeholder="Extra Dietaries" />
-                <FormUploader v-model="item.bc" :allowed-types="['image']" label="Business Card" name="bc" class="lg:col-span-12" />
+                <FormUploader v-model="item.bc" :edit="usePermissionCheck(['conference_delegate_update'])" :allowed-types="['image']" label="Business Card" name="bc" class="lg:col-span-12" />
             </div>
             <div v-else class="p-5 text-center animate-pulse">Loading Data...</div>
         </template>
         <template #footer>
             <div class="w-full flex items-center justify-between gap-5">
-                <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-warning px-4" type="button" @click="resendPassword">
+                <button v-if="usePermissionCheck(['conference_delegate_update'])" :disabled="formLoading" class="btn-rounded btn-sm btn btn-warning px-4" type="button" @click="resendPassword">
                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:circle-top-up-linear'" class="w-5 h-5 mr-2" />
                     <span>Resend Password</span>
                 </button>
@@ -245,7 +245,7 @@ onMounted(async () => {
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
                         <span>Close</span>
                     </button>
-                    <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit">
+                    <button v-if="usePermissionCheck(['conference_delegate_update'])" :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit">
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                         <span v-html="'update'" />
                     </button>

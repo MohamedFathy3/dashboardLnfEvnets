@@ -13,7 +13,11 @@ defineProps<{
         </div>
         <ul v-if="member.orders.length > 0 || member.pendingOrder" class="flex flex-col gap-3">
             <li>
-                <NuxtLink v-if="member.pendingOrder" :to="'/conferences-attendees/orders/' + member.pendingOrder.id" class="items-center grid lg:grid-cols-3 gap-3 bg-white rounded-xl p-3 shadow-sm cursor-pointer hover:scale-[101%] transition-all">
+                <NuxtLink
+                    v-if="member.pendingOrder"
+                    :href="usePermissionCheck(['conference_member_update']) ? '/conferences-attendees/orders/' + member.pendingOrder.id : null"
+                    class="items-center grid lg:grid-cols-3 gap-3 bg-white rounded-xl p-3 shadow-sm cursor-pointer hover:scale-[101%] transition-all"
+                >
                     <div>
                         <div class="font-normal">{{ member.pendingOrder.uuid }}</div>
                         <div class="font-light">{{ member.pendingOrder.createdAt }}</div>
@@ -26,7 +30,11 @@ defineProps<{
             </li>
             <template v-if="member.orders.length > 0">
                 <li v-for="order in member.orders" :key="order.id">
-                    <NuxtLink :to="'/conferences-attendees/orders/' + order.id" class="items-center grid lg:grid-cols-3 gap-3 bg-white rounded-xl p-3 shadow-sm cursor-pointer hover:scale-[101%] transition-all">
+                    <NuxtLink
+                        :href="usePermissionCheck(['conference_order_list']) ? '/conferences-attendees/orders/' + order.id : null"
+                        class="items-center grid lg:grid-cols-3 gap-3 bg-white rounded-xl p-3 shadow-sm"
+                        :class="usePermissionCheck(['conference_order_list']) && 'cursor-pointer hover:scale-[101%] transition-all'"
+                    >
                         <div>
                             <div class="font-normal">{{ order.uuid }}</div>
                             <div class="font-light">{{ order.createdAt }}</div>
