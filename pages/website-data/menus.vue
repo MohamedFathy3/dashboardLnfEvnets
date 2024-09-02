@@ -377,33 +377,39 @@ async function handleChildModalSubmit() {
 }
 </script>
 <template>
-    <div class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['network_menu_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
+                <Icon name="solar:hamburger-menu-outline" class="size-5 opacity-75" />
                 <div>{{ serverParams.deleted ? 'Deleted Menus' : 'Menus' }}</div>
             </div>
             <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
                 <template v-if="selectedRows.length > 0">
-                    <button v-if="serverParams.deleted" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
-                        <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
-                        Delete Permanently
-                    </button>
-                    <button v-else class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
-                        <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
-                        Delete Items
-                    </button>
-                    <button v-if="serverParams.deleted" class="btn btn-success btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="restoreItems">
-                        <Icon name="solar:restart-circle-outline" class="size-5 opacity-75" />
-                        Restore Items
-                    </button>
+                    <template v-if="serverParams.deleted">
+                        <button v-if="usePermissionCheck(['network_menu_force_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
+                            <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
+                            Delete Permanently
+                        </button>
+                    </template>
+                    <template v-else>
+                        <button v-if="usePermissionCheck(['network_menu_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
+                            <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
+                            Delete Items
+                        </button>
+                    </template>
+                    <template v-if="serverParams.deleted">
+                        <button v-if="usePermissionCheck(['network_menu_restore'])" class="btn btn-success btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="restoreItems">
+                            <Icon name="solar:restart-circle-outline" class="size-5 opacity-75" />
+                            Restore Items
+                        </button>
+                    </template>
                 </template>
-                <button :disabled="serverParams.deleted" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
+                <button v-if="usePermissionCheck(['network_menu_create'])" :disabled="serverParams.deleted" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
                     <Icon name="solar:add-square-linear" class="size-5 opacity-75" />
                     Add New
                 </button>
-                <button class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
+                <button v-if="usePermissionCheck(['network_menu_delete', 'network_menu_force_delete'])" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
                     <Icon :name="serverParams.deleted ? 'solar:hamburger-menu-line-duotone' : 'solar:trash-bin-minimalistic-line-duotone'" class="size-5 opacity-75" />
                     {{ serverParams.deleted ? 'Items List' : 'Deleted Items' }}
                 </button>
@@ -458,7 +464,9 @@ async function handleChildModalSubmit() {
                             <div class="font-light text-sm opacity-75">{{ row.slug }}</div>
                         </td>
                         <td>
-                            <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="serverParams.deleted" @change="useToggleSwitch(row.id, 'active', 'menu')" />
+                            <div data-tw-merge class="flex items-center place-content-center" @change="useToggleSwitch(row.id, 'active', 'menu')">
+                                <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="!usePermissionCheck(['network_menu_update']) || serverParams.deleted" />
+                            </div>
                         </td>
                         <td v-if="serverParams.deleted" class="text-sm">{{ row.deletedAt }}</td>
                         <td class="text-right">
@@ -501,7 +509,7 @@ async function handleChildModalSubmit() {
                                     <Icon name="solar:hamburger-menu-line-duotone" class="w-6 h-6 opacity-75" />
                                     <div class="uppercase opacity-75">menu Items</div>
                                 </div>
-                                <button class="btn btn-primary btn-rounded btn-sm gap-3" type="button" @click="openChildModal()">
+                                <button :disabled="!usePermissionCheck(['network_menu_create', 'network_menu_update'])" class="btn btn-primary btn-rounded btn-sm gap-3" type="button" @click="openChildModal()">
                                     <Icon name="solar:add-circle-outline" class="w-5 h-5" />
                                     <span>Add Menu Item</span>
                                 </button>
@@ -520,16 +528,20 @@ async function handleChildModalSubmit() {
                                             </div>
                                         </div>
                                         <div>
-                                            <FormSwitch :id="'child-active-' + subItem.id" v-model="subItem.active" @change="useToggleSwitch(subItem.id, 'active', 'sub-menu')" />
+                                            <FormSwitch :id="'child-active-' + subItem.id" v-model="subItem.active" :disabled="!usePermissionCheck(['network_menu_update'])" @change="useToggleSwitch(subItem.id, 'active', 'sub-menu')" />
                                         </div>
                                         <div class="text-sm">{{ subItem.orderId }}</div>
                                         <div class="flex items-center space-x-2 text-xs justify-end">
                                             <div class="flex justify-center items-center gap-3">
-                                                <button :disabled="formLoading" class="gap-1.5 btn btn-sm btn-secondary btn-rounded" @click="openChildModal(subItem.id)">
+                                                <button :disabled="formLoading || !usePermissionCheck(['network_menu_create', 'network_menu_update'])" class="gap-1.5 btn btn-sm btn-secondary btn-rounded" @click="openChildModal(subItem.id)">
                                                     <Icon name="solar:pen-new-round-outline" class="w-4 h-4" />
                                                     <span>Edit</span>
                                                 </button>
-                                                <button :disabled="formLoading" class="gap-1.5 btn btn-sm btn-outline-danger btn-rounded" @click="deleteChild(subItem.id, subItem.menuId)">
+                                                <button
+                                                    :disabled="formLoading || !usePermissionCheck(['network_menu_delete', 'network_menu_force_delete'])"
+                                                    class="gap-1.5 btn btn-sm btn-outline-danger btn-rounded"
+                                                    @click="deleteChild(subItem.id, subItem.menuId)"
+                                                >
                                                     <Icon name="solar:close-circle-outline" class="w-4 h-4" />
                                                     <span>Remove</span>
                                                 </button>
@@ -550,16 +562,20 @@ async function handleChildModalSubmit() {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <FormSwitch :id="'child-active-' + child.id" v-model="child.active" @change="useToggleSwitch(child.id, 'active', 'sub-menu')" />
+                                                    <FormSwitch :id="'child-active-' + child.id" v-model="child.active" :disabled="!usePermissionCheck(['network_menu_update'])" @change="useToggleSwitch(child.id, 'active', 'sub-menu')" />
                                                 </div>
                                                 <div class="text-sm">{{ child.orderId }}</div>
                                                 <div class="flex items-center space-x-2 text-xs justify-end">
                                                     <div class="flex justify-center items-center gap-3">
-                                                        <button :disabled="formLoading" class="gap-1.5 btn btn-sm btn-secondary btn-rounded" @click="openChildModal(child.id)">
+                                                        <button :disabled="formLoading || !usePermissionCheck(['network_menu_create', 'network_menu_update'])" class="gap-1.5 btn btn-sm btn-secondary btn-rounded" @click="openChildModal(child.id)">
                                                             <Icon name="solar:pen-new-round-outline" class="w-4 h-4" />
                                                             <span>Edit</span>
                                                         </button>
-                                                        <button :disabled="formLoading" class="gap-1.5 btn btn-sm btn-outline-danger btn-rounded" @click="deleteChild(child.id, child.menuId)">
+                                                        <button
+                                                            :disabled="formLoading || !usePermissionCheck(['network_menu_delete', 'network_menu_force_delete'])"
+                                                            class="gap-1.5 btn btn-sm btn-outline-danger btn-rounded"
+                                                            @click="deleteChild(child.id, child.menuId)"
+                                                        >
                                                             <Icon name="solar:close-circle-outline" class="w-4 h-4" />
                                                             <span>Remove</span>
                                                         </button>
@@ -607,7 +623,7 @@ async function handleChildModalSubmit() {
                                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
                                     <span>Close</span>
                                 </button>
-                                <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleChildModalSubmit()">
+                                <button v-if="usePermissionCheck(['network_menu_create', 'network_menu_update'])" :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleChildModalSubmit()">
                                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                                     <span v-html="childEditMode ? 'Update' : 'Save'" />
                                 </button>
@@ -623,7 +639,7 @@ async function handleChildModalSubmit() {
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
                         <span>Close</span>
                     </button>
-                    <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit()">
+                    <button v-if="usePermissionCheck(['network_menu_create', 'network_menu_update'])" :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit()">
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                         <span v-html="editMode ? 'Update' : 'Save'" />
                     </button>

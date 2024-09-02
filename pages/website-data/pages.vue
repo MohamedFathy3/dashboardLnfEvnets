@@ -291,29 +291,35 @@ function removeRow(index) {
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
+                <Icon name="solar:pen-new-square-linear" class="size-5 opacity-75" />
                 <div>{{ serverParams.deleted ? 'Deleted Pages' : 'Pages' }}</div>
             </div>
             <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
                 <template v-if="selectedRows.length > 0">
-                    <button v-if="serverParams.deleted" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
-                        <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
-                        Delete Permanently
-                    </button>
-                    <button v-else class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
-                        <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
-                        Delete Items
-                    </button>
-                    <button v-if="serverParams.deleted" class="btn btn-success btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="restoreItems">
-                        <Icon name="solar:restart-circle-outline" class="size-5 opacity-75" />
-                        Restore Items
-                    </button>
+                    <template v-if="serverParams.deleted">
+                        <button v-if="usePermissionCheck(['network_page_force_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
+                            <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
+                            Delete Permanently
+                        </button>
+                    </template>
+                    <template v-else>
+                        <button v-if="usePermissionCheck(['network_page_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
+                            <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
+                            Delete Items
+                        </button>
+                    </template>
+                    <template v-if="serverParams.deleted">
+                        <button v-if="usePermissionCheck(['network_page_restore'])" class="btn btn-success btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="restoreItems">
+                            <Icon name="solar:restart-circle-outline" class="size-5 opacity-75" />
+                            Restore Items
+                        </button>
+                    </template>
                 </template>
-                <button :disabled="serverParams.deleted" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
+                <button v-if="usePermissionCheck(['network_page_create'])" :disabled="serverParams.deleted" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
                     <Icon name="solar:add-square-linear" class="size-5 opacity-75" />
                     Add New
                 </button>
-                <button class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
+                <button v-if="usePermissionCheck(['network_page_delete', 'network_page_force_delete'])" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
                     <Icon :name="serverParams.deleted ? 'solar:hamburger-menu-line-duotone' : 'solar:trash-bin-minimalistic-line-duotone'" class="size-5 opacity-75" />
                     {{ serverParams.deleted ? 'Items List' : 'Deleted Items' }}
                 </button>
@@ -372,7 +378,7 @@ function removeRow(index) {
                             <div>{{ row.orderId }}</div>
                         </td>
                         <td>
-                            <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="serverParams.deleted" @change="useToggleSwitch(row.id, 'active', 'page')" />
+                            <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="!usePermissionCheck(['network_page_update']) || serverParams.deleted" @change="useToggleSwitch(row.id, 'active', 'page')" />
                         </td>
                         <td v-if="serverParams.deleted" class="text-sm">{{ row.deletedAt }}</td>
                         <td class="text-right">
@@ -416,21 +422,22 @@ function removeRow(index) {
                                     v-model="section.pageSectionId"
                                     :clearable="false"
                                     labelvalue="title"
+                                    :disabled="!usePermissionCheck(['network_page_create', 'network_page_update'])"
                                     class="col-span-2"
                                     keyvalue="id"
                                     :select-data="pageSections"
                                     :name="'page-section-' + index"
                                     :placeholder="'Section ' + (index + 1)"
                                 />
-                                <FormInputField v-model="section.orderId" type="number" :placeholder="'Order ID ' + (index + 1)" :name="'section-order-id-' + index" />
+                                <FormInputField v-model="section.orderId" :disabled="!usePermissionCheck(['network_page_create', 'network_page_update'])" type="number" :placeholder="'Order ID ' + (index + 1)" :name="'section-order-id-' + index" />
                                 <div>
-                                    <button type="button" class="btn btn-danger btn-sm btn-rounded px-4" @click="removeRow(index)">
+                                    <button :disabled="!usePermissionCheck(['network_page_create', 'network_page_update'])" type="button" class="btn btn-danger btn-sm btn-rounded px-4" @click="removeRow(index)">
                                         <Icon name="solar:close-circle-linear" class="w-5 h-5 mr-2" />
                                         <span>Remove</span>
                                     </button>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-success btn-sm btn-rounded px-4" @click="addRow">
+                            <button :disabled="!usePermissionCheck(['network_page_create', 'network_page_update'])" type="button" class="btn btn-success btn-sm btn-rounded px-4" @click="addRow">
                                 <Icon name="solar:add-circle-outline" class="w-5 h-5 mr-2" />
                                 <span>Add New</span>
                             </button>
@@ -444,7 +451,7 @@ function removeRow(index) {
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
                         <span>Close</span>
                     </button>
-                    <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit()">
+                    <button v-if="usePermissionCheck(['network_page_create', 'network_page_update'])" :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit()">
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                         <span v-html="editMode ? 'Update' : 'Save'" />
                     </button>

@@ -265,13 +265,18 @@ const { data: permissions, refresh: refreshPermissions } = await useApiFetch('/a
     transform: (permissions) => permissions.data,
     lazy: true,
 });
+
+const replaceWord = (text, word, replacement) => {
+    const regex = new RegExp(word, 'g');
+    return text.replace(regex, replacement);
+};
 </script>
 <template>
     <div class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
+                <Icon name="solar:eye-scan-bold" class="size-5 opacity-75" />
                 <div>{{ serverParams.deleted ? 'Deleted Roles' : 'Roles' }}</div>
             </div>
             <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
@@ -379,38 +384,35 @@ const { data: permissions, refresh: refreshPermissions } = await useApiFetch('/a
                 <div class="grid lg:grid-cols-12 gap-5 items-start">
                     <FormInputField v-model="item.name" :errors="v$.name.$errors" class="lg:col-span-12" label="Name" name="name" placeholder="Name" />
                     <div class="lg:col-span-12 grid lg:grid-cols-12 gap-5 items-start">
-                        <div v-for="(list, index) in permissions" :key="index" class="lg:col-span-6">
+                        <div v-for="(list, index) in permissions" :key="index" class="lg:col-span-12">
                             <div class="flex items-center justify-between px-1">
                                 <div>
-                                    <span class="opacity-50 font-medium">{{ index + 1 }}.</span>
                                     <span class="ml-1">{{ list.name }}</span>
                                 </div>
                             </div>
                             <div class="mt-2 bg-slate-50 rounded-xl borer">
-                                <div class="border border-slate-100 bg-slate-50/50 rounded-lg grid grid-cols-12 p-5 gap-5">
-                                    <div class="sm:col-span-12">
-                                        <fieldset class="mt-8 px-4 grid lg:grid-cols-3 md:grid-cols-2 gap-6 grid-cols-1 duration-300 ease-in-out">
-                                            <div v-for="permission in list.children" :key="permission.id" class="relative flex items-center">
-                                                <div class="flex items-center h-6">
-                                                    <input
-                                                        :id="permission.id"
-                                                        v-model="item.permissions"
-                                                        :checked="item.permissions.some((p) => p.permissionId === permission.id)"
-                                                        :aria-describedby="permission.id + '-description'"
-                                                        :name="permission.id"
-                                                        :value="{ permissionId: permission.id }"
-                                                        type="checkbox"
-                                                        class="focus:ring-primary h-5 w-5 rounded text-primary border-slate-500 disabled:read-only:opacity-50 disabled:read-only:cursor-not-allowed"
-                                                    />
-                                                </div>
-                                                <div class="ml-3 text-sm">
-                                                    <label :class="['disabled:read-only:text-slate-500']" :for="permission.id" class="font-sm ease-in-out duration-150">
-                                                        {{ permission.name }}
-                                                    </label>
-                                                </div>
+                                <div class="border border-slate-200 bg-slate-50/50 rounded-2xl p-5 flex flex-col gap-5">
+                                    <fieldset class="px-4 grid lg:grid-cols-7 gap-5 grid-cols-3 duration-300 ease-in-out">
+                                        <div v-for="permission in list.children" :key="permission.id" class="relative flex items-center">
+                                            <div class="flex items-center">
+                                                <input
+                                                    :id="permission.id"
+                                                    v-model="item.permissions"
+                                                    :checked="item.permissions.some((p) => p.permissionId === permission.id)"
+                                                    :aria-describedby="permission.id + '-description'"
+                                                    :name="permission.id"
+                                                    :value="{ permissionId: permission.id }"
+                                                    type="checkbox"
+                                                    class="focus:ring-primary h-5 w-5 rounded text-primary border-slate-500 disabled:read-only:opacity-50 disabled:read-only:cursor-not-allowed"
+                                                />
                                             </div>
-                                        </fieldset>
-                                    </div>
+                                            <div class="ml-3 text-xs whitespace-nowrap">
+                                                <label :class="[item.permissions.some((p) => p.permissionId === permission.id) && 'text-success', 'disabled:read-only:text-slate-500']" :for="permission.id" class="font-sm ease-in-out duration-150">
+                                                    {{ replaceWord(permission.name, 'List', 'Show') }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
                                 </div>
                             </div>
                         </div>
