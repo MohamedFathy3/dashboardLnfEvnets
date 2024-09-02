@@ -277,7 +277,7 @@ const menuItems = ref([
                 subMenus: [],
                 permission: ['conference_message_list'],
             },
-            { name: 'Hotels', path: '/conferences-data/hotels', icon: 'solar:buildings-2-line-duotone', subMenus: [], permission: ['conference_hotel_list'] },
+            // { name: 'Hotels', path: '/conferences-data/hotels', icon: 'solar:buildings-2-line-duotone', subMenus: [], permission: ['conference_hotel_list'] },
             { name: 'Rooms', path: '/conferences-data/rooms', icon: 'solar:bed-line-duotone', subMenus: [], permission: ['conference_room_list'] },
             { name: 'Packages', path: '/conferences-data/packages', icon: 'solar:box-outline', subMenus: [], permission: ['conference_package_list'] },
             {

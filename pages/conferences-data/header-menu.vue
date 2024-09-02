@@ -42,7 +42,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/event-menu/index', {
     method: 'POST',
@@ -183,11 +183,11 @@ async function handleModalSubmit() {
 }
 </script>
 <template>
-    <div class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['conference_menu_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
+                <Icon name="solar:hamburger-menu-line-duotone" class="size-5 opacity-75" />
                 <div>Menu Items</div>
             </div>
         </div>
@@ -226,11 +226,11 @@ async function handleModalSubmit() {
                     <th class="text-left">Name</th>
                     <th>Active</th>
                     <th>Show Icon</th>
-                    <th class="text-right">Action</th>
+                    <th v-if="usePermissionCheck(['conference_menu_update'])" class="text-right">Action</th>
                 </tr>
             </thead>
             <tbody>
-                <template v-if="!pending && rows">
+                <template v-if="status !== 'pending' && rows">
                     <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -240,12 +240,12 @@ async function handleModalSubmit() {
                             <div class="font-light opacity-75 text-xs">{{ row.link }}</div>
                         </td>
                         <td>
-                            <FormSwitch :id="'row-active-' + row.id" v-model="row.active" @change="useToggleSwitch(row.id, 'active', 'event-menu')" />
+                            <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="!usePermissionCheck(['conference_menu_update'])" @change="useToggleSwitch(row.id, 'active', 'event-menu')" />
                         </td>
                         <td>
-                            <FormSwitch :id="'row-show-icon-' + row.id" v-model="row.showIcon" @change="useToggleSwitch(row.id, 'show_icon', 'event-menu')" />
+                            <FormSwitch :id="'row-show-icon-' + row.id" v-model="row.showIcon" :disabled="!usePermissionCheck(['conference_menu_update'])" @change="useToggleSwitch(row.id, 'show_icon', 'event-menu')" />
                         </td>
-                        <td class="text-right">
+                        <td v-if="usePermissionCheck(['conference_menu_update'])" class="text-right">
                             <div>
                                 <button class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
                                     <Icon name="solar:pen-new-round-outline" class="size-4" />
@@ -257,15 +257,15 @@ async function handleModalSubmit() {
                 </template>
                 <template v-else>
                     <tr v-for="i in serverParams.perPage" :key="i">
-                        <td colspan="5">
-                            <div class="h-12 !opacity-50 animate-pulse" />
+                        <td colspan="4">
+                            <div class="h-9 !opacity-50 animate-pulse" />
                         </td>
                     </tr>
                 </template>
             </tbody>
         </table>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
 
         <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
             <template #header>
@@ -290,7 +290,7 @@ async function handleModalSubmit() {
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
                         <span>Close</span>
                     </button>
-                    <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit()">
+                    <button v-if="usePermissionCheck(['conference_menu_update', 'conference_menu_create'])" :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit()">
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                         <span v-html="editMode ? 'Update' : 'Save'" />
                     </button>
