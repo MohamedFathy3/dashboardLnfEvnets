@@ -289,22 +289,22 @@ const generateTimeOptions = computed(() => {
 });
 </script>
 <template>
-    <div class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['conference_program_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
+                <Icon name="solar:server-2-linear" class="size-5 opacity-75" />
                 <div>Agenda Programs</div>
             </div>
             <div class="flex items-center gap-3">
                 <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
                     <template v-if="selectedRows.length > 0">
-                        <button class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
+                        <button v-if="usePermissionCheck(['conference_program_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
                             <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
                             Delete Items
                         </button>
                     </template>
-                    <button class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
+                    <button v-if="usePermissionCheck(['conference_program_create'])" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
                         <Icon name="solar:add-square-linear" class="size-5 opacity-75" />
                         Add New
                     </button>
@@ -350,7 +350,7 @@ const generateTimeOptions = computed(() => {
                     <th>Day</th>
                     <th>Program</th>
                     <th class="text-center">Active</th>
-                    <th class="text-right">Action</th>
+                    <th v-if="usePermissionCheck(['conference_program_update'])" class="text-right">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -373,10 +373,10 @@ const generateTimeOptions = computed(() => {
                         </td>
                         <td>
                             <div class="flex items-center place-content-center">
-                                <FormSwitch :id="'row-active-' + row.id" v-model="row.active" @change="useToggleSwitch(row.id, 'active', 'program')" />
+                                <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="!usePermissionCheck(['conference_program_update'])" @change="useToggleSwitch(row.id, 'active', 'program')" />
                             </div>
                         </td>
-                        <td class="text-right">
+                        <td v-if="usePermissionCheck(['conference_program_update'])" class="text-right">
                             <div>
                                 <button class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
                                     <Icon name="solar:pen-new-round-outline" class="size-4" />
@@ -388,7 +388,7 @@ const generateTimeOptions = computed(() => {
                 </template>
                 <template v-else>
                     <tr v-for="i in serverParams.perPage" :key="i">
-                        <td colspan="7">
+                        <td colspan="6">
                             <div class="h-12 !opacity-50 animate-pulse" />
                         </td>
                     </tr>
@@ -423,7 +423,7 @@ const generateTimeOptions = computed(() => {
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
                         <span>Close</span>
                     </button>
-                    <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit()">
+                    <button v-if="usePermissionCheck(['conference_program_create', 'conference_program_update'])" :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit()">
                         <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                         <span v-html="editMode ? 'Update' : 'Save'" />
                     </button>

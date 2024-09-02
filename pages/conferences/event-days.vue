@@ -142,11 +142,11 @@ async function handleModalSubmit() {
 }
 </script>
 <template>
-    <div class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['conference_day_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
+                <Icon name="solar:sunrise-outline" class="size-5 opacity-75" />
                 <div>Event Days</div>
             </div>
             <ConferenceSwitcher @reload="refresh" />
@@ -182,7 +182,7 @@ async function handleModalSubmit() {
             <thead>
                 <tr class="uppercase text-sm">
                     <th class="text-left">Name</th>
-                    <th class="text-right">Action</th>
+                    <th v-if="usePermissionCheck(['conference_day_update'])" class="text-right">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -193,7 +193,7 @@ async function handleModalSubmit() {
                             <div class="font-light text-sm opacity-75">{{ row.date }}</div>
                         </td>
                         <td v-if="serverParams.deleted" class="text-sm">{{ row.deletedAt }}</td>
-                        <td class="text-right">
+                        <td v-if="usePermissionCheck(['conference_day_update'])" class="text-right">
                             <div>
                                 <button :disabled="serverParams.deleted" class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
                                     <Icon name="solar:pen-new-round-outline" class="size-4" />
@@ -205,8 +205,8 @@ async function handleModalSubmit() {
                 </template>
                 <template v-else>
                     <tr v-for="i in serverParams.perPage" :key="i">
-                        <td colspan="5">
-                            <div class="h-12 !opacity-50 animate-pulse" />
+                        <td colspan="2">
+                            <div class="h-11 !opacity-50 animate-pulse" />
                         </td>
                     </tr>
                 </template>

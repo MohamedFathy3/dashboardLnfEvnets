@@ -378,8 +378,8 @@ onMounted(async () => {
 });
 </script>
 <template>
-    <div>
-        <div v-if="!loadingPage" class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['conference_page_list'])">
+        <div v-if="!loadingPage" class="flex flex-col gap-5">
             <!-- Page Title & Action Buttons -->
             <div class="md:flex md:items-center md:justify-between md:gap-5">
                 <div class="flex items-center gap-2">
@@ -387,7 +387,7 @@ onMounted(async () => {
                     <div>{{ item.name }}</div>
                 </div>
                 <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
-                    <button class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
+                    <button v-if="usePermissionCheck(['conference_page_update'])" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
                         <Icon name="solar:add-square-linear" class="size-5 opacity-75" />
                         Add New Section
                     </button>
@@ -400,7 +400,7 @@ onMounted(async () => {
                     <FormInputField v-model="item.slug" readonly disabled :errors="v$.slug.$errors" class="lg:col-span-6" label="Slug" name="slug" placeholder="Slug" />
                     <FormInputField v-model="item.keywords" :errors="v$.keywords.$errors" class="lg:col-span-12" label="Keywords" name="keywords" placeholder="Keywords" type="textarea" />
                     <FormInputField v-model="item.description" :errors="v$.description.$errors" class="lg:col-span-12" label="Description" name="description" placeholder="Description" type="textarea" />
-                    <div class="lg:col-span-12">
+                    <div v-if="usePermissionCheck(['conference_page_update'])" class="lg:col-span-12">
                         <button :disabled="formLoading" class="w-full btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit()">
                             <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                             <span v-html="'Update'" />
@@ -425,9 +425,9 @@ onMounted(async () => {
                                 <div class="font-light text-sm opacity-75">{{ section.slug }}</div>
                             </td>
                             <td>
-                                <FormSwitch :id="'section-active-' + section.id" v-model="section.active" @change="useToggleSwitch(section.id, 'active', 'event-section-page')" />
+                                <FormSwitch :id="'section-active-' + section.id" v-model="section.active" :disabled="!usePermissionCheck(['conference_page_update'])" @change="useToggleSwitch(section.id, 'active', 'event-section-page')" />
                             </td>
-                            <td class="text-right">
+                            <td v-if="usePermissionCheck(['conference_page_update'])" class="text-right">
                                 <div>
                                     <button class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(section.id)">
                                         <Icon name="solar:pen-new-round-outline" class="size-4" />
