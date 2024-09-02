@@ -186,7 +186,7 @@ async function closeModal() {
     await resetMemberValues();
     formLoading.value = false;
 }
-async function updateMember() {
+async function addMember() {
     formLoading.value = true;
     const result = await v$.value.$validate();
     if (!result) {
@@ -598,7 +598,7 @@ const companyTypes = ref([
                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
                     <span>Close</span>
                 </button>
-                <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="updateMember">
+                <button v-if="usePermissionCheck(['network_application_create', 'network_member_create'])" :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="addMember">
                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                     <span v-html="'update'" />
                 </button>

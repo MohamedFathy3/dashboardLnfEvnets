@@ -299,7 +299,7 @@ async function restoreItems() {
                     <Icon name="solar:add-square-linear" class="size-5 opacity-75" />
                     Add New
                 </button>
-                <button v-if="usePermissionCheck(['network_team_delete', 'network_team_force_delete'])" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
+                <button v-if="usePermissionCheck(['network_team_delete', 'network_team_force_delete', 'network_team_restore'])" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
                     <Icon :name="serverParams.deleted ? 'solar:hamburger-menu-line-duotone' : 'solar:trash-bin-minimalistic-line-duotone'" class="size-5 opacity-75" />
                     {{ serverParams.deleted ? 'Items List' : 'Deleted Items' }}
                 </button>

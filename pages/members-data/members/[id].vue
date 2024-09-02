@@ -56,15 +56,15 @@ const sendResetPasswordEmail = async () => {
 </script>
 <template>
     <div v-if="company" class="flex flex-col gap-5">
-        <div class="flex flex-col gap-5">
+        <div v-if="usePermissionCheck(['network_member_list', 'network_application_list'])" class="flex flex-col gap-5">
             <!-- Page Title & Action Buttons -->
             <div class="lg:flex lg:items-center lg:justify-between lg:gap-5">
                 <div class="flex items-center gap-2">
                     <Icon name="solar:buildings-outline" class="size-5 opacity-75" />
                     <div>Member Profile</div>
                 </div>
-                <div class="lg:flex lg:items-center lg:gap-5 lg:space-y-0 space-y-5">
-                    <button class="btn btn-primary btn-rounded px-6 btn-sm gap-5 lg:w-fit w-full lg:mt-0 mt-5" type="button" @click="openUpdateModal">
+                <div v-if="usePermissionCheck(['network_member_update', 'network_application_update'])" class="lg:flex lg:items-center lg:gap-5 lg:space-y-0 space-y-5">
+                    <button class="btn btn-primary btn-rounded px-6 btn-sm gap-3 lg:w-fit w-full lg:mt-0 mt-5" type="button" @click="openUpdateModal">
                         <Icon name="solar:pen-new-round-outline" class="size-5 opacity-75" />
                         <span>Update Member</span>
                     </button>

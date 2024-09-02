@@ -176,33 +176,43 @@ async function restoreItems() {
 }
 </script>
 <template>
-    <div class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['network_contact_person_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
+                <Icon name="solar:users-group-two-rounded-line-duotone" class="size-5 opacity-75" />
                 <div>{{ serverParams.deleted ? 'Deleted Contact Persons' : 'Contact Persons' }}</div>
             </div>
             <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
                 <template v-if="selectedRows.length > 0">
-                    <button v-if="serverParams.deleted" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
-                        <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
-                        Delete Permanently
-                    </button>
-                    <button v-else class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
-                        <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
-                        Delete Items
-                    </button>
-                    <button v-if="serverParams.deleted" class="btn btn-success btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="restoreItems">
-                        <Icon name="solar:restart-circle-outline" class="size-5 opacity-75" />
-                        Restore Items
-                    </button>
+                    <template v-if="serverParams.deleted">
+                        <button v-if="usePermissionCheck(['network_contact_person_force_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
+                            <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
+                            Delete Permanently
+                        </button>
+                    </template>
+                    <template v-else>
+                        <button v-if="usePermissionCheck(['network_contact_person_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
+                            <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
+                            Delete Items
+                        </button>
+                    </template>
+                    <template v-if="serverParams.deleted">
+                        <button v-if="usePermissionCheck(['network_contact_person_restore'])" class="btn btn-success btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="restoreItems">
+                            <Icon name="solar:restart-circle-outline" class="size-5 opacity-75" />
+                            Restore Items
+                        </button>
+                    </template>
                 </template>
-                <!--                <button :disabled="serverParams.deleted" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">-->
+                <!--                <button v-if="usePermissionCheck(['network_contact_person_create'])" :disabled="serverParams.deleted" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">-->
                 <!--                    <Icon name="solar:add-square-linear" class="size-5 opacity-75" />-->
                 <!--                    Add New-->
                 <!--                </button>-->
-                <button class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
+                <button
+                    v-if="usePermissionCheck(['network_contact_person_delete', 'network_contact_person_force_delete', 'network_contact_person_restore'])"
+                    class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5"
+                    @click="toggleDeleted"
+                >
                     <Icon :name="serverParams.deleted ? 'solar:hamburger-menu-line-duotone' : 'solar:trash-bin-minimalistic-line-duotone'" class="size-5 opacity-75" />
                     {{ serverParams.deleted ? 'Items List' : 'Deleted Items' }}
                 </button>

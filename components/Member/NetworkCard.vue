@@ -38,7 +38,7 @@ function closeModal() {
                 <Icon name="solar:global-outline" class="size-5 opacity-75" />
                 {{ props.network.name }}
             </div>
-            <button class="flex items-center btn btn-sm btn-secondary btn-rounded" @click="openModal">
+            <button v-if="usePermissionCheck(['network_member_update', 'network_application_update'])" class="flex items-center btn btn-sm btn-secondary btn-rounded" @click="openModal">
                 <Icon class="size-4 mr-1" name="solar:pen-new-round-outline" />
                 Update
             </button>

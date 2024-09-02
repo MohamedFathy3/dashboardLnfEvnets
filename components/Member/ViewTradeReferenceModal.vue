@@ -18,7 +18,12 @@ const props = defineProps({
         required: false,
         type: Boolean,
     },
+    reference: {
+        required: false,
+        type: Object,
+    },
 });
+
 const item = ref({
     id: null,
     name: null,
@@ -53,6 +58,12 @@ const resetPersonValues = async () => {
         userId: null,
     };
 };
+onMounted(() => {
+    if (props.reference) {
+        editMode.value = true;
+        item.value = props.reference;
+    }
+});
 async function closeModal() {
     emit('close');
     v$.value.$reset();
@@ -159,7 +170,7 @@ onMounted(async () => {
                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
                     <span>Close</span>
                 </button>
-                <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit">
+                <button v-if="usePermissionCheck(['network_trade_reference_create', 'network_trade_reference_update'])" :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit">
                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                     <span v-html="'update'" />
                 </button>

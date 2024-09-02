@@ -227,7 +227,7 @@ onMounted(async () => {
                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
                     <span>Close</span>
                 </button>
-                <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit">
+                <button v-if="usePermissionCheck(['network_contact_person_update', 'network_contact_person_create'])" :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit">
                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                     <span v-html="'update'" />
                 </button>

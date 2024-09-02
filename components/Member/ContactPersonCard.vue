@@ -32,7 +32,7 @@ function closeModal() {
                 <Icon name="solar:global-outline" class="size-5 opacity-75" />
                 Contact Persons
             </div>
-            <button class="flex items-center btn btn-sm btn-dark btn-rounded !p-1.5" @click="openModal()">
+            <button v-if="usePermissionCheck(['network_contact_person_create'])" class="flex items-center btn btn-sm btn-dark btn-rounded !p-1.5" @click="openModal()">
                 <Icon class="size-5" name="solar:add-circle-outline" />
             </button>
         </div>
