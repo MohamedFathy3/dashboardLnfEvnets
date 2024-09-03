@@ -68,10 +68,10 @@ async function logout() {
             />
             <HeadlessMenu as="div" class="relative inline-block self-end">
                 <HeadlessMenuButton>
-                    <div class="flex items-center gap-5 py-1 px-3 rounded-xl hover:bg-white/10">
+                    <div class="flex items-center gap-1.5 py-1 px-1 rounded-xl hover:bg-white/10">
                         <div class="text-right">
-                            <div class="text-sm font-medium">{{ userStore.user?.name }}</div>
-                            <span class="text-xs opacity-75 font-extralight">
+                            <div class="text-sm font-medium truncate">{{ userStore.user?.name }}</div>
+                            <span class="text-xs opacity-75 font-extralight truncate">
                                 {{ userStore.user?.superAdmin ? 'Super Admin' : userStore.user?.role?.name }}
                             </span>
                         </div>
