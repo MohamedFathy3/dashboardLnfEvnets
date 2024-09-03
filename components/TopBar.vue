@@ -59,7 +59,7 @@ async function logout() {
             <FormSelectField
                 id="network-selector"
                 v-model="settingStore.networkId"
-                class="text-slate-800 cursor-pointer"
+                class="text-slate-800 cursor-pointer z-50"
                 placeholder="Please select a network..."
                 :clearable="false"
                 :select-data="settingStore.networks"
