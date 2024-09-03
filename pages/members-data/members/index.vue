@@ -468,7 +468,7 @@ onMounted(() => {
             </button>
         </div>
         <!-- Table -->
-        <div>
+        <div class="overflow-x-auto">
             <table class="table table-report font-light">
                 <thead>
                     <tr class="uppercase text-sm">

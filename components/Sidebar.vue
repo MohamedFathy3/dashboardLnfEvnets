@@ -560,7 +560,7 @@ function toggleSubMenuOpen(path: string) {
 </script>
 
 <template>
-    <div class="text-white/75 p-5 flex flex-col gap-8">
+    <div class="text-white/75 p-3 sm:p-5 flex flex-col gap-8">
         <div :class="[open ? 'flex items-center justify-between gap-5' : 'px-4']">
             <div :class="['flex items-center gap-3 place-content-center']">
                 <Icon v-if="open" class="size-7" name="solar:asteroid-linear" />
@@ -572,7 +572,7 @@ function toggleSubMenuOpen(path: string) {
             <Icon v-if="!open" class="size-5 mx-auto cursor-pointer" name="solar:round-alt-arrow-right-linear" @click="emit('toggleSidebar')" />
             <Icon v-if="open" class="size-5 cursor-pointer hover:text-white" name="solar:round-alt-arrow-left-linear" @click="emit('toggleSidebar')" />
         </div>
-        <div class="relative pr-2 scrollbar-w-2 scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar scrollbar-thumb-white/25 overflow-y-hidden hover:overflow-y-auto">
+        <div class="relative sm:pr-2 scrollbar-w-2 scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar scrollbar-thumb-white/25 overflow-y-hidden hover:overflow-y-auto">
             <ul class="flex flex-col gap-2 font-light text-sm mb-12">
                 <template v-for="(item, i) in menuItems" :key="i">
                     <template v-if="typeof item === 'string'">
