@@ -329,64 +329,66 @@ async function restoreItems() {
             </button>
         </div>
         <!-- Table -->
-        <table class="table table-report font-light">
-            <thead>
-                <tr class="uppercase text-sm">
-                    <th class="text-left">
-                        <input v-model="allSelected" type="checkbox" class="form-check-input" @change="selectAllRows" />
-                    </th>
-                    <th class="text-left">Name</th>
-                    <th>Active</th>
-                    <th>Collection</th>
-                    <th v-if="serverParams.deleted">Deleted At</th>
-                    <th class="text-right">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <template v-if="!pending && rows">
-                    <tr v-for="row in rows.data" :key="row.id" class="text-sm">
-                        <td>
-                            <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
-                        </td>
-                        <td class="font-normal">
-                            <div class="flex items-center gap-3">
-                                <NuxtImg :src="row.imageUrl" :alt="row.name" :title="row.name" class="ring-2 ring-slate-500/10 size-10 p-1 bg-white !rounded-md object-contain" />
-                                <div>
-                                    <div>{{ row.name }}</div>
-                                    <div class="font-light text-sm opacity-75">{{ row.slug }}</div>
+        <div class="overflow-x-auto">
+            <table class="table table-report font-light">
+                <thead>
+                    <tr class="uppercase text-sm">
+                        <th class="text-left">
+                            <input v-model="allSelected" type="checkbox" class="form-check-input" @change="selectAllRows" />
+                        </th>
+                        <th class="text-left">Name</th>
+                        <th>Active</th>
+                        <th>Collection</th>
+                        <th v-if="serverParams.deleted">Deleted At</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template v-if="!pending && rows">
+                        <tr v-for="row in rows.data" :key="row.id" class="text-sm">
+                            <td>
+                                <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
+                            </td>
+                            <td class="font-normal">
+                                <div class="flex items-center gap-3">
+                                    <NuxtImg :src="row.imageUrl" :alt="row.name" :title="row.name" class="ring-2 ring-slate-500/10 size-10 p-1 bg-white !rounded-md object-contain" />
+                                    <div>
+                                        <div>{{ row.name }}</div>
+                                        <div class="font-light text-sm opacity-75">{{ row.slug }}</div>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div data-tw-merge @change="useToggleSwitch(row.id, 'active', 'network')">
-                                <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="!usePermissionCheck(['network_update']) || serverParams.deleted" />
-                            </div>
-                        </td>
-                        <td>
-                            <div data-tw-merge @change="useToggleSwitch(row.id, 'collection', 'network')">
-                                <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="!usePermissionCheck(['network_update']) || serverParams.deleted" />
-                            </div>
-                        </td>
-                        <td v-if="serverParams.deleted" class="text-sm">{{ row.deletedAt }}</td>
-                        <td class="text-right">
-                            <div>
-                                <button :disabled="serverParams.deleted" class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
-                                    <Icon name="solar:pen-new-round-outline" class="size-4" />
-                                    Edit
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </template>
-                <template v-else>
-                    <tr v-for="i in serverParams.perPage" :key="i">
-                        <td colspan="5">
-                            <div class="h-12 !opacity-50 animate-pulse" />
-                        </td>
-                    </tr>
-                </template>
-            </tbody>
-        </table>
+                            </td>
+                            <td>
+                                <div data-tw-merge @change="useToggleSwitch(row.id, 'active', 'network')">
+                                    <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="!usePermissionCheck(['network_update']) || serverParams.deleted" />
+                                </div>
+                            </td>
+                            <td>
+                                <div data-tw-merge @change="useToggleSwitch(row.id, 'collection', 'network')">
+                                    <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="!usePermissionCheck(['network_update']) || serverParams.deleted" />
+                                </div>
+                            </td>
+                            <td v-if="serverParams.deleted" class="text-sm">{{ row.deletedAt }}</td>
+                            <td class="text-right">
+                                <div>
+                                    <button :disabled="serverParams.deleted" class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
+                                        <Icon name="solar:pen-new-round-outline" class="size-4" />
+                                        Edit
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
+                    <template v-else>
+                        <tr v-for="i in serverParams.perPage" :key="i">
+                            <td colspan="5">
+                                <div class="h-12 !opacity-50 animate-pulse" />
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
         <!-- Pagination -->
         <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
 

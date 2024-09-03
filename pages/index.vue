@@ -44,7 +44,7 @@ const userStore = useUserStore();
 </script>
 <template>
     <div v-if="usePermissionCheck(['network_overview_list'])" class="grid lg:grid-cols-12 gap-5">
-        <div class="intro-x lg:col-span-12 text-2xl"><span class="font-light">Hello</span>, {{ userStore.user?.name }}</div>
+        <div class="lg:col-span-12 text-2xl"><span class="font-light">Hello</span>, {{ userStore.user?.name }}</div>
         <UiInfoBox :data="networkInfoBoxes" />
     </div>
 </template>

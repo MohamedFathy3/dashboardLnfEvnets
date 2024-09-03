@@ -55,11 +55,11 @@ async function logout() {
                 </li>
             </template>
         </ul>
-        <div class="flex items-center gap-5">
+        <div class="flex items-center gap-5 z-50">
             <FormSelectField
                 id="network-selector"
                 v-model="settingStore.networkId"
-                class="text-slate-800 cursor-pointer z-50"
+                class="text-slate-800 cursor-pointer"
                 placeholder="Please select a network..."
                 :clearable="false"
                 :select-data="settingStore.networks"
