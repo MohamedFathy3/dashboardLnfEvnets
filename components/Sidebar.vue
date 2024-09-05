@@ -25,6 +25,7 @@ const menuItems = ref([
                 subMenus: [],
                 permission: ['network_report_visit_list'],
             },
+            { name: 'Expire Soon Members', path: '/network-reports/expire-soon-members', icon: 'solar:case-minimalistic-linear', subMenus: [], permission: ['network_report_vote_list'] },
         ],
     },
     {
