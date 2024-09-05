@@ -1,10 +1,13 @@
-<script lang="ts" setup>
+<script setup>
 definePageMeta({
     middleware: 'auth',
 });
 const networkInfoBoxes = ref([]);
 const { data: networkStatistics, execute: fetchNetworkStatistics } = await useApiFetch('/api/dashboard/network/user-statistic', {
     immediate: false,
+    lazy: true,
+});
+const { data: networkReports, status } = await useApiFetch('/api/dashboard/network-overview', {
     lazy: true,
 });
 async function prepareInfoBoxes() {
@@ -36,9 +39,8 @@ async function prepareInfoBoxes() {
         },
     ];
 }
-const s = ['network_overview_list', 'network_report_vote_list', 'network_report_log_list'];
-onMounted(() => {
-    prepareInfoBoxes();
+onMounted(async () => {
+    await prepareInfoBoxes();
 });
 const userStore = useUserStore();
 </script>
@@ -46,5 +48,15 @@ const userStore = useUserStore();
     <div v-if="usePermissionCheck(['network_overview_list'])" class="grid lg:grid-cols-12 gap-5">
         <div class="lg:col-span-12 text-2xl"><span class="font-light">Hello</span>, {{ userStore.user?.name }}</div>
         <UiInfoBox :data="networkInfoBoxes" />
+        <div v-if="status !== 'pending'" class="lg:col-span-12 grid lg:grid-cols-12 gap-5">
+            <div class="lg:col-span-8 intro-x pt-5 flex flex-col gap-5">
+                <LazyApplicationExpireSoonTopFive v-if="usePermissionCheck(['network_member_list'])" :data="networkReports?.expireSoonMember" />
+                <LazyApplicationLatestApplications v-if="usePermissionCheck(['network_application_list'])" :data="networkReports?.latestApplication" />
+                <LazyApplicationContactMessageModal v-if="usePermissionCheck(['network_message_list'])" :data="networkReports?.latestMassages" />
+            </div>
+            <div class="lg:col-span-4 intro-x">
+                <LazyChartTopVisitsCountry :data="networkReports?.topVisitedCountries" />
+            </div>
+        </div>
     </div>
 </template>

@@ -40,7 +40,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/contactus/index', {
     method: 'POST',
@@ -209,7 +209,7 @@ async function deleteItems() {
                 </tr>
             </thead>
             <tbody>
-                <template v-if="!pending && rows">
+                <template v-if="status !== 'pending' && rows">
                     <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -250,7 +250,7 @@ async function deleteItems() {
                         </td>
                     </tr>
                 </template>
-                <template v-if="!pending && rows && rows.data.length === 0">
+                <template v-if="status !== 'pending' && rows && rows.data.length === 0">
                     <tr>
                         <td colspan="7">
                             <div class="text-center">
@@ -263,7 +263,7 @@ async function deleteItems() {
             </tbody>
         </table>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
 
         <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
             <template #header>
