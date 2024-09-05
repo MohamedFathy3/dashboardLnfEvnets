@@ -54,7 +54,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/dashboard/delegate/index', {
     method: 'POST',
@@ -110,6 +110,72 @@ const orderStatuses = ref([
     { name: 'Approved Online Payment', value: 'approved_online_payment' },
     { name: 'Approved Bank Transfer', value: 'approved_bank_transfer' },
 ]);
+async function forceDeleteItems() {
+    const confirmed = confirm('Are you sure you want to delete this item?');
+    if (confirmed) {
+        const { data, error } = await useApiFetch(`/api/dashboard/delegate/force-delete`, {
+            body: { items: selectedRows.value },
+            method: 'DELETE',
+            lazy: true,
+        });
+        if (data.value) {
+            useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
+            await refresh();
+        }
+        if (error.value) {
+            useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
+        }
+    }
+}
+const toggleDeleted = async () => {
+    serverParams.value.deleted = !serverParams.value.deleted;
+    if (!serverParams.value.deleted) {
+        serverParams.value.relationFilter = {
+            memberType: null,
+            orderStatus: ['approved_online_payment', 'approved_bank_transfer'],
+            companyName: null,
+            companyCountryId: null,
+        };
+    } else {
+        serverParams.value.relationFilter = {
+            memberType: null,
+            orderStatus: [],
+            companyName: null,
+            companyCountryId: null,
+        };
+    }
+    selectedRows.value = [];
+    await refresh();
+};
+
+const isSelected = (id) => {
+    return selectedRows.value.some((r) => r === id);
+};
+const allSelected = computed(() => {
+    return rows?.value?.data.every((row) => selectedRows.value.includes(row.id));
+});
+const selectAllRows = () => {
+    const allSelected = rows.value.data.every((row) => isSelected(row.id));
+    if (allSelected) {
+        selectedRows.value = [];
+    } else {
+        rows.value.data.forEach((row) => {
+            const id = row.id;
+            if (!isSelected(id)) {
+                selectedRows.value.push(id);
+            }
+        });
+    }
+};
+
+const toggleRowSelection = (id) => {
+    const index = selectedRows.value.indexOf(id);
+    if (index === -1) {
+        selectedRows.value.push(id);
+    } else {
+        selectedRows.value.splice(index, 1);
+    }
+};
 </script>
 <template>
     <div v-if="usePermissionCheck(['conference_delegate_list'])" class="flex flex-col gap-8">
@@ -117,7 +183,21 @@ const orderStatuses = ref([
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
                 <Icon name="solar:users-group-two-rounded-line-duotone" class="size-5 opacity-75" />
-                <div>Delegates</div>
+                <div>{{ serverParams.deleted ? 'Deleted Delegates' : 'Delegates' }}</div>
+            </div>
+            <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
+                <template v-if="selectedRows.length > 0">
+                    <template v-if="serverParams.deleted">
+                        <button v-if="usePermissionCheck(['conference_delegate_force_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
+                            <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
+                            Delete Permanently
+                        </button>
+                    </template>
+                </template>
+                <button v-if="usePermissionCheck(['conference_delegate_delete', 'conference_delegate_force_delete'])" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
+                    <Icon :name="serverParams.deleted ? 'solar:hamburger-menu-line-duotone' : 'solar:trash-bin-minimalistic-line-duotone'" class="size-5 opacity-75" />
+                    {{ serverParams.deleted ? 'Items List' : 'Deleted Items' }}
+                </button>
             </div>
         </div>
         <!-- Filter & Search -->
@@ -193,17 +273,23 @@ const orderStatuses = ref([
             <table class="table table-report font-light">
                 <thead>
                     <tr class="uppercase text-sm">
+                        <th v-if="serverParams.deleted" class="text-left">
+                            <input v-model="allSelected" type="checkbox" class="form-check-input" @change="selectAllRows" />
+                        </th>
                         <th>Delegate</th>
                         <th>Company</th>
                         <th>Membership</th>
                         <th>Order Status</th>
                         <th v-if="serverParams.deleted">Deleted At</th>
-                        <th class="text-right">Action</th>
+                        <th v-if="!serverParams.deleted" class="text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-if="!pending && rows">
+                    <template v-if="status !== 'pending' && rows">
                         <tr v-for="row in rows.data" :key="row.id" class="text-sm">
+                            <td v-if="serverParams.deleted">
+                                <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
+                            </td>
                             <td class="font-normal">
                                 <div class="flex items-center gap-3">
                                     <NuxtImg :src="row.imageUrl" :alt="row.name" :title="row.name" class="size-10 !rounded-full object-cover" />
@@ -214,7 +300,7 @@ const orderStatuses = ref([
                                 </div>
                             </td>
                             <td class="text-sm font-normal">
-                                <div class="flex items-center gap-3">
+                                <div v-if="row.company" class="flex items-center gap-3">
                                     <NuxtImg :src="row.company.imageUrl" class="h-10 !rounded-md w-16 object-contain p-0.5 shrink-0" />
                                     <div class="flex flex-col gap-0.5">
                                         <div class="flex items-center gap-1.5">
@@ -229,13 +315,17 @@ const orderStatuses = ref([
                                 </div>
                             </td>
                             <td>
-                                <UiNetworkTypeBadge :data="row.company.membershipType" />
+                                <template v-if="row.company">
+                                    <UiNetworkTypeBadge :data="row.company.membershipType" />
+                                </template>
                             </td>
                             <td>
-                                <UiEventOrderStatusBadge :data="row.orderStatus" />
+                                <template v-if="row.company">
+                                    <UiEventOrderStatusBadge :data="row.orderStatus" />
+                                </template>
                             </td>
                             <td v-if="serverParams.deleted" class="text-sm">{{ row.deletedAt }}</td>
-                            <td class="text-right">
+                            <td v-if="!serverParams.deleted" class="text-right">
                                 <div>
                                     <button :disabled="serverParams.deleted" class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
                                         <Icon name="solar:pen-new-round-outline" class="size-4" />
@@ -247,7 +337,7 @@ const orderStatuses = ref([
                     </template>
                     <template v-else>
                         <tr v-for="i in serverParams.perPage" :key="i">
-                            <td colspan="5">
+                            <td colspan="6">
                                 <div class="h-12 !opacity-50 animate-pulse" />
                             </td>
                         </tr>
@@ -256,7 +346,7 @@ const orderStatuses = ref([
             </table>
         </div>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
         <MemberDelegateModal v-if="isOpen" :open="isOpen" :person-id="selectedId" @close="closeModal" @refresh="refresh" />
     </div>
 </template>
