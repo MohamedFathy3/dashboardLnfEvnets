@@ -491,22 +491,19 @@ async function restoreItems() {
                         <template v-if="item.type === 'network-directory' || item.type === 'about-left-image' || item.type === 'about-right-image' || item.type === 'image-banner-section' || item.type === 'grid-home-section' || item.type === 'intro'">
                             <FormUploader v-model="item.image" :allowed-types="['image', 'svg']" label="Image" name="image" class="lg:col-span-12" />
                         </template>
-
                         <FormInputField v-model="item.title" :errors="v$.title.$errors" class="col-span-12 sm:col-span-6" label="Title" name="title" placeholder="Title" />
-
                         <FormSelectField
                             v-if="item.type === 'grid-box'"
                             v-model="item.parentId"
                             :errors="v$.parentId.$errors"
                             labelvalue="title"
                             keyvalue="id"
-                            :select-data="rows"
+                            :select-data="rows.data"
                             class="col-span-12 sm:col-span-6"
                             label="Parent Section"
                             name="section-parent"
                             placeholder="Select Parent Section"
                         />
-
                         <FormInputField
                             v-if="
                                 item.type !== 'benefits-grid' &&
@@ -530,7 +527,6 @@ async function restoreItems() {
                             name="sub-title"
                             placeholder="Sub Title"
                         />
-
                         <FormInputField
                             v-if="
                                 item.type !== 'contact-form' &&
@@ -554,7 +550,6 @@ async function restoreItems() {
                             name="des"
                             placeholder="Description"
                         />
-
                         <FormSwitch
                             v-if="item.type === 'intro' || item.type === 'cta' || item.type === 'image-banner-section'"
                             v-model="item.buttonOneActive"

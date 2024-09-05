@@ -420,7 +420,6 @@ const faqTypes = ref([
         </table>
         <!-- Pagination -->
         <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
-
         <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
             <template #header>
                 <div class="flex justify-between items-center">
@@ -448,7 +447,7 @@ const faqTypes = ref([
                             :clearable="false"
                             keyvalue="id"
                             name="section-id"
-                            :select-data="rows"
+                            :select-data="rows.data"
                             label="Section"
                             placeholder="Section"
                         />
@@ -472,13 +471,13 @@ const faqTypes = ref([
                                         :label="item.active ? 'Active' : 'Inactive'"
                                     />
                                     <div class="col-span-12 sm:col-span-2">
-                                        <button type="button" class="btn btn-outline-danger btn-sm" @click="removeListItemRow(index)">
+                                        <button :disabled="usePermissionCheck(['conference_faq_update', 'conference_faq_create'])" type="button" class="btn btn-outline-danger btn-sm" @click="removeListItemRow(index)">
                                             <Icon name="solar:close-circle-outline" class="size-4 mr-2" />
                                             <span>Remove</span>
                                         </button>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-secondary btn-sm w-full" @click="addListItemRow">
+                                <button :disabled="usePermissionCheck(['conference_faq_update', 'conference_faq_create'])" type="button" class="btn btn-secondary btn-sm w-full" @click="addListItemRow">
                                     <Icon name="solar:add-circle-outline" class="size-4 mr-2" />
                                     <span>Add New</span>
                                 </button>
