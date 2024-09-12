@@ -64,6 +64,11 @@ const resetServerParams = async () => {
         companyEmail: null,
         email: null,
     };
+    networkFilter.value = {
+        active: null,
+        fpp: null,
+        network: null,
+    };
     serverParams.value = {
         filters: {},
         networkFilter: {
@@ -83,7 +88,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/user/index', {
     method: 'POST',
@@ -341,11 +346,11 @@ onMounted(() => {
                         placeholder="Please select an option..."
                         :select-data="[
                             { name: 'All (Active) Statuses', value: null },
-                            { name: 'Active', value: 1 },
-                            { name: 'Inactive', value: 0 },
+                            { name: 'Active', value: true },
+                            { name: 'Inactive', value: false },
                         ]"
                         labelvalue="name"
-                        keyvalue="id"
+                        keyvalue="value"
                     />
                     <FormSelectField
                         id="add-member-fpp-filter"
@@ -356,11 +361,11 @@ onMounted(() => {
                         placeholder="Please select an option..."
                         :select-data="[
                             { name: 'All (FPP) Statuses', value: null },
-                            { name: 'FPP is Active', value: 1 },
-                            { name: 'FPP is Inactive', value: 0 },
+                            { name: 'FPP is Active', value: true },
+                            { name: 'FPP is Inactive', value: false },
                         ]"
                         labelvalue="name"
-                        keyvalue="id"
+                        keyvalue="value"
                     />
                     <FormSelectField
                         id="add-member-network-filter"
@@ -371,11 +376,11 @@ onMounted(() => {
                         placeholder="Please select an option..."
                         :select-data="[
                             { name: 'All (Show in Network) Statuses', value: null },
-                            { name: 'Directory Show Active', value: 1 },
-                            { name: 'Directory Show Inactive', value: 0 },
+                            { name: 'Directory Show Active', value: true },
+                            { name: 'Directory Show Inactive', value: false },
                         ]"
                         labelvalue="name"
-                        keyvalue="id"
+                        keyvalue="value"
                     />
                     <div class="lg:col-span-12">
                         <div class="border border-slate-100 bg-slate-50/50 rounded-lg grid grid-cols-12 p-5 gap-5">
@@ -483,7 +488,7 @@ onMounted(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-if="!pending && rows">
+                    <template v-if="status !== 'pending' && rows">
                         <tr v-for="row in rows.data" :key="row.id">
                             <td>
                                 <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -552,6 +557,6 @@ onMounted(() => {
             </table>
         </div>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
     </div>
 </template>
