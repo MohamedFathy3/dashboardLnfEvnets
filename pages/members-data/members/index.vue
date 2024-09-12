@@ -134,7 +134,7 @@ watch(
     (newVal) => {
         for (const key in newVal) {
             const value = newVal[key];
-            if (value) {
+            if (value !== null) {
                 serverParams.value.networkFilter[key] = value;
             } else {
                 delete serverParams.value.networkFilter[key];
