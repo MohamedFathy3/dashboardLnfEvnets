@@ -63,21 +63,24 @@ async function changeTab(tab: string) {
 }
 const resources = useResourceStore();
 const getMembersByCountry = async () => {
-    formLoading.value = true;
-    if (formShowAllMembers && isOpen) {
-        formShowAllMembers.value = false;
+    if (selectedCountryId.value) {
+        formLoading.value = true;
+        if (formShowAllMembers && isOpen) {
+            formShowAllMembers.value = false;
+        }
+        console.log('Country ID', selectedCountryId.value);
+        const { data: res, error } = await useApiFetch(`/api/network-report/vote/country/${selectedCountryId.value}`, {
+            lazy: true,
+            transform: (res) => (res as ApiResponse).data as Company[],
+        });
+        if (res.value) {
+            countryMembers.value = (res.value as Company[]).sort((a, b) => b.totalVotes - a.totalVotes);
+        }
+        if (error.value) {
+            console.log(error.value);
+        }
+        formLoading.value = false;
     }
-    const { data: res, error } = await useApiFetch(`/api/network-report/vote/country/${selectedCountryId.value}`, {
-        lazy: true,
-        transform: (res) => (res as ApiResponse).data as Company[],
-    });
-    if (res.value) {
-        countryMembers.value = (res.value as Company[]).sort((a, b) => b.totalVotes - a.totalVotes);
-    }
-    if (error.value) {
-        console.log(error.value);
-    }
-    formLoading.value = false;
 };
 const activeMembers = async () => {
     const { data: res, error } = await useApiFetch('/api/network-report/vote/can-vote-members', {
@@ -92,18 +95,20 @@ const activeMembers = async () => {
     }
 };
 const getVotesByMemberId = async () => {
-    loadingMembersVotes.value = true;
-    const { data: res, error } = await useApiFetch(`/api/network-report/vote/member/${selectedMemberId.value}`, {
-        lazy: true,
-        transform: (res) => (res as ApiResponse).data as VotedMember[],
-    });
-    if (res.value) {
-        memberVotes.value = res.value as VotedMember[];
+    if (selectedMemberId.value) {
+        loadingMembersVotes.value = true;
+        const { data: res, error } = await useApiFetch(`/api/network-report/vote/member/${selectedMemberId.value}`, {
+            lazy: true,
+            transform: (res) => (res as ApiResponse).data as VotedMember[],
+        });
+        if (res.value) {
+            memberVotes.value = res.value as VotedMember[];
+        }
+        if (error.value) {
+            console.log(error.value);
+        }
+        loadingMembersVotes.value = false;
     }
-    if (error.value) {
-        console.log(error.value);
-    }
-    loadingMembersVotes.value = false;
 };
 const getTopVotedMembers = async () => {
     loadingMembersVotes.value = true;

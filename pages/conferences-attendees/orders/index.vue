@@ -297,7 +297,7 @@ async function refreshFilterData() {
                                 </div>
                             </td>
                             <td class="text-sm font-normal whitespace-nowrap">
-                                <div class="flex items-start gap-3">
+                                <div v-if="row.user" class="flex items-start gap-3">
                                     <NuxtImg v-if="row.user?.imageUrl" :src="row.user?.imageUrl" class="h-10 !rounded-md w-16 object-contain p-1 shrink-0" />
                                     <div class="flex flex-col gap-0.5">
                                         <div class="flex items-center gap-1.5">

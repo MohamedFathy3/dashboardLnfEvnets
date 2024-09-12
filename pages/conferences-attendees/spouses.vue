@@ -173,23 +173,23 @@ const resources = useResourceStore();
                             </div>
                         </td>
                         <td class="text-sm font-normal whitespace-nowrap">
-                            <div class="flex items-center gap-3">
-                                <NuxtImg :src="row.company.imageUrl" class="h-12 !rounded-md w-20 object-contain p-1 shrink-0" />
+                            <div v-if="row.company" class="flex items-center gap-3">
+                                <NuxtImg :src="row.company?.imageUrl" class="h-12 !rounded-md w-20 object-contain p-1 shrink-0" />
                                 <div class="flex flex-col gap-0.5">
                                     <div class="flex items-center gap-1.5">
-                                        <span class="truncate 2xl:max-w-64 max-w-44">{{ row.company.name }}</span>
+                                        <span class="truncate 2xl:max-w-64 max-w-44">{{ row.company?.name }}</span>
                                     </div>
                                     <div class="flex items-center text-xs whitespace-nowrap">
-                                        <NuxtImg :src="row.company.countryFlag" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
-                                        <div class="opacity-75 font-semibold">{{ row.company.countryName }}</div>
-                                        <span class="capitalize font-light opacity-80">, {{ row.company.city.toLowerCase() }}</span>
+                                        <NuxtImg :src="row.company?.countryFlag" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
+                                        <div class="opacity-75 font-semibold">{{ row.company?.countryName }}</div>
+                                        <span class="capitalize font-light opacity-80">, {{ row.company?.city.toLowerCase() }}</span>
                                     </div>
-                                    <div class="font-light mt-0.5 text-xs opacity-75 truncate max-w-[15rem]">{{ row.company.email }}</div>
+                                    <div class="font-light mt-0.5 text-xs opacity-75 truncate max-w-[15rem]">{{ row.company?.email }}</div>
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <UiNetworkTypeBadge :data="row.company.membershipType" />
+                            <UiNetworkTypeBadge :data="row.company?.membershipType" />
                         </td>
                         <td>
                             <UiEventOrderStatusBadge :data="row.orderStatus" />
