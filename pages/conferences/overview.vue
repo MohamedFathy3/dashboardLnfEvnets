@@ -41,12 +41,7 @@ import colors from 'tailwindcss/colors';
 definePageMeta({
     middleware: 'auth',
 });
-const {
-    data: overview,
-    status,
-    execute: fetchOverViewData,
-    error,
-} = await useApiFetch<ConferenceOverview>('/api/event/dashboard/overview', {
+const { data: overview, execute: fetchOverViewData } = await useApiFetch<ConferenceOverview>('/api/event/dashboard/overview', {
     immediate: false,
     lazy: true,
 });
