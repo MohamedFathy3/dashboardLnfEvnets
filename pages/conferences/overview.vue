@@ -19,8 +19,11 @@
             <div class="lg:col-span-6 intro-x">
                 <ChartPie section-heading="Orders Statuses By Type" :data="orderStatuses" icon="solar:graph-outline" />
             </div>
-            <div class="lg:col-span-4 intro-x">
+            <div class="lg:col-span-6 intro-x">
                 <ChartTopVisitsCountry :data="topVisitsByCountry" />
+            </div>
+            <div class="lg:col-span-6 intro-x">
+                <ChartTopVisitsCountry label="Approved Members By Country" :data="approvedMembersCountryCount" />
             </div>
         </div>
         <div v-else class="flex min-h-dvh items-center place-content-center text-center">
@@ -145,7 +148,6 @@ async function prepareOrderStatusesPerMonthChart() {
         ],
     };
 }
-
 async function prepareMembersByTypePieChart() {
     membersByType.value = {
         label: approvedMembersByTypeCount.value?.label,
