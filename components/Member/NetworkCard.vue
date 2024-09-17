@@ -46,6 +46,13 @@ function closeModal() {
         <ul class="pt-3 divide-y divide-dashed !divide-slate-100 text-sm">
             <li class="py-1.5 flex items-center justify-between min-h-10">
                 <div class="flex items-center gap-1.5">
+                    <Icon name="solar:dollar-outline" class="size-4 opacity-75" />
+                    Category
+                </div>
+                <UiCategoryBadge :data="props.network.category" />
+            </li>
+            <li class="py-1.5 flex items-center justify-between min-h-10">
+                <div class="flex items-center gap-1.5">
                     <Icon name="solar:bookmark-linear" class="size-4 opacity-75" />
                     Status
                 </div>

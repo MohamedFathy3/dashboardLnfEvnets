@@ -225,6 +225,64 @@ type ChartDataValues = {
     label: string;
     data: number[];
 };
+
+type PieChartDataValues = {
+    label: string[];
+    colors: string[];
+    data: number[];
+};
+type ConferenceOverview = {
+    statistics: DashboardReportStatus;
+    paymentsPerMonth: ChartPaymentsPerMonth;
+    ordersCountPerMonth: ChartPaymentsPerMonth;
+    ordersStatusCountPerMonth: ChartPaymentsPerMonth;
+    topVisitsByCountry: ChartCountByCountry[];
+    approvedMembersCountryCount: ChartCountByCountry[];
+    approvedMembersByTypeCount: PieChartApiData;
+    orderStatusCount: PieChartApiData;
+};
+type PieChartApiData = {
+    label: string[];
+    data: number[];
+};
+type DashboardReportStatus = {
+    totalAmount: number;
+    totalRegisteredCompanies: number;
+    totalApprovedDelegates: number;
+    totalBookedRooms: number;
+    totalApprovedCompanies: number;
+};
+type MonthNumber = {
+    member?: number[];
+    non_member?: number[];
+    in_application_form?: number[];
+    pending_payment?: number[];
+    pending_bank_transfer?: number[];
+    approved_online_payment?: number[];
+    approved_bank_transfer?: number[];
+};
+type ChartCountByCountry = {
+    country: Country;
+    count: number;
+};
+type ChartTotal =
+    | number
+    | {
+          in_application_form: number;
+          pending_payment: number;
+          pending_bank_transfer: number;
+          approved_online_payment: number;
+          approved_bank_transfer: number;
+      };
+type ChartPaymentsPerMonth = {
+    months_number: MonthNumber;
+    months: string[];
+    total: ChartTotal;
+    totalOrder?: number;
+    percent: string;
+    monthly: number;
+    previousMonthly: number;
+};
 type Conference = {
     id: number;
     name: string;

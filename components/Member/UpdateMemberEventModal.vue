@@ -43,6 +43,7 @@ const item = ref({
     unhashedPassword: props.member?.unhashedPassword,
     typeCompany: props.member?.typeCompany,
     membershipType: props.member?.membershipType,
+    category: props.member?.category,
 });
 onMounted(() => {
     if (props.member !== null) {
@@ -72,6 +73,7 @@ onMounted(() => {
         item.value.unhashedPassword = props.member?.unhashedPassword;
         item.value.typeCompany = props.member?.typeCompany;
         item.value.membershipType = props.member?.membershipType;
+        item.value.category = props.member?.category;
     }
 });
 const rules = ref({
@@ -100,6 +102,7 @@ const rules = ref({
     unhashedPassword: {},
     typeCompany: {},
     membershipType: {},
+    category: {},
 });
 const v$ = useVuelidate(rules, item);
 const emit = defineEmits(['refresh', 'close']);
@@ -144,6 +147,13 @@ const membershipTypes = ref([
     { name: 'Partner', value: 'partner' },
     { name: 'Vendor', value: 'vendor' },
     { name: 'Non Member', value: 'non_member' },
+    { name: 'WSA Team', value: 'wsa_team' },
+]);
+const internalReportTypes = ref([
+    { name: 'Free', value: 'free' },
+    { name: 'Paid', value: 'paid' },
+    { name: 'PFS Team', value: 'pfs_team' },
+    { name: 'Vendor', value: 'vendor' },
     { name: 'WSA Team', value: 'wsa_team' },
 ]);
 
@@ -230,7 +240,7 @@ const companyTypes = ref([
                             labelvalue="name"
                             keyvalue="value"
                             :select-data="companyTypes"
-                            class="col-span-12 lg:col-span-4"
+                            class="col-span-12 lg:col-span-6"
                             label="Company Type"
                             name="company-type-company"
                             placeholder="Company Type"
@@ -242,12 +252,25 @@ const companyTypes = ref([
                             keyvalue="value"
                             :clearable="false"
                             :select-data="props.member.networks.length === 0 ? nonMembershipTypes : membershipTypes"
-                            class="col-span-12 lg:col-span-4"
+                            class="col-span-12 lg:col-span-6"
                             label="Membership Type"
                             name="company-membership-type"
                             placeholder="Membership Type"
                         />
-                        <FormInputField v-model="item.wsaId" :errors="v$.wsaId.$errors" class="col-span-12 lg:col-span-4" type="number" label="WSA ID" name="wsa-id" placeholder="WSA ID" />
+                        <FormSelectField
+                            v-model="item.category"
+                            :errors="v$.category.$errors"
+                            labelvalue="name"
+                            keyvalue="value"
+                            :clearable="false"
+                            :select-data="internalReportTypes"
+                            class="col-span-12 lg:col-span-6"
+                            label="Category"
+                            name="member-internal-category"
+                            placeholder="Category - Internal Usage Only"
+                            description="For Reporting and Internal Usage Only"
+                        />
+                        <FormInputField v-model="item.wsaId" :errors="v$.wsaId.$errors" class="col-span-12 lg:col-span-6" type="number" label="WSA ID" name="wsa-id" placeholder="WSA ID" />
                     </div>
                 </div>
                 <div class="mt-6">

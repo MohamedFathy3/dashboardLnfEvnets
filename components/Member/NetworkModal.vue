@@ -27,6 +27,7 @@ const item = ref({
     fpp: props.network?.fpp ?? false,
     startDate: props.network?.startDate ?? null,
     expireDate: props.network?.expireDate ?? null,
+    category: props.network?.category ?? null,
 });
 onMounted(() => {
     if (props.network !== null) {
@@ -39,6 +40,7 @@ onMounted(() => {
         item.value.fpp = props.network?.fpp;
         item.value.startDate = props.network?.startDate;
         item.value.expireDate = props.network?.expireDate;
+        item.value.category = props.network?.category;
     }
 });
 const rules = ref({
@@ -51,6 +53,7 @@ const rules = ref({
     fpp: {},
     startDate: {},
     expireDate: {},
+    category: {},
 });
 const v$ = useVuelidate(rules, item);
 const emit = defineEmits(['refresh', 'close']);
@@ -65,6 +68,7 @@ const resetNetworkValues = async () => {
         fpp: false,
         startDate: null,
         expireDate: null,
+        category: null,
     };
 };
 async function closeModal() {
@@ -85,6 +89,13 @@ const membershipTypes = ref([
     { name: 'Partner', value: 'partner' },
     { name: 'Vendor', value: 'vendor' },
     { name: 'Non Member', value: 'non_member' },
+    { name: 'WSA Team', value: 'wsa_team' },
+]);
+const internalReportTypes = ref([
+    { name: 'Free', value: 'free' },
+    { name: 'Paid', value: 'paid' },
+    { name: 'PFS Team', value: 'pfs_team' },
+    { name: 'Vendor', value: 'vendor' },
     { name: 'WSA Team', value: 'wsa_team' },
 ]);
 const settings = useSettingsStore();
@@ -135,17 +146,30 @@ async function updateNetwork() {
                     name="network-name"
                     placeholder="Please select a network..."
                 />
-                <FormSelectField v-model="item.type" :errors="v$.type.$errors" labelvalue="name" keyvalue="value" :select-data="membershipTypes" class="lg:col-span-6" label="Type" name="network-membership-type" placeholder="Membership Type" />
+                <FormSelectField v-model="item.type" :errors="v$.type.$errors" labelvalue="name" keyvalue="value" :select-data="membershipTypes" class="lg:col-span-4" label="Type" name="network-membership-type" placeholder="Membership Type" />
                 <FormSelectField
                     v-model="item.status"
                     :errors="v$.status.$errors"
                     labelvalue="name"
                     keyvalue="value"
                     :select-data="membershipStatues"
-                    class="lg:col-span-6"
+                    class="lg:col-span-4"
                     label="Status"
                     name="network-membership-status"
                     placeholder="Membership Status"
+                />
+                <FormSelectField
+                    v-model="item.category"
+                    :errors="v$.category.$errors"
+                    labelvalue="name"
+                    keyvalue="value"
+                    :clearable="false"
+                    :select-data="internalReportTypes"
+                    class="col-span-12 lg:col-span-4"
+                    label="Category"
+                    name="member-internal-category"
+                    placeholder="Category - Internal Usage Only"
+                    description="For Reporting and Internal Usage Only"
                 />
                 <FormSwitch v-model="item.active" label="Can login (Active)" class="lg:col-span-4" />
                 <FormSwitch v-model="item.network" label="Show in Network" class="lg:col-span-4" />

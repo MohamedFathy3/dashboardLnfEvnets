@@ -86,8 +86,11 @@ async function resendPassword() {
                 </div>
                 <div class="bg-white shadow-sm p-5 rounded-xl lg:col-span-8">
                     <div class="font-medium text-base opacity-75">
-                        <div class="line-clamp-1">{{ company.name }}</div>
-                        <div class="font-light text-sm mt-0.5 lowercase hover:text-warning cursor-pointer transition-all" @click="useClipboard(company.email.toLowerCase())">{{ company.email.toLowerCase() }}</div>
+                        <div class="flex items-center justify-between gap-5">
+                            <div class="line-clamp-1">{{ company.name }}</div>
+                            <UiCategoryBadge :data="company.category" />
+                        </div>
+                        <span class="font-light text-sm mt-0.5 lowercase hover:text-warning cursor-pointer transition-all" @click="useClipboard(company.email.toLowerCase())">{{ company.email.toLowerCase() }}</span>
                     </div>
                     <div class="border-t mt-1.5 pt-1.5 border-dashed">
                         <div class="flex items-center line-clamp-1 whitespace-nowrap">

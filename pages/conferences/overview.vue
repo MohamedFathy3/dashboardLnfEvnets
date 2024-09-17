@@ -12,8 +12,15 @@
             <div class="lg:col-span-12 intro-x">
                 <ChartBarFive :chart-data-values="ordersStatusesPerMonth.data" :chart-labels="ordersStatusesPerMonth.labels" :section-heading="ordersStatusesPerMonth.sectionHeading" icon="solar:graph-outline" />
             </div>
+
+            <div class="lg:col-span-6 intro-x">
+                <ChartPie section-heading="Approved Companies By Type" :data="membersByType" icon="solar:graph-outline" />
+            </div>
+            <div class="lg:col-span-6 intro-x">
+                <ChartPie section-heading="Orders Statuses By Type" :data="orderStatuses" icon="solar:graph-outline" />
+            </div>
             <div class="lg:col-span-4 intro-x">
-                <ChartTopVisitsCountry :data="topVisitsCountries?.data" />
+                <ChartTopVisitsCountry :data="topVisitsByCountry" />
             </div>
         </div>
         <div v-else class="flex min-h-dvh items-center place-content-center text-center">
@@ -26,120 +33,139 @@
 </template>
 
 <script lang="ts" setup>
+import colors from 'tailwindcss/colors';
+
 definePageMeta({
     middleware: 'auth',
 });
-
+const {
+    data: overview,
+    status,
+    execute: fetchOverViewData,
+    error,
+} = await useApiFetch<ConferenceOverview>('/api/event/dashboard/overview', {
+    immediate: false,
+    lazy: true,
+});
 const loadingOverview = ref(true);
-const conferenceInfoBoxes = ref<InfoBoxType[]>([]);
+const statistics = ref<DashboardReportStatus>();
+const paymentsPerMonth = ref<ChartPaymentsPerMonth>();
+const ordersCountPerMonth = ref<ChartPaymentsPerMonth>();
+const ordersStatusCountPerMonth = ref<ChartPaymentsPerMonth>();
+const topVisitsByCountry = ref<ChartCountByCountry[]>();
+const approvedMembersCountryCount = ref<ChartCountByCountry[]>();
+const approvedMembersByTypeCount = ref<PieChartApiData>();
+const orderStatusCount = ref<PieChartApiData>();
+
+onMounted(async () => {
+    loadingOverview.value = true;
+    await fetchOverViewData();
+    console.log('Overview', overview.value);
+    if (overview.value) {
+        statistics.value = overview.value.statistics;
+        paymentsPerMonth.value = overview.value.paymentsPerMonth;
+        ordersCountPerMonth.value = overview.value.ordersCountPerMonth;
+        ordersStatusCountPerMonth.value = overview.value.ordersStatusCountPerMonth;
+        topVisitsByCountry.value = overview.value.topVisitsByCountry;
+        approvedMembersCountryCount.value = overview.value.approvedMembersCountryCount;
+        approvedMembersByTypeCount.value = overview.value.approvedMembersByTypeCount;
+        orderStatusCount.value = overview.value.orderStatusCount;
+    }
+    await loadPageData();
+    loadingOverview.value = false;
+});
+// Final Preparation Data Objects
+const conferenceInfoBoxes = ref();
 const ordersPaymentChart = ref();
 const ordersCountChart = ref();
 const ordersStatusesPerMonth = ref();
-
-const { data: conferenceStatistics, execute: fetchConferenceStatistics } = await useApiFetch<ConferenceStatisticsBox>('/api/event/dashboard/report', {
-    immediate: false,
-    lazy: true,
-});
-
-const { data: paymentChart, execute: fetchingPaymentChart } = await useApiFetch<ApiResponse>('/api/event/payment/chart-per-month', {
-    immediate: false,
-    lazy: true,
-});
-const { data: ordersChart, execute: fetchingOrdersChart } = await useApiFetch<ApiResponse>('/api/event/order/count-per-month', {
-    immediate: false,
-    lazy: true,
-});
-const { data: orderStatuesChart, execute: fetchingOrderStatuesChart } = await useApiFetch<ApiResponse>('/api/event/order/count-status-month', {
-    immediate: false,
-    lazy: true,
-});
-const { data: topVisitsCountries, execute: fetchingTopVisitsCountries } = await useApiFetch<ApiResponse>('/api/event/count/visit-country', {
-    immediate: false,
-    lazy: true,
-});
+const membersByType = ref();
+const orderStatuses = ref();
 
 async function prepareInfoBoxes() {
-    await fetchConferenceStatistics();
     conferenceInfoBoxes.value = [
         {
             title: 'Approved Payments',
             icon: 'solar:dollar-minimalistic-outline',
-            value: useFormatCurrency((conferenceStatistics.value as ConferenceStatisticsBox).totalAmount),
+            value: useFormatCurrency((statistics.value as DashboardReportStatus).totalAmount),
             description: 'USD',
         },
         {
             title: 'Approved Companies',
             icon: 'solar:case-minimalistic-line-duotone',
-            value: (conferenceStatistics.value as ConferenceStatisticsBox).totalApprovedCompanies,
+            value: (statistics.value as DashboardReportStatus).totalApprovedCompanies,
             description: 'Companies',
         },
         {
             title: 'Approved Delegates',
             icon: 'solar:users-group-two-rounded-linear',
-            value: (conferenceStatistics.value as ConferenceStatisticsBox).totalApprovedDelegates,
+            value: (statistics.value as DashboardReportStatus).totalApprovedDelegates,
             description: 'Delegate',
         },
         {
             title: 'Booked Rooms',
             icon: 'solar:bed-line-duotone',
-            value: (conferenceStatistics.value as ConferenceStatisticsBox).totalBookedRooms,
+            value: (statistics.value as DashboardReportStatus).totalBookedRooms,
             description: 'Room',
         },
     ];
 }
 async function preparePaymentChart() {
-    await fetchingPaymentChart();
     ordersPaymentChart.value = {
         sectionHeading: 'Payments',
-        labels: paymentChart.value?.data?.months,
-        total: paymentChart.value?.data?.total,
+        labels: paymentsPerMonth.value?.months,
+        total: paymentsPerMonth.value?.total,
         data: [
-            { data: paymentChart.value?.data?.months_number.member, label: 'Members' },
-            { data: paymentChart.value?.data?.months_number.non_member, label: 'Non Members' },
+            { data: paymentsPerMonth.value?.months_number.member, label: 'Members' },
+            { data: paymentsPerMonth.value?.months_number.non_member, label: 'Non Members' },
         ],
     };
 }
 async function prepareOrdersChart() {
-    await fetchingOrdersChart();
     ordersCountChart.value = {
         sectionHeading: 'Orders',
-        labels: ordersChart.value?.data?.months,
-        total: ordersChart.value?.data?.total,
+        labels: ordersCountPerMonth.value?.months,
+        total: ordersCountPerMonth.value?.total,
         data: [
-            { data: ordersChart.value?.data?.months_number.member, label: 'Members' },
-            { data: ordersChart.value?.data?.months_number.non_member, label: 'Non Members' },
+            { data: ordersCountPerMonth.value?.months_number.member, label: 'Members' },
+            { data: ordersCountPerMonth.value?.months_number.non_member, label: 'Non Members' },
         ],
     };
 }
 async function prepareOrderStatusesPerMonthChart() {
-    await fetchingOrderStatuesChart();
     ordersStatusesPerMonth.value = {
         sectionHeading: 'Orders Status Per Month',
-        labels: orderStatuesChart.value?.data?.months,
+        labels: ordersStatusCountPerMonth.value?.months,
         data: [
-            { data: orderStatuesChart.value?.data?.months_number.in_application_form, label: 'Application Form' },
-            { data: orderStatuesChart.value?.data?.months_number.pending_payment, label: 'Pending Payment' },
-            { data: orderStatuesChart.value?.data?.months_number.pending_bank_transfer, label: 'Requested Bank Transfer' },
-            { data: orderStatuesChart.value?.data?.months_number.approved_bank_transfer, label: 'Approved Bank Transfer' },
-            { data: orderStatuesChart.value?.data?.months_number.approved_online_payment, label: 'Online Payment' },
+            { data: ordersStatusCountPerMonth.value?.months_number.in_application_form, label: 'Application Form' },
+            { data: ordersStatusCountPerMonth.value?.months_number.pending_payment, label: 'Pending Payment' },
+            { data: ordersStatusCountPerMonth.value?.months_number.pending_bank_transfer, label: 'Requested Bank Transfer' },
+            { data: ordersStatusCountPerMonth.value?.months_number.approved_bank_transfer, label: 'Approved Bank Transfer' },
+            { data: ordersStatusCountPerMonth.value?.months_number.approved_online_payment, label: 'Online Payment' },
         ],
     };
 }
-async function prepareTopVisits() {
-    await fetchingTopVisitsCountries();
-}
 
+async function prepareMembersByTypePieChart() {
+    membersByType.value = {
+        label: approvedMembersByTypeCount.value?.label,
+        colors: [colors.blue[900], colors.yellow[500], colors.orange[300], colors.red[600]],
+        data: approvedMembersByTypeCount.value?.data,
+    };
+}
+async function prepareOrdersByStatusPieChart() {
+    orderStatuses.value = {
+        label: orderStatusCount.value?.label,
+        colors: [colors.slate[300], colors.slate[500], colors.yellow[300], colors.green[500], colors.green[600]],
+        data: orderStatusCount.value?.data,
+    };
+}
 async function loadPageData() {
     await prepareInfoBoxes();
     await preparePaymentChart();
     await prepareOrdersChart();
     await prepareOrderStatusesPerMonthChart();
-    await prepareTopVisits();
+    await prepareMembersByTypePieChart();
+    await prepareOrdersByStatusPieChart();
 }
-
-onMounted(async () => {
-    loadingOverview.value = true;
-    await loadPageData();
-    loadingOverview.value = false;
-});
 </script>
