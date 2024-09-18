@@ -234,11 +234,13 @@ type PieChartDataValues = {
 type ConferenceOverview = {
     statistics: DashboardReportStatus;
     paymentsPerMonth: ChartPaymentsPerMonth;
+    registeredCompaniesByMonth: ChartPaymentsPerMonth;
     ordersCountPerMonth: ChartPaymentsPerMonth;
     ordersStatusCountPerMonth: ChartPaymentsPerMonth;
-    topVisitsByCountry: ChartCountByCountry[];
-    approvedMembersCountryCount: ChartCountByCountry[];
+    topVisitsByCountry: Visit;
+    approvedMembersCountryCount: Visit;
     approvedMembersByTypeCount: PieChartApiData;
+    approvedDelegatesByUserType: PieChartApiData;
     orderStatusCount: PieChartApiData;
 };
 type PieChartApiData = {
@@ -255,6 +257,10 @@ type DashboardReportStatus = {
 type MonthNumber = {
     member?: number[];
     non_member?: number[];
+    founder?: number[];
+    vendor?: number[];
+    wsa_team?: number[];
+    partner?: number[];
     in_application_form?: number[];
     pending_payment?: number[];
     pending_bank_transfer?: number[];
@@ -264,6 +270,8 @@ type MonthNumber = {
 type ChartCountByCountry = {
     country: Country;
     count: number;
+    totalCountries?: number;
+    totalCount?: number;
 };
 type ChartTotal =
     | number
@@ -317,9 +325,14 @@ type Conference = {
     deletedAt: string | null;
 };
 
-type Visit = {
+type VisitData = {
     country: Country;
     count: number;
+};
+type Visit = {
+    data: VisitData[];
+    totalCount: number;
+    totalCountries: number;
 };
 type Media = {
     id: number;

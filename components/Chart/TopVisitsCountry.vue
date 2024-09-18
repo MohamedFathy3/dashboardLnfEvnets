@@ -1,30 +1,32 @@
 <script setup lang="ts">
-const props = defineProps({
-    label: {
-        type: String,
-        default: 'Top Visited Countries',
+const props = withDefaults(
+    defineProps<{
+        label: string;
+        icon: string;
+        data: Visit;
+    }>(),
+    {
+        label: 'Top Visited Countries',
+        icon: 'solar:asteroid-linear',
     },
-    icon: {
-        type: String,
-        default: 'solar:asteroid-linear',
-    },
-    data: {
-        type: Array as () => Visit[],
-        default: () => [] as Visit[],
-    },
-});
+);
 </script>
 
 <template>
     <div class="lg:col-span-3">
         <div>
             <div class="p-5 bg-white rounded-2xl">
-                <div class="flex items-center gap-3">
-                    <Icon v-if="props.icon" :name="props.icon" class="opacity-75 size-5" />
-                    <span class="font-medium">{{ props.label }}</span>
+                <div>
+                    <div class="flex items-center gap-3">
+                        <Icon v-if="props.icon" :name="props.icon" class="opacity-75 size-5" />
+                        <span class="font-medium">{{ props.label }}</span>
+                    </div>
+                    <div class="text-xs font-light mt-1 ml-8 opacity-75">
+                        Total <span class="font-medium">{{ props.data.totalCountries }}</span> Countries has <span class="font-medium">{{ props.data.totalCount }}</span> Records
+                    </div>
                 </div>
                 <ul class="mt-5 divide-y divide-slate-200 divide-dashed">
-                    <template v-for="item in data" :key="item.country.id">
+                    <template v-for="item in (data as Visit).data as VisitData[]" :key="item.country.id">
                         <li class="py-2">
                             <div class="flex items-center justify-between gap- text-sm">
                                 <div class="flex items-center gap-3">

@@ -92,7 +92,7 @@ const membershipTypes = ref([
     { name: 'WSA Team', value: 'wsa_team' },
 ]);
 const internalReportTypes = ref([
-    { name: 'Free', value: 'free' },
+    { name: 'Unpaid', value: 'free' },
     { name: 'Paid', value: 'paid' },
     { name: 'PFS Team', value: 'pfs_team' },
     { name: 'Vendor', value: 'vendor' },

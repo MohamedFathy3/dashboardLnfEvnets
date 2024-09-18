@@ -1,35 +1,55 @@
 <template>
-    <div v-if="usePermissionCheck(['conference_overview_list'])">
-        <div v-if="!loadingOverview" class="grid lg:grid-cols-12 gap-5">
-            <UiInfoBox :data="conferenceInfoBoxes" />
-            <div class="lg:col-span-6 intro-x">
-                <ChartLine :chart-data-values="ordersPaymentChart.data" :total="ordersPaymentChart.total" currency :chart-labels="ordersPaymentChart.labels" :section-heading="ordersPaymentChart.sectionHeading" icon="solar:graph-outline" />
+    <div class="flex flex-col gap-5">
+        <div class="md:flex md:items-center md:justify-between md:gap-5 -intro-y">
+            <div class="flex items-center gap-2">
+                <Icon name="solar:chart-2-outline" class="size-5 opacity-75" />
+                <div>Conference Overview</div>
             </div>
-            <div class="lg:col-span-6 intro-x">
-                <ChartBar :chart-data-values="ordersCountChart.data" :total="ordersCountChart.total" :chart-labels="ordersCountChart.labels" :section-heading="ordersCountChart.sectionHeading" icon="solar:graph-outline" />
-            </div>
-
-            <div class="lg:col-span-12 intro-x">
-                <ChartBarFive :chart-data-values="ordersStatusesPerMonth.data" :chart-labels="ordersStatusesPerMonth.labels" :section-heading="ordersStatusesPerMonth.sectionHeading" icon="solar:graph-outline" />
-            </div>
-
-            <div class="lg:col-span-6 intro-x">
-                <ChartPie section-heading="Approved Companies By Type" :data="membersByType" icon="solar:graph-outline" />
-            </div>
-            <div class="lg:col-span-6 intro-x">
-                <ChartPie section-heading="Orders Statuses By Type" :data="orderStatuses" icon="solar:graph-outline" />
-            </div>
-            <div class="lg:col-span-6 intro-x">
-                <ChartTopVisitsCountry :data="topVisitsByCountry" />
-            </div>
-            <div class="lg:col-span-6 intro-x">
-                <ChartTopVisitsCountry label="Approved Members By Country" :data="approvedMembersCountryCount" />
-            </div>
+            <ConferenceSwitcher @reload="fetchOverViewData" />
         </div>
-        <div v-else class="flex min-h-dvh items-center place-content-center text-center">
-            <div>
-                <div class="opacity-75 text-sm animate-pulse">Loading Conference Statistics</div>
-                <Icon name="eos-icons:three-dots-loading" class="size-16" />
+        <ConferenceOldWarning />
+        <div v-if="usePermissionCheck(['conference_overview_list'])">
+            <div v-if="!loadingOverview" class="grid lg:grid-cols-12 gap-5">
+                <UiInfoBox :data="conferenceInfoBoxes" />
+                <div class="lg:col-span-6 intro-x">
+                    <ChartLine :chart-data-values="ordersPaymentChart.data" :total="ordersPaymentChart.total" currency :chart-labels="ordersPaymentChart.labels" :section-heading="ordersPaymentChart.sectionHeading" icon="solar:graph-outline" />
+                </div>
+                <div class="lg:col-span-6 intro-x">
+                    <ChartBar :chart-data-values="ordersCountChart.data" :total="ordersCountChart.total" :chart-labels="ordersCountChart.labels" :section-heading="ordersCountChart.sectionHeading" icon="solar:graph-outline" />
+                </div>
+                <div class="lg:col-span-12 intro-x">
+                    <ChartBarFive :chart-data-values="ordersStatusesPerMonth.data" :chart-labels="ordersStatusesPerMonth.labels" :section-heading="ordersStatusesPerMonth.sectionHeading" icon="solar:graph-outline" />
+                </div>
+                <div class="lg:col-span-6 intro-x">
+                    <ChartLineSix
+                        :chart-data-values="registeredCompaniesByMonthData.data"
+                        :total="registeredCompaniesByMonthData.total"
+                        :chart-labels="registeredCompaniesByMonthData.labels"
+                        :section-heading="registeredCompaniesByMonthData.sectionHeading"
+                        icon="solar:case-minimalistic-outline"
+                    />
+                </div>
+                <div class="lg:col-span-6 intro-x">
+                    <ChartPie section-heading="Approved Companies By Type" :data="membersByType" icon="solar:graph-outline" />
+                </div>
+                <div class="lg:col-span-6 intro-x">
+                    <ChartPie section-heading="Orders Statuses By Type" :data="orderStatuses" icon="solar:graph-outline" />
+                </div>
+                <div class="lg:col-span-6 intro-x">
+                    <ChartPie section-heading="Approved Delegates By Type" :data="approvedDelegatesByUserTypeData" icon="solar:users-group-two-rounded-outline" />
+                </div>
+                <div class="lg:col-span-6 intro-x">
+                    <ChartTopVisitsCountry v-if="topVisitsByCountry" :data="topVisitsByCountry" />
+                </div>
+                <div class="lg:col-span-6 intro-x">
+                    <ChartTopVisitsCountry v-if="approvedMembersCountryCount" label="Approved Members By Country" :data="approvedMembersCountryCount" />
+                </div>
+            </div>
+            <div v-else class="flex min-h-dvh items-center place-content-center text-center">
+                <div>
+                    <div class="opacity-75 text-sm animate-pulse">Loading Conference Statistics</div>
+                    <Icon name="eos-icons:three-dots-loading" class="size-16" />
+                </div>
             </div>
         </div>
     </div>
@@ -48,12 +68,14 @@ const { data: overview, execute: fetchOverViewData } = await useApiFetch<Confere
 const loadingOverview = ref(true);
 const statistics = ref<DashboardReportStatus>();
 const paymentsPerMonth = ref<ChartPaymentsPerMonth>();
+const registeredCompaniesByMonth = ref<ChartPaymentsPerMonth>();
 const ordersCountPerMonth = ref<ChartPaymentsPerMonth>();
 const ordersStatusCountPerMonth = ref<ChartPaymentsPerMonth>();
-const topVisitsByCountry = ref<ChartCountByCountry[]>();
-const approvedMembersCountryCount = ref<ChartCountByCountry[]>();
+const topVisitsByCountry = ref<Visit>();
+const approvedMembersCountryCount = ref<Visit>();
 const approvedMembersByTypeCount = ref<PieChartApiData>();
 const orderStatusCount = ref<PieChartApiData>();
+const approvedDelegatesByUserType = ref<PieChartApiData>();
 
 onMounted(async () => {
     loadingOverview.value = true;
@@ -62,12 +84,14 @@ onMounted(async () => {
     if (overview.value) {
         statistics.value = overview.value.statistics;
         paymentsPerMonth.value = overview.value.paymentsPerMonth;
+        registeredCompaniesByMonth.value = overview.value.registeredCompaniesByMonth;
         ordersCountPerMonth.value = overview.value.ordersCountPerMonth;
         ordersStatusCountPerMonth.value = overview.value.ordersStatusCountPerMonth;
         topVisitsByCountry.value = overview.value.topVisitsByCountry;
         approvedMembersCountryCount.value = overview.value.approvedMembersCountryCount;
         approvedMembersByTypeCount.value = overview.value.approvedMembersByTypeCount;
         orderStatusCount.value = overview.value.orderStatusCount;
+        approvedDelegatesByUserType.value = overview.value.approvedDelegatesByUserType;
     }
     await loadPageData();
     loadingOverview.value = false;
@@ -79,6 +103,8 @@ const ordersCountChart = ref();
 const ordersStatusesPerMonth = ref();
 const membersByType = ref();
 const orderStatuses = ref();
+const registeredCompaniesByMonthData = ref();
+const approvedDelegatesByUserTypeData = ref();
 
 async function prepareInfoBoxes() {
     conferenceInfoBoxes.value = [
@@ -119,9 +145,24 @@ async function preparePaymentChart() {
         ],
     };
 }
+async function prepareRegCompaniesByMonthChart() {
+    registeredCompaniesByMonthData.value = {
+        sectionHeading: 'All Registered Companies By Types',
+        labels: registeredCompaniesByMonth.value?.months,
+        total: registeredCompaniesByMonth.value?.total,
+        data: [
+            { data: registeredCompaniesByMonth.value?.months_number.member, label: 'Members' },
+            { data: registeredCompaniesByMonth.value?.months_number.non_member, label: 'Non Members' },
+            { data: registeredCompaniesByMonth.value?.months_number.founder, label: 'Founder' },
+            { data: registeredCompaniesByMonth.value?.months_number.vendor, label: 'Vendor' },
+            { data: registeredCompaniesByMonth.value?.months_number.wsa_team, label: 'WSA Team' },
+            { data: registeredCompaniesByMonth.value?.months_number.partner, label: 'Partner' },
+        ],
+    };
+}
 async function prepareOrdersChart() {
     ordersCountChart.value = {
-        sectionHeading: 'Orders',
+        sectionHeading: 'Approved Orders',
         labels: ordersCountPerMonth.value?.months,
         total: ordersCountPerMonth.value?.total,
         data: [
@@ -157,6 +198,13 @@ async function prepareOrdersByStatusPieChart() {
         data: orderStatusCount.value?.data,
     };
 }
+async function prepareApprovedDelegatesByUserTypePieChart() {
+    approvedDelegatesByUserTypeData.value = {
+        label: approvedDelegatesByUserType.value?.label,
+        colors: [colors.green[500], colors.blue[900], colors.slate[400], colors.red[500], colors.orange[300], colors.yellow[600]],
+        data: approvedDelegatesByUserType.value?.data,
+    };
+}
 async function loadPageData() {
     await prepareInfoBoxes();
     await preparePaymentChart();
@@ -164,5 +212,7 @@ async function loadPageData() {
     await prepareOrderStatusesPerMonthChart();
     await prepareMembersByTypePieChart();
     await prepareOrdersByStatusPieChart();
+    await prepareRegCompaniesByMonthChart();
+    await prepareApprovedDelegatesByUserTypePieChart();
 }
 </script>
