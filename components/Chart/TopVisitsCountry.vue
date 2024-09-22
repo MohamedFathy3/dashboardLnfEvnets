@@ -30,7 +30,7 @@ const props = withDefaults(
                         <li class="py-2">
                             <div class="flex items-center justify-between gap- text-sm">
                                 <div class="flex items-center gap-3">
-                                    <img :alt="item.country.name" :src="item.country.imageUrl" :title="item.country.name" class="w-6 h-6 rounded-full object-cover ring-3 ring-slate-100" />
+                                    <NuxtImg :alt="item.country.name" :src="item.country.imageUrl" :title="item.country.name" class="w-6 h-6 rounded-full object-cover ring-2 ring-slate-200" />
                                     <div class="font-light">{{ item.country.name }}</div>
                                 </div>
                                 <div>{{ item.count }}</div>
