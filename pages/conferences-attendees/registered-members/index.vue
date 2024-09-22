@@ -239,12 +239,11 @@ function getLastOrderAmount(id) {
     }
     return lastOrderAmountFromOrders;
 }
-const config = useRuntimeConfig();
 </script>
 <template>
     <div v-if="usePermissionCheck(['conference_member_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
-        <div class="md:flex md:items-center md:justify-between md:gap-5">
+        <div class="md:flex md:items-center md:justify-between md:gap-5 intro-x">
             <div class="flex items-center gap-2">
                 <Icon name="solar:users-group-two-rounded-outline" class="size-5 opacity-75" />
                 <div>
@@ -252,28 +251,19 @@ const config = useRuntimeConfig();
                     <span v-if="status !== 'pending' && rows" class="text-sm ml-3 bg-white border px-3 py-1 rounded-full">{{ rows.meta?.total }} Companies</span>
                 </div>
             </div>
-            <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5 intro-x">
+            <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
                 <template v-if="selectedRows.length > 0">
                     <button v-if="usePermissionCheck(['conference_member_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
                         <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
                         Delete Items
                     </button>
                 </template>
-                <div class="flex items-center gap-3">
-                    <a v-if="usePermissionCheck(['conference_member_export'])" :href="config.public.apiUrl + '/export-excel/report-attendee/export'" target="_blank">
-                        <button type="button" class="btn btn-dark btn-rounded btn-sm w-full justify-between gap-3">
-                            <span class="items-center flex">
-                                <span>Export Attendees</span>
-                            </span>
-                            <Icon name="solar:download-outline" class="w-5 h-5 mr-2" />
-                        </button>
-                    </a>
-                    <ConferenceSwitcher @reload="refresh" />
-                </div>
+                <LazyMemberExportOptions v-if="usePermissionCheck(['conference_member_export'])" />
+                <ConferenceSwitcher @reload="refresh" />
             </div>
         </div>
         <!-- Network Members Statistics -->
-        <UiInfoBox :data="conferenceInfoBoxes" />
+        <UiInfoBox class="intro-x" :data="conferenceInfoBoxes" />
         <!-- Filter & Search -->
         <div class="grid lg:grid-cols-12 gap-5 items-center p-5 bg-white border rounded-2xl">
             <FormInputField v-model="filter.name" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Company Name" />
