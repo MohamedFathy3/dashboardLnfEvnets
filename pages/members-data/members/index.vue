@@ -95,6 +95,11 @@ const {
     body: serverParams,
     lazy: true,
 });
+
+const applySearch = async () => {
+    serverParams.value.page = 1;
+    await refresh();
+};
 const onExport = async () => {
     const exportServerParams = { ...serverParams.value };
     exportServerParams.perPage = rows.value?.meta?.total || 25;
@@ -496,7 +501,7 @@ function openModal() {
                     />
                 </div>
             </TransitionExpand>
-            <button class="xl:col-span-4 lg:col-span-4 btn btn-rounded btn-sm btn-primary gap-3 w-full" @click="refresh">
+            <button class="xl:col-span-4 lg:col-span-4 btn btn-rounded btn-sm btn-primary gap-3 w-full" @click="applySearch">
                 <Icon name="solar:rounded-magnifer-line-duotone" class="size-5 shrink-0" />
                 Filter
             </button>

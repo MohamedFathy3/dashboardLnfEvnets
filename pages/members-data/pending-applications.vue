@@ -64,13 +64,18 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/user/index', {
     method: 'POST',
     body: serverParams,
     lazy: true,
 });
+
+const applySearch = async () => {
+    serverParams.value.page = 1;
+    await refresh();
+};
 watch(
     filter,
     (newVal) => {
@@ -303,7 +308,7 @@ const viewMember = async (value) => {
                 ]"
             />
 
-            <button class="xl:col-span-6 lg:col-span-6 btn btn-rounded btn-sm btn-primary gap-3 w-full" @click="refresh">
+            <button class="xl:col-span-6 lg:col-span-6 btn btn-rounded btn-sm btn-primary gap-3 w-full" @click="applySearch">
                 <Icon name="solar:rounded-magnifer-line-duotone" class="size-5 shrink-0" />
                 Filter
             </button>
@@ -327,7 +332,7 @@ const viewMember = async (value) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-if="!pending && rows">
+                    <template v-if="status !== 'pending' && rows">
                         <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                             <td>
                                 <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -387,7 +392,7 @@ const viewMember = async (value) => {
             </table>
         </div>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
         <MemberAddModal v-if="isOpen" :open="isOpen" @close="closeModal" @success="viewMember" />
     </div>
 </template>
