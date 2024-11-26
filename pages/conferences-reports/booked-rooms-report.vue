@@ -111,7 +111,9 @@ onMounted(async () => {
                                 <template v-for="person in record.persons" :key="person.id">
                                     <div class="whitespace-nowrap lg:col-span-4">
                                         <div class="inline-flex text-left items-center">
-                                            <img :alt="person.name" :src="person.imageUrl" :title="person.name" class="h-14 w-14 !rounded-full ring-2 -ring-offset-2 ring-slate-500/10 object-cover bg-white" />
+                                            <div class="shrink-0">
+                                                <NuxtImg :alt="person.name" :src="person.imageUrl" :title="person.name" class="!size-14 !rounded-full ring-2 -ring-offset-2 object-top ring-slate-500/10 object-cover bg-white" />
+                                            </div>
                                             <div class="ml-2">
                                                 <div class="font-medium truncate">{{ person.name }}</div>
                                                 <div class="text-xs truncate capitalize">{{ person.jobTitle ? person.jobTitle : person.type }}</div>

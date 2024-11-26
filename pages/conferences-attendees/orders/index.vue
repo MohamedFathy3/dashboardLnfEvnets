@@ -173,7 +173,9 @@ async function refreshFilterData() {
                 <Icon name="solar:clipboard-list-linear" class="size-5 opacity-75" />
                 <div>Orders</div>
             </div>
+            <ConferenceSwitcher @reload="refresh" />
         </div>
+        <ConferenceOldWarning />
         <!-- Network Members Statistics -->
         <UiInfoBox :data="conferenceInfoBoxes" />
         <!-- Filter & Search -->

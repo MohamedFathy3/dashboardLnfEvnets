@@ -110,6 +110,7 @@ const resources = useResourceStore();
                 <Icon name="solar:users-group-two-rounded-line-duotone" class="size-5 opacity-75" />
                 <div>Spouses</div>
             </div>
+            <ConferenceSwitcher @reload="refresh" />
         </div>
         <!-- Filter & Search -->
         <div class="grid lg:grid-cols-12 gap-5 items-center p-5 bg-white border rounded-2xl">
@@ -147,6 +148,7 @@ const resources = useResourceStore();
                 Reset
             </button>
         </div>
+        <ConferenceOldWarning />
         <!-- Table -->
         <table class="table table-report font-light">
             <thead>

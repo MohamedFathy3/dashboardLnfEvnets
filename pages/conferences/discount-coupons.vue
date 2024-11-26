@@ -238,9 +238,12 @@ async function deleteItems() {
     <div v-if="usePermissionCheck(['conference_coupon_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
-            <div class="flex items-center gap-2">
-                <Icon name="solar:tag-price-linear" class="size-5 opacity-75" />
-                <div>Coupons</div>
+            <div class="md:flex md:items-center md:justify-between md:gap-5 grow">
+                <div class="flex items-center gap-2">
+                    <Icon name="solar:tag-price-linear" class="size-5 opacity-75" />
+                    <div>Coupons</div>
+                </div>
+                <ConferenceSwitcher @reload="refresh" />
             </div>
             <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
                 <template v-if="selectedRows.length > 0">
@@ -255,6 +258,7 @@ async function deleteItems() {
                 </button>
             </div>
         </div>
+        <ConferenceOldWarning />
         <!-- Filter & Search -->
         <div class="grid lg:grid-cols-12 gap-5 items-center p-5 bg-white border rounded-2xl">
             <FormInputField v-model="filter.code" rounded class="xl:col-span-4 lg:col-span-4" placeholder="Code" />
