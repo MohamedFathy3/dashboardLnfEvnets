@@ -2,10 +2,9 @@
 definePageMeta({
     middleware: 'auth',
 });
-const { data, execute, refresh, error, status } = await useApiFetch(`/api/dashboard/report/persons-dietaries`, {
+const { data, refresh, status } = await useApiFetch(`/api/dashboard/report/persons-dietaries`, {
     lazy: true,
     transform: (data) => data.data,
-    immediate: false,
 });
 const config = useRuntimeConfig();
 
