@@ -9,6 +9,7 @@ const { data, refresh, status } = await useApiFetch(`/api/dashboard/report/perso
 const config = useRuntimeConfig();
 
 const resources = useResourceStore();
+const setting = useSettingsStore();
 </script>
 <template>
     <div v-if="usePermissionCheck(['conference_report_dietary_list'])">
@@ -20,7 +21,7 @@ const resources = useResourceStore();
                     <div>T-Shirts Sizes Report</div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <a v-if="usePermissionCheck(['conference_report_dietary_export'])" :href="config.public.apiUrl + '/export-excel/dietary-delegate/export'" target="_blank">
+                    <a v-if="usePermissionCheck(['conference_report_dietary_export'])" :href="config.public.apiUrl + '/export-excel/dietary-delegate/export?conference=' + setting.conference?.id" target="_blank">
                         <button type="button" class="btn btn-dark btn-rounded btn-sm w-full justify-between gap-3">
                             <span class="items-center flex">
                                 <Icon name="solar:t-shirt-outline" class="w-5 h-5 mr-2" />

@@ -45,6 +45,7 @@ async function changeSelectedTabIndex(index) {
     selectedTabIndex.value = index;
     selectedContent.value = shirts.value[index];
 }
+const setting = useSettingsStore();
 </script>
 <template>
     <div v-if="usePermissionCheck(['conference_report_shirt_list'])">
@@ -58,7 +59,7 @@ async function changeSelectedTabIndex(index) {
                     <div class="opacity-75 text-sm">Total</div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <a v-if="usePermissionCheck(['conference_report_shirt_export'])" :href="config.public.apiUrl + '/export-excel/tshirt-Size-delegate/export'" target="_blank">
+                    <a v-if="usePermissionCheck(['conference_report_shirt_export'])" :href="config.public.apiUrl + '/export-excel/tshirt-Size-delegate/export?conference=' + setting.conference?.id" target="_blank">
                         <button type="button" class="btn btn-dark btn-rounded btn-sm w-full justify-between gap-3">
                             <span class="items-center flex">
                                 <Icon name="solar:t-shirt-outline" class="w-5 h-5 mr-2" />
