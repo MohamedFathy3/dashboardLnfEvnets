@@ -76,7 +76,7 @@ const config = useRuntimeConfig();
             </div>
             <div v-if="meetings" class="mt-8">
                 <template v-for="day in meetings" :key="day.id">
-                    <template v-if="!useCheckDateIsPast(day.date)">
+                    <!--<template v-if="!useCheckDateIsPast(day.date)">-->
                         <template v-if="day.timeSlots.length > 0">
                             <div class="bg-primary text-center text-white flex items-center py-2 px-4 text-base rounded-md justify-between">
                                 <div class="items-center flex">
@@ -147,7 +147,7 @@ const config = useRuntimeConfig();
                                 </template>
                             </table>
                         </template>
-                    </template>
+                    <!--</template>-->
                 </template>
             </div>
         </div>

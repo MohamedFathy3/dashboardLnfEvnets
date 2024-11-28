@@ -6,5 +6,5 @@ export function useCheckDateIsPast(date: string) {
     const currentDate = new Date();
 
     // Return true if the target date is in the past
-    return targetDate < currentDate;
+    return targetDate <= currentDate;
 }
