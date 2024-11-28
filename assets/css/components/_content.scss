@@ -1,8 +1,9 @@
+@use "./_media.scss" as media;
 .content {
     margin-top: 2.2rem;
     border-radius: 1.6rem;
     @apply relative min-h-screen w-full bg-slate-100 px-6 pb-6 pt-0.5 dark:bg-darkmode-700;
-    @include media-breakpoint-down(sm) {
+    @include media.media-breakpoint-down(sm) {
         @apply px-4;
     }
 

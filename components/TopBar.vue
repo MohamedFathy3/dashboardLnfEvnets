@@ -55,11 +55,11 @@ async function logout() {
                 </li>
             </template>
         </ul>
-        <div class="flex items-center gap-5 z-50">
+        <div class="justify-end flex items-center gap-5 z-50 mr-5">
             <FormSelectField
                 id="network-selector"
                 v-model="settingStore.networkId"
-                class="text-slate-800 cursor-pointer"
+                class="text-slate-800 sm:w-auto w-36 cursor-pointer"
                 placeholder="Please select a network..."
                 :clearable="false"
                 :select-data="settingStore.networks"
@@ -70,12 +70,12 @@ async function logout() {
                 <HeadlessMenuButton>
                     <div class="flex items-center gap-1.5 py-1 px-1 rounded-xl hover:bg-white/10">
                         <div class="text-right">
-                            <div class="text-sm font-medium truncate">{{ userStore.user?.name }}</div>
-                            <span class="text-xs opacity-75 font-extralight truncate">
+                            <div class="sm:text-sm text-xs font-medium truncate sm:w-auto max-w-12">{{ userStore.user?.name }}</div>
+                            <div class="text-xs opacity-75 font-extralight truncate sm:w-auto max-w-12">
                                 {{ userStore.user?.superAdmin ? 'Super Admin' : userStore.user?.role?.name }}
-                            </span>
+                            </div>
                         </div>
-                        <Icon class="size-4" name="solar:alt-arrow-down-outline" />
+                        <Icon class="size-4 shrink-0" name="solar:alt-arrow-down-outline" />
                     </div>
                 </HeadlessMenuButton>
                 <TransitionExpand>

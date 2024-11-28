@@ -1,5 +1,6 @@
+@use "./_media.scss" as media;
 .daily-report {
-    @include media-breakpoint-down(xl) {
+    @include media.media-breakpoint-down(xl) {
         min-width: 1000px;
     }
 

@@ -1,19 +1,21 @@
+@use "./_media.scss" as media;
+
 .wrapper {
     @apply h-screen min-w-0 flex-1 overflow-y-auto overflow-x-hidden pb-6 pr-6;
-    @include media-breakpoint-down(xl) {
+    @include media.media-breakpoint-down(xl) {
         @apply ml-0 max-w-full px-4;
     }
-    @include media-breakpoint-down(sm) {
+    @include media.media-breakpoint-down(sm) {
         @apply px-3;
     }
 
     &.wrapper--simple {
         margin-left: 112px;
         @apply pl-0;
-        @include media-breakpoint-down(xl) {
+        @include media.media-breakpoint-down(xl) {
             @apply ml-0 px-4;
         }
-        @include media-breakpoint-down(sm) {
+        @include media.media-breakpoint-down(sm) {
             @apply px-3;
         }
     }

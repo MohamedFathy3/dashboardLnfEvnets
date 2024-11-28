@@ -7,7 +7,7 @@ defineProps({
     },
 });
 const emit = defineEmits(['toggleSidebar']);
-const menuItems = ref([
+const menuItems = ref<SideBarMenu[]>([
     'Overview',
     { name: 'Network Overview', path: '/', icon: 'solar:monitor-linear', subMenus: [], permission: [] },
     {
@@ -558,11 +558,14 @@ const activeMenuItem = ref(route.fullPath);
 function toggleSubMenuOpen(path: string) {
     activeMenuItem.value = path;
 }
+
+const isString = (item: SideBarMenu): item is string => typeof item === 'string';
+const isSidebarMenuItem = (item: SideBarMenu): item is SidebarMenuItem => typeof item === 'object' && 'name' in item;
 </script>
 
 <template>
-    <div class="text-white/75 p-3 sm:p-5 flex flex-col gap-8">
-        <div :class="[open ? 'flex items-center justify-between gap-5' : 'px-4']">
+    <div class="text-white/75 sm:p-5 p-3 flex flex-col gap-8 sm:h-screen min-h-screen duration-300 ease-in-out">
+        <div :class="[open ? 'flex items-center justify-between gap-5 px-4' : 'px-4']">
             <div :class="['flex items-center gap-3 place-content-center']">
                 <Icon v-if="open" class="size-7" name="solar:asteroid-linear" />
                 <div v-if="open" class="text-lg">
@@ -573,22 +576,23 @@ function toggleSubMenuOpen(path: string) {
             <Icon v-if="!open" class="size-5 mx-auto cursor-pointer" name="solar:round-alt-arrow-right-linear" @click="emit('toggleSidebar')" />
             <Icon v-if="open" class="size-5 cursor-pointer hover:text-white" name="solar:round-alt-arrow-left-linear" @click="emit('toggleSidebar')" />
         </div>
-        <div class="relative sm:pr-2 scrollbar-w-2 scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar scrollbar-thumb-white/25 overflow-y-hidden hover:overflow-y-auto">
+        <div class="relative px-3 scrollbar-w-2 scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar scrollbar-thumb-white/25 overflow-y-hidden hover:overflow-y-auto">
             <ul class="flex flex-col gap-2 font-light text-sm mb-12">
                 <template v-for="(item, i) in menuItems" :key="i">
-                    <template v-if="typeof item === 'string'">
+                    <template v-if="isString(item)">
                         <li v-if="open" class="text-xs first:mt-0 mt-5 opacity-75">{{ item }}</li>
                         <li v-else class="first:mt-0 mt-5 opacity-75 text-center">...</li>
                     </template>
-                    <template v-else>
+                    <template v-else-if="isSidebarMenuItem(item)">
                         <li v-if="useCheckPermission(item.permission as string[])" class="relative">
                             <NuxtLink
+                                v-if="item"
                                 :class="[
-                                    open ? 'px-6 rounded-full' : 'px-4 rounded-xl',
+                                    open ? 'px-6 rounded-full' : 'px-2 rounded-xl',
                                     route.fullPath === item.path ? 'bg-white text-slate-700' : 'hover:bg-white/10 hover:text-white',
                                     'relative group py-2 flex items-center justify-between gap-3 w-full cursor-pointer',
                                 ]"
-                                :to="item.subMenus.length > 0 ? '' : item.path"
+                                :to="item.subMenus?.length > 0 ? '' : item.path"
                                 @click="toggleSubMenuOpen(item.path)"
                             >
                                 <div class="items-center flex gap-2">
@@ -596,7 +600,7 @@ function toggleSubMenuOpen(path: string) {
                                     <div v-if="open">{{ item.name }}</div>
                                 </div>
                                 <Icon
-                                    v-if="item.subMenus.length > 0 && open"
+                                    v-if="item.subMenus?.length > 0 && open"
                                     :class="[activeMenuItem === item.path || item.subMenus.some((m) => m.path === activeMenuItem) ? 'rotate-90' : '', 'size-4 ease-in-out duration-300 opacity-75']"
                                     name="solar:alt-arrow-down-line-duotone"
                                 />
@@ -606,7 +610,7 @@ function toggleSubMenuOpen(path: string) {
                             </NuxtLink>
                             <TransitionExpand>
                                 <template v-if="activeMenuItem === item.path || item.subMenus.some((m) => m.path === activeMenuItem)">
-                                    <ul v-if="item.subMenus.length > 0" class="bg-white/10 rounded-xl p-2 flex flex-col gap-2 mt-2">
+                                    <ul v-if="item.subMenus.length > 0" class="bg-white/10 rounded-xl p-0.5 flex flex-col gap-2 mt-2">
                                         <template v-for="(subItem, s) in item.subMenus" :key="s">
                                             <li v-if="useCheckPermission(subItem.permission as string[])" class="relative">
                                                 <NuxtLink

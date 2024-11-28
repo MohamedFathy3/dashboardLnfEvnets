@@ -470,13 +470,15 @@ type City = {
     deletedAt: string | null;
 };
 
-type SideBarMenu = {
+type SidebarMenuItem = {
     name: string;
     path: string;
     icon: string;
-    permissions: string[];
-    subMenus: SideBarMenu[];
+    permission: string[];
+    subMenus: SidebarMenuItem[];
 };
+
+type SideBarMenu = string | SidebarMenuItem;
 
 type NetworkSetting = {
     id: number;

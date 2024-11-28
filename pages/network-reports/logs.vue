@@ -87,53 +87,55 @@ const changePage = async (value) => {
             </button>
         </div>
         <!-- Table -->
-        <table class="table table-report font-light">
-            <thead>
-                <tr class="uppercase text-sm">
-                    <th class="text-left">Name</th>
-                    <th class="text-left">Log</th>
-                    <th class="text-left">Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <template v-if="!pending && rows">
-                    <tr v-for="row in rows.data" :key="row.id" class="text-sm">
-                        <td class="font-normal">
-                            <div v-if="row.ip">{{ row.ip }}</div>
-                            <div v-else>Undefined</div>
-                        </td>
-                        <td class="font-normal">
-                            <div v-if="row.description !== 'login'" class="capitalize font-light">
-                                <div class="line-clamp-1 truncate">
-                                    <span class="font-normal">{{ row.module }}</span> was <span class="font-normal">{{ row.description }}</span> for record <span class="font-normal">{{ row.properties?.name }}</span>
-                                </div>
-                                <div class="mt-2">
-                                    <span v-if="row.causer" class="px-3 py-1 text-xs font-medium border bg-slate-100 rounded-full">{{ row.causer }}</span>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <div v-if="row.description" class="capitalize">{{ row.description }}</div>
-                                <div class="mt-2">
-                                    <span v-if="row.causer" class="px-3 py-1 text-xs font-medium border bg-slate-100 rounded-full">{{ row.causer }}</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="font-normal">
-                            <div>{{ row.date }}</div>
-                            <div class="mt-0.5 font-light">{{ row.time }}</div>
-                        </td>
+        <div class="overflow-x-auto">
+            <table class="table table-report font-light md:text-sm text-xs">
+                <thead>
+                    <tr class="uppercase text-sm">
+                        <th class="text-left whitespace-nowrap">Name</th>
+                        <th class="text-left whitespace-nowrap">Log</th>
+                        <th class="text-left whitespace-nowrap">Date</th>
                     </tr>
-                </template>
-                <template v-else>
-                    <tr v-for="i in serverParams.perPage" :key="i">
-                        <td colspan="5">
-                            <div class="h-12 !opacity-50 animate-pulse" />
-                        </td>
-                    </tr>
-                </template>
-            </tbody>
-        </table>
-        <!-- Pagination -->
+                </thead>
+                <tbody>
+                    <template v-if="!pending && rows">
+                        <tr v-for="row in rows.data" :key="row.id" class="text-sm">
+                            <td class="font-normal">
+                                <div v-if="row.ip">{{ row.ip }}</div>
+                                <div v-else>Undefined</div>
+                            </td>
+                            <td class="font-normal">
+                                <div v-if="row.description !== 'login'" class="capitalize font-light">
+                                    <div class="line-clamp-1 flex gap-0.5 flex-wrap text-xs">
+                                        <span class="font-normal">{{ row.module }}</span> was <span class="font-normal">{{ row.description }}</span> for record <span class="font-normal">{{ row.properties?.name }}</span>
+                                    </div>
+                                    <div class="mt-2 whitespace-nowrap">
+                                        <div v-if="row.causer" class="px-3 py-1 text-xs font-medium border bg-slate-100 rounded-full">{{ row.causer }}</div>
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <div v-if="row.description" class="capitalize truncate text-xs">{{ row.description }}</div>
+                                    <div class="mt-2 whitespace-nowrap">
+                                        <span v-if="row.causer" class="px-3 py-1 text-xs font-medium border bg-slate-100 rounded-full">{{ row.causer }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="font-normal whitespace-nowrap text-xs">
+                                <div>{{ row.date }}</div>
+                                <div class="mt-0.5 font-light">{{ row.time }}</div>
+                            </td>
+                        </tr>
+                    </template>
+                    <template v-else>
+                        <tr v-for="i in serverParams.perPage" :key="i">
+                            <td colspan="5">
+                                <div class="h-12 !opacity-50 animate-pulse" />
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+            <!-- Pagination -->
+        </div>
         <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
     </div>
 </template>

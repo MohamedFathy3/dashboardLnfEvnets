@@ -243,19 +243,19 @@ async function updateMembersStatus(members: CompanyVoteUpdateBody[]) {
                 <template v-if="currentTab === 'country'">
                     <FormSelectField v-model="selectedCountryId" placeholder="Please select a country..." :select-data="resources.countries" labelvalue="name" keyvalue="id" imgvalue="imageUrl" />
                     <template v-if="!isOpen">
-                        <div v-if="countryMembers.length > 0">
+                        <div v-if="countryMembers.length > 0" class="overflow-x-auto">
                             <table class="table table-report font-light">
                                 <thead>
                                     <tr class="uppercase text-sm opacity-75">
                                         <th class="text-left">Member</th>
-                                        <th class="text-center">WSA ID</th>
-                                        <th class="text-center">Total Votes</th>
+                                        <th class="text-center whitespace-nowrap">WSA ID</th>
+                                        <th class="text-center whitespace-nowrap">Total Votes</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="row in countryMembers" :key="row.id" class="text-sm">
                                         <td>
-                                            <div class="flex items-center gap-3">
+                                            <div class="flex items-center gap-3 min-w-64">
                                                 <NuxtImg :src="row.imageUrl" class="h-10 !rounded-md w-20 object-contain p-0.5 shrink-0" />
                                                 <div>
                                                     <div class="font-medium">{{ row.name }}</div>

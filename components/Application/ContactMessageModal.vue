@@ -35,14 +35,14 @@ async function openModal(id = null) {
 
 <template>
     <div>
-        <div class="flex items-center justify-between gap-5">
+        <div class="flex flex-col md:flex-row items-center justify-between sm:gap-5 gap-2">
             <div class="flex items-center gap-3">
                 <Icon name="solar:chat-line-line-duotone" class="opacity-75 size-5" />
                 <span class="font-medium">Latest Contact Messages</span>
             </div>
-            <NuxtLink class="text-xs px-2 py-1 rounded-full bg-white border" href="/website-data/network-messages">View More</NuxtLink>
+            <NuxtLink class="text-xs px-2 py-1 rounded-full bg-white border md:w-auto w-full text-center" href="/website-data/network-messages">View More</NuxtLink>
         </div>
-        <div class="overflow-x-auto text-xs">
+        <div class="hidden md:block text-xs">
             <table class="table table-report font-light">
                 <tbody>
                     <template v-if="props.data.length > 0">
@@ -75,7 +75,20 @@ async function openModal(id = null) {
                 </tbody>
             </table>
         </div>
-        <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
+        <div v-if="props.data.length > 0" class="md:hidden flex flex-col gap-3 mt-5">
+            <div v-for="row in props.data" :key="row.id" class="box p-3 text-xs">
+                <div class="space-y-0.5">
+                    <div class="">{{ row.name }}</div>
+                    <div class="font-light truncate opacity-75">{{ row.email }}</div>
+                    <div>{{ row.sentSince }}</div>
+                    <div>{{ row.createdAt }}</div>
+                </div>
+                <button class="mt-5 w-full btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
+                    <Icon name="solar:eye-outline" class="size-4 shrink-0" />
+                </button>
+            </div>
+        </div>
+        <TheModal :open-modal="isOpen" size="sm:5xl" @close-modal="closeModal()">
             <template #header>
                 <div class="flex justify-between items-center">
                     <div class="font-medium" v-html="'View Message'"></div>

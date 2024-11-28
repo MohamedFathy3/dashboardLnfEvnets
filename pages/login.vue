@@ -18,8 +18,8 @@ async function login() {
 <template>
     <div class="container relative">
         <ToastList />
-        <div class="w-full min-h-screen p-5 md:p-20 flex items-center justify-center">
-            <div class="w-96 intro-y">
+        <div class="w-full min-h-dvh p-5 md:p-20 flex items-center justify-center">
+            <div class="sm:w-96 w-80 intro-y">
                 <WSANetworkLogo alt="WSA Consol Dashboard" class="w-64 text-white mx-auto" />
                 <form @submit.prevent="login">
                     <div

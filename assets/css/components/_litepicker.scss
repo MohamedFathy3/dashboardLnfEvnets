@@ -1,13 +1,14 @@
+@use "./_media.scss" as media;
 .litepicker {
     @apply rounded-md bg-white text-sm;
     z-index: 999999 !important;
     margin-top: 7px;
-    box-shadow: 0px 3px 20px #00000014;
-    @include media-breakpoint-down(lg) {
+    box-shadow: 0 3px 20px #00000014;
+    @include media.media-breakpoint-down(lg) {
         width: 310px;
     }
-    @include media-breakpoint-down(sm) {
-        left: 0px !important;
+    @include media.media-breakpoint-down(sm) {
+        left: 0 !important;
         @apply right-0 mx-auto;
     }
 
@@ -15,7 +16,6 @@
         content: "";
         left: 9px;
         top: -7px;
-        border-bottom-color: #f7f7f7;
         border-right: 7px solid transparent;
         border-left: 7px solid transparent;
         border-bottom: 7px solid #e8e8e8;
@@ -39,29 +39,29 @@
 
     .container__footer {
         @apply m-0 border-t border-slate-200/60 p-3;
-        @include media-breakpoint-down(lg) {
+        @include media.media-breakpoint-down(lg) {
             @apply flex flex-col-reverse text-center;
         }
 
         .preview-date-range {
-            @include media-breakpoint-down(lg) {
+            @include media.media-breakpoint-down(lg) {
                 @apply order-1 mb-1.5 block w-full;
             }
         }
 
         .button-cancel {
-            @include media-breakpoint-down(lg) {
+            @include media.media-breakpoint-down(lg) {
                 width: 100% !important;
-                margin-left: 0px !important;
+                margin-left: 0 !important;
                 padding-top: 0.375rem !important;
                 padding-bottom: 0.375rem !important;
             }
         }
 
         .button-apply {
-            @include media-breakpoint-down(lg) {
+            @include media.media-breakpoint-down(lg) {
                 width: 100% !important;
-                margin-left: 0px !important;
+                margin-left: 0 !important;
                 padding-top: 0.375rem !important;
                 padding-bottom: 0.375rem !important;
                 @apply mb-1.5;
@@ -123,11 +123,10 @@
             .button-next-month:hover svg,
             .button-next-month svg {
                 fill: transparent;
-                border: solid black;
+                border: solid #4a5568;
                 border-width: 0 2px 2px 0;
                 border-radius: 0;
                 display: inline-block;
-                border-color: #4a5568;
                 @apply block h-2 w-2;
             }
 
@@ -173,7 +172,7 @@
     }
 }
 
-@include media-breakpoint-down(lg) {
+@include media.media-breakpoint-down(lg) {
     :root {
         --litepicker-day-width: 35px;
     }

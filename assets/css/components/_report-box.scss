@@ -1,16 +1,18 @@
+@use "./_media.scss" as media;
+
 .report-box {
     @apply relative;
 
     &:before {
         content: "";
         width: 96%;
-        box-shadow: 0px 3px 5px #0000000b;
+        box-shadow: 0 3px 5px #0000000b;
         @apply absolute inset-x-0 mx-auto mt-3 h-full rounded-lg border border-slate-200 bg-slate-50 dark:border-darkmode-500/60 dark:bg-darkmode-600/70;
     }
 
     .report-box__item {
         @apply relative;
-        @include media-breakpoint-up(xl) {
+        @include media.media-breakpoint-up(xl) {
             &:not(:last-child) {
                 &:before {
                     content: "";
