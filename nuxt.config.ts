@@ -73,7 +73,6 @@ export default defineNuxtConfig({
                 lang: 'en',
                 dir: 'ltr',
             },
-            script: [{ type: 'text/javascript', src: '//rum-static.pingdom.net/pa-674876df5c6a700012000291.js', async: true }],
         },
         pageTransition: { name: 'page', mode: 'out-in' },
     },
