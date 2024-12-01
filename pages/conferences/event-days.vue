@@ -42,7 +42,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/event-day/index', {
     method: 'POST',
@@ -186,7 +186,7 @@ async function handleModalSubmit() {
                 </tr>
             </thead>
             <tbody>
-                <template v-if="!pending && rows">
+                <template v-if="status !== 'pending' && rows">
                     <tr v-for="row in rows.data" :key="row.id">
                         <td class="font-normal">
                             <div>{{ row.name }}</div>
@@ -213,7 +213,7 @@ async function handleModalSubmit() {
             </tbody>
         </table>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
         <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
             <template #header>
                 <div class="flex justify-between items-center">

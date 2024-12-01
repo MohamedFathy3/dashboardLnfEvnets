@@ -32,11 +32,7 @@ const serverParams = ref({
 const resources = useResourceStore();
 const formLoading = ref(false);
 const isOpen = ref(false);
-const showFilter = ref(false);
 
-function toggleShowMoreFilterOptions() {
-    showFilter.value = !showFilter.value;
-}
 const resetServerParams = async () => {
     filter.value = {
         name: null,

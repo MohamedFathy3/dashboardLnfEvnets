@@ -20,13 +20,13 @@ const membershipTypes = ref([
     { name: 'Non Member', value: 'non_member' },
     { name: 'WSA Team', value: 'wsa_team' },
 ]);
-const orderStatuses = ref([
+const orderStatuses = [
     { name: 'Application Form', value: 'in_application_form' },
     { name: 'Pending Payment', value: 'pending_payment' },
     { name: 'Pending Bank Transfer', value: 'pending_bank_transfer' },
     { name: 'Approved Online Payment', value: 'approved_online_payment' },
     { name: 'Approved Bank Transfer', value: 'approved_bank_transfer' },
-]);
+];
 const serverParams = ref({
     filters: {},
     relationFilter: {
@@ -69,7 +69,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/dashboard/order/index', {
     method: 'POST',
@@ -289,7 +289,7 @@ async function refreshFilterData() {
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-if="!pending && rows">
+                    <template v-if="status !== 'pending' && rows">
                         <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                             <td class="whitespace-nowrap">
                                 <div class="font-medium">{{ row.uuid }}</div>
@@ -353,6 +353,6 @@ async function refreshFilterData() {
             </table>
         </div>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
     </div>
 </template>

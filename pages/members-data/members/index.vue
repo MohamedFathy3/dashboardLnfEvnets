@@ -30,12 +30,12 @@ const membershipTypes = ref([
     { name: 'Non Member', value: 'non_member' },
     { name: 'WSA Team', value: 'wsa_team' },
 ]);
-const membershipStatuses = ref([
+const membershipStatuses = [
     // { name: 'Pending', value: 'pending' },
     { name: 'Approved', value: 'approved' },
     { name: 'Suspended', value: 'suspended' },
     { name: 'Blacklisted', value: 'blacklisted' },
-]);
+];
 const serverParams = ref({
     filters: {},
     networkFilter: {

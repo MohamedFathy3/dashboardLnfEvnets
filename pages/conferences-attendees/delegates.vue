@@ -103,13 +103,13 @@ async function openModal(id) {
     formLoading.value = false;
 }
 const resources = useResourceStore();
-const orderStatuses = ref([
+const orderStatuses = [
     { name: 'Application Form', value: 'in_application_form' },
     { name: 'Pending Payment', value: 'pending_payment' },
     { name: 'Pending Bank Transfer', value: 'pending_bank_transfer' },
     { name: 'Approved Online Payment', value: 'approved_online_payment' },
     { name: 'Approved Bank Transfer', value: 'approved_bank_transfer' },
-]);
+];
 async function forceDeleteItems() {
     const confirmed = confirm('Are you sure you want to delete this item?');
     if (confirmed) {

@@ -44,7 +44,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/benefit/index', {
     method: 'POST',
@@ -261,7 +261,7 @@ async function restoreItems() {
     }
 }
 async function networkStatus() {
-    const itemNetworks = item.value.networks.map((n) => n.networkId);
+    const itemNetworks = item.value.networks?.map((n) => n?.networkId);
     settingStore.networks.forEach((network) => {
         const networkExist = itemNetworks.includes(network.id);
         if (!networkExist) {
@@ -483,7 +483,7 @@ const contentTypes = ref([
                 </tr>
             </thead>
             <tbody>
-                <template v-if="!pending && rows">
+                <template v-if="status !== 'pending' && rows">
                     <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -513,7 +513,7 @@ const contentTypes = ref([
                         </td>
                     </tr>
                 </template>
-                <template v-if="!pending && rows && rows.data.length === 0">
+                <template v-if="status !== 'pending' && rows && rows.data.length === 0">
                     <tr>
                         <td colspan="7">
                             <div class="text-center">
@@ -526,7 +526,7 @@ const contentTypes = ref([
             </tbody>
         </table>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
 
         <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
             <template #header>

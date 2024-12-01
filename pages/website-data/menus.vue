@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { numeric, required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 
@@ -46,7 +46,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/menu/index', {
     method: 'POST',
@@ -220,7 +220,7 @@ async function openChildModal(id = null) {
     isChildOpen.value = true;
 }
 async function updateItem() {
-    const { data, error } = await useApiFetch(`/api/menu/${item.value.id}`, {
+    const { data, error } = await useApiFetch(`/api/menu/${item.value?.id}`, {
         method: 'PATCH',
         body: item,
         lazy: true,
@@ -454,7 +454,7 @@ async function handleChildModalSubmit() {
                 </tr>
             </thead>
             <tbody>
-                <template v-if="!pending && rows">
+                <template v-if="status !== 'pending' && rows">
                     <tr v-for="row in rows.data" :key="row.id">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -489,7 +489,7 @@ async function handleChildModalSubmit() {
             </tbody>
         </table>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
 
         <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
             <template #header>

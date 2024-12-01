@@ -12,6 +12,7 @@ const sortByList = ref([
 ]);
 const filter = ref({
     name: null,
+    type: 'event',
 });
 
 const serverParams = ref({
@@ -34,7 +35,9 @@ const resetServerParams = async () => {
         type: 'event',
     };
     serverParams.value = {
-        filters: {},
+        filters: {
+            type: 'event',
+        },
         orderBy: 'id',
         orderByDirection: 'desc',
         perPage: 25,

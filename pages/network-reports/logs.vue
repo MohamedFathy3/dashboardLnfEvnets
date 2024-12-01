@@ -32,7 +32,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/log/index', {
     method: 'POST',
@@ -97,7 +97,7 @@ const changePage = async (value) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-if="!pending && rows">
+                    <template v-if="status !== 'pending' && rows">
                         <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                             <td class="font-normal">
                                 <div v-if="row.ip">{{ row.ip }}</div>
@@ -136,6 +136,6 @@ const changePage = async (value) => {
             </table>
             <!-- Pagination -->
         </div>
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
     </div>
 </template>

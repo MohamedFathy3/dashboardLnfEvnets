@@ -29,7 +29,7 @@ const editMode = ref(false);
 
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/program/index', {
     method: 'POST',
@@ -354,7 +354,7 @@ const generateTimeOptions = computed(() => {
                 </tr>
             </thead>
             <tbody>
-                <template v-if="!pending && rows">
+                <template v-if="status !== 'pending' && rows">
                     <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -396,7 +396,7 @@ const generateTimeOptions = computed(() => {
             </tbody>
         </table>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
 
         <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
             <template #header>

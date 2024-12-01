@@ -43,7 +43,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/trade-reference/index', {
     method: 'POST',
@@ -261,7 +261,7 @@ const resources = useResourceStore();
                 </tr>
             </thead>
             <tbody>
-                <template v-if="!pending && rows">
+                <template v-if="status !== 'pending' && rows">
                     <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -315,7 +315,7 @@ const resources = useResourceStore();
             </tbody>
         </table>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
         <MemberViewTradeReferenceModal v-if="isOpen" :open="isOpen" :reference-id="selectedId" @close="closeModal" />
     </div>
 </template>

@@ -46,7 +46,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/conference/index', {
     method: 'POST',
@@ -217,7 +217,7 @@ async function openModal(id = null) {
 }
 
 async function updateItem() {
-    const { data, error } = await useApiFetch(`/api/conference/${item.value.id}`, {
+    const { data, error } = await useApiFetch(`/api/conference/${item.value?.id}`, {
         method: 'PATCH',
         body: item,
         lazy: true,
@@ -408,7 +408,7 @@ const formatDate = (dateStr) => {
                 </tr>
             </thead>
             <tbody>
-                <template v-if="!pending && rows">
+                <template v-if="status !== 'pending' && rows">
                     <tr v-for="row in rows.data" :key="row.id">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -457,7 +457,7 @@ const formatDate = (dateStr) => {
             </tbody>
         </table>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
 
         <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
             <template #header>

@@ -1,9 +1,9 @@
-<script setup>
+<script setup lang="ts">
 definePageMeta({
     layout: false,
     middleware: 'guest',
 });
-const credentials = ref({
+const credentials = ref<Credentials>({
     email: null,
     password: null,
 });
@@ -12,7 +12,11 @@ const userStore = useUserStore();
 const route = useRoute();
 const redirectPath = route.query?.redirect;
 async function login() {
-    await userStore.login(credentials.value, redirectPath);
+    if (redirectPath) {
+        await userStore.login(credentials.value, redirectPath);
+    } else {
+        await userStore.login(credentials.value);
+    }
 }
 </script>
 <template>

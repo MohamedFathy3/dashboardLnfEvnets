@@ -42,7 +42,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/contact-person/index', {
     method: 'POST',
@@ -257,7 +257,7 @@ async function restoreItems() {
                 </tr>
             </thead>
             <tbody>
-                <template v-if="!pending && rows">
+                <template v-if="status !== 'pending' && rows">
                     <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -307,7 +307,7 @@ async function restoreItems() {
             </tbody>
         </table>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
         <MemberContactPersonModal v-if="isOpen" :open="isOpen" :person-id="selectedId ? selectedId : null" @close="closeModal" @refresh="refresh" />
     </div>
 </template>

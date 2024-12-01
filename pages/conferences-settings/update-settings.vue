@@ -54,7 +54,6 @@ async function closeModal() {
     resetItem();
 }
 
-const selectedItem = ref({});
 async function openModal(item, fieldId) {
     formLoading.value = true;
     if (item) {

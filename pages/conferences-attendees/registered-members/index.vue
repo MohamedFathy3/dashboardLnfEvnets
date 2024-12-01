@@ -29,13 +29,13 @@ const membershipTypes = ref([
     { name: 'Non Member', value: 'non_member' },
     { name: 'WSA Team', value: 'wsa_team' },
 ]);
-const orderStatuses = ref([
+const orderStatuses = [
     { name: 'Application Form', value: 'in_application_form' },
     { name: 'Pending Payment', value: 'pending_payment' },
     { name: 'Pending Bank Transfer', value: 'pending_bank_transfer' },
     { name: 'Approved Online Payment', value: 'approved_online_payment' },
     { name: 'Approved Bank Transfer', value: 'approved_bank_transfer' },
-]);
+];
 const serverParams = ref({
     filters: {},
     relationFilter: {

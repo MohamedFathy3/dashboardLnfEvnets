@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 
@@ -6,7 +6,7 @@ definePageMeta({
     middleware: 'auth',
 });
 const route = useRoute();
-const slug = ref(route.params.slug);
+const slug = ref(route.params?.slug as string);
 const loadingPage = ref(true);
 const formLoading = ref(false);
 const isOpen = ref(false);
@@ -133,10 +133,10 @@ const buttonTargets = ref([
     { name: 'Self (Same Tab)', id: '_self' },
     { name: 'New Tab', id: '_blank' },
 ]);
-const dividerStyles = ref([
-    { name: 'Default', id: 'default' },
-    { name: 'Alternative', id: 'alternative' },
-]);
+// const dividerStyles = ref([
+//     { name: 'Default', id: 'default' },
+//     { name: 'Alternative', id: 'alternative' },
+// ]);
 
 const fetchChildren = async (id) => {
     const { data, error } = await useApiFetch(`/api/event-section-page/${id}`, {
@@ -286,21 +286,21 @@ async function updateChildrenItem() {
         useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
     }
 }
-async function addSubChild() {
-    const { data, error } = await useApiFetch(`/api/event-item`, {
-        method: 'POST',
-        body: subChild,
-        lazy: true,
-    });
-    if (data.value) {
-        useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
-        await closeModal();
-        await refresh();
-    }
-    if (error.value) {
-        useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
-    }
-}
+// async function addSubChild() {
+//     const { data, error } = await useApiFetch(`/api/event-item`, {
+//         method: 'POST',
+//         body: subChild,
+//         lazy: true,
+//     });
+//     if (data.value) {
+//         useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
+//         await closeModal();
+//         await refresh();
+//     }
+//     if (error.value) {
+//         useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
+//     }
+// }
 async function handleModalSubmit() {
     formLoading.value = true;
     const result = await v$.value.$validate();
@@ -324,21 +324,21 @@ async function handleChildrenModalSubmit() {
     formLoading.value = false;
 }
 
-async function handleSubChildrenModalSubmit() {
-    formLoading.value = true;
-    const result = await s$.value.$validate();
-    if (!result) {
-        formLoading.value = false;
-        return false;
-    }
-    if (editModeSubChild) {
-        await updateChildrenItem();
-    } else {
-        await addSubChild();
-    }
-    await closeSubChildModal();
-    formLoading.value = false;
-}
+// async function handleSubChildrenModalSubmit() {
+//     formLoading.value = true;
+//     const result = await s$.value.$validate();
+//     if (!result) {
+//         formLoading.value = false;
+//         return false;
+//     }
+//     if (editModeSubChild) {
+//         await updateChildrenItem();
+//     } else {
+//         await addSubChild();
+//     }
+//     await closeSubChildModal();
+//     formLoading.value = false;
+// }
 
 async function initPageData() {
     await execute();
@@ -353,23 +353,23 @@ async function refreshPageData() {
         item.value = data.value.data;
     }
 }
-async function deleteItems() {
-    const confirmed = confirm('Are you sure you want to delete this item?');
-    if (confirmed) {
-        const { data, error } = await useApiFetch(`/api/certificate/delete`, {
-            body: { items: selectedRows.value },
-            method: 'DELETE',
-            lazy: true,
-        });
-        if (data.value) {
-            useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
-            await refresh();
-        }
-        if (error.value) {
-            useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
-        }
-    }
-}
+// async function deleteItems() {
+//     const confirmed = confirm('Are you sure you want to delete this item?');
+//     if (confirmed) {
+//         const { data, error } = await useApiFetch(`/api/certificate/delete`, {
+//             body: { items: selectedRows.value },
+//             method: 'DELETE',
+//             lazy: true,
+//         });
+//         if (data.value) {
+//             useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
+//             await refresh();
+//         }
+//         if (error.value) {
+//             useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
+//         }
+//     }
+// }
 onMounted(async () => {
     loadingPage.value = true;
     await resetItemValues();

@@ -18,7 +18,7 @@ function openUpdateModal() {
 function closeUpdateModal() {
     updateModalOpen.value = false;
 }
-const { data: company, refresh } = await useApiFetch(`/api/user/${route.params.id}`, {
+const { data: company, refresh } = await useApiFetch(`/api/user/${route.params?.id}`, {
     lazy: true,
     transform: (company) => company.data,
 });

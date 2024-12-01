@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 
@@ -12,12 +12,11 @@ const sortByList = ref([
 ]);
 const filter = ref({
     name: null,
+    type: 'network',
 });
 
 const serverParams = ref({
-    filters: {
-        type: 'network',
-    },
+    filters: {},
     orderBy: 'id',
     orderByDirection: 'desc',
     perPage: 25,
@@ -47,7 +46,7 @@ const resetServerParams = async () => {
 };
 const {
     data: rows,
-    pending,
+    status,
     refresh,
 } = await useApiFetch('/api/email-template/index', {
     method: 'POST',
@@ -267,7 +266,7 @@ async function restoreItems() {
     }
 }
 
-const showExamplesLinks = ref([
+const showExamplesLinks = [
     { path: '/mail-template/cancel-one-to-one/show-example', slug: 'one_to_one_cancel_request_email_template' },
     { path: '/mail-template/event-application/show-example', slug: 'conference_new_application_confirmation_email_template' },
     { path: '/mail-template/status-approved/show-example', slug: 'conference_payment_confirmation_email_template' },
@@ -276,7 +275,7 @@ const showExamplesLinks = ref([
     { path: '/mail-template/reset-password/show-example', slug: 'event_reset_password_email_template' },
     { path: '/mail-template/receiver-mail/show-example', slug: 'one_to_one_receiver_request_email_template' },
     { path: '/mail-template/sender-mail/show-example', slug: 'one_to_one_sender_request_email_template' },
-]);
+];
 
 const config = useRuntimeConfig();
 </script>
@@ -351,7 +350,7 @@ const config = useRuntimeConfig();
                 </tr>
             </thead>
             <tbody>
-                <template v-if="!pending && rows">
+                <template v-if="status !== 'pending' && rows">
                     <tr v-for="row in rows.data" :key="row.id" class="text-sm">
                         <td>
                             <input :checked="isSelected(row.id)" type="checkbox" class="form-check-input" @change="toggleRowSelection(row.id)" />
@@ -381,7 +380,7 @@ const config = useRuntimeConfig();
             </tbody>
         </table>
         <!-- Pagination -->
-        <TablePagination :pending="pending" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+        <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
 
         <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
             <template #header>
@@ -402,8 +401,8 @@ const config = useRuntimeConfig();
             <template #footer>
                 <div class="w-full flex items-center justify-end gap-5">
                     <div class="justify-start">
-                        <a :href="config.public.apiUrl + showExamplesLinks.find((e) => e.slug === item.slug)?.path" target="_blank">
-                            <button v-if="showExamplesLinks.find((e) => e.slug === item.slug)?.path" class="btn-rounded btn-sm btn btn-success px-4" type="button">
+                        <a :href="config.public.apiUrl + showExamplesLinks?.find((e) => e?.slug === item.slug)?.path" target="_blank">
+                            <button v-if="showExamplesLinks.find((e) => e?.slug === item.slug)?.path" class="btn-rounded btn-sm btn btn-success px-4" type="button">
                                 <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:eye-linear'" class="w-5 h-5 mr-2" />
                                 <span>View Sample</span>
                             </button>
