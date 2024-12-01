@@ -80,7 +80,6 @@ const approvedDelegatesByUserType = ref<PieChartApiData>();
 onMounted(async () => {
     loadingOverview.value = true;
     await fetchOverViewData();
-    console.log('Overview', overview.value);
     if (overview.value) {
         statistics.value = overview.value.statistics;
         paymentsPerMonth.value = overview.value.paymentsPerMonth;

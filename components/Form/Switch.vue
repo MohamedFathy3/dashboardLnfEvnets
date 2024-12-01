@@ -48,8 +48,8 @@ const props = defineProps({
         default: 'checkbox',
     },
     modelValue: {
-        type: Object,
-        default: null,
+        type: Boolean,
+        default: false,
     },
     flexTitle: {
         type: Boolean,

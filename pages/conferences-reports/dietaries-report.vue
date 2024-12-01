@@ -50,12 +50,12 @@ const setting = useSettingsStore();
                             <template v-if="data && data.length > 0">
                                 <tr v-for="row in data" :key="row.id" class="text-sm">
                                     <td class="font-normal">
-                                        <div class="flex items-center gap-3 whitespace-nowrap">
-                                            <NuxtImg :src="row.imageUrl" :alt="row.name" :title="row.name" class="size-14 object-cover !rounded-full ring ring-slate-500/25" />
-                                            <div class="space-y-0.5">
-                                                <div>{{ row.name }}</div>
-                                                <div class="text-xs font-light capitalize">{{ row.type }}</div>
-                                                <div class="text-xs font-light truncate line-clamp-1">{{ row.company.name }}</div>
+                                        <div class="flex items-center gap-3 whitespace-nowrap text-xs">
+                                            <NuxtImg :src="row.imageUrl" :alt="row.name" :title="row.name" class="size-12 object-cover !rounded-full ring-1 ring-slate-500/25" />
+                                            <div>
+                                                <div class="truncate capitalize max-w-40">{{ row.name?.toLowerCase() }}</div>
+                                                <div class="font-light capitalize">{{ row.type }}</div>
+                                                <div class="font-light truncate max-w-40">{{ row.company?.name }}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -67,7 +67,7 @@ const setting = useSettingsStore();
                                             </div>
                                         </td>
                                     </template>
-                                    <td>{{ row.extraDietaries }}</td>
+                                    <td class="text-xs font-medium">{{ row.extraDietaries }}</td>
                                 </tr>
                             </template>
                             <template v-else>

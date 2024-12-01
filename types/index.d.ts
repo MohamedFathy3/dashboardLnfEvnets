@@ -425,12 +425,13 @@ type Role = {
     permissions: string[];
 };
 type Admin = {
-    id: number;
-    name: string;
-    email: string;
+    id?: number;
+    name: string | undefined;
+    password?: string;
+    email: string | undefined;
     superAdmin: boolean;
     roleId: number | undefined;
-    role: Role;
+    role?: Role;
 };
 type ToastItem = {
     title: string | undefined;
