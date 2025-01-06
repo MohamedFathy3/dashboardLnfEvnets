@@ -57,6 +57,14 @@ const menuItems = ref<SideBarMenu[]>([
                 icon: 'solar:multiple-forward-left-linear',
                 subMenus: [],
                 permission: ['network_referral_list'],
+            }, 
+            
+            {
+                name: 'Test',
+                path: '/master-data/test-certificates',
+                icon: 'solar:multiple-forward-left-linear',
+                subMenus: [],
+                permission: [],
             },
         ],
     },
