@@ -14,10 +14,11 @@ const menuItems = ref<SideBarMenu[]>([
         name: 'Network Reports',
         path: '/network-reports',
         icon: 'solar:chart-linear',
-        permission: ['network_report_vote_list', 'network_report_log_list', 'network_report_visit_list'],
+        permission: ['network_report_vote_list', 'network_report_log_list', 'network_report_visit_list', 'network_report_countries_capacity'],
         subMenus: [
             { name: 'Votes', path: '/network-reports/votes', icon: 'solar:chart-square-linear', subMenus: [], permission: ['network_report_vote_list'] },
             { name: 'Logs', path: '/network-reports/logs', icon: 'solar:checklist-line-duotone', subMenus: [], permission: ['network_report_log_list'] },
+            { name: 'Countries Capacity', path: '/network-reports/countries-capacity', icon: 'solar:planet-3-outline', subMenus: [], permission: ['network_report_countries_capacity'] },
             {
                 name: 'Visits',
                 path: '/network-reports/visits',
@@ -57,14 +58,6 @@ const menuItems = ref<SideBarMenu[]>([
                 icon: 'solar:multiple-forward-left-linear',
                 subMenus: [],
                 permission: ['network_referral_list'],
-            }, 
-            
-            {
-                name: 'Test',
-                path: '/master-data/test-certificates',
-                icon: 'solar:multiple-forward-left-linear',
-                subMenus: [],
-                permission: [],
             },
         ],
     },
@@ -575,14 +568,14 @@ const isSidebarMenuItem = (item: SideBarMenu): item is SidebarMenuItem => typeof
     <div class="text-white/75 sm:p-5 p-3 flex flex-col gap-8 sm:h-screen min-h-screen duration-300 ease-in-out">
         <div :class="[open ? 'flex items-center justify-between gap-5 px-4' : 'px-4']">
             <div :class="['flex items-center gap-3 place-content-center']">
-                <Icon v-if="open" class="size-7" name="solar:asteroid-linear" />
+                <Icon v-if="open" class="size-7 shrink-0" name="solar:asteroid-linear" />
                 <div v-if="open" class="text-lg">
                     <span class="text-white">{{ settingStore.network?.name }}</span>
                     <span class="text-[0.65rem] font-light align-super ml-2 opacity-75">v1.0.3</span>
                 </div>
             </div>
-            <Icon v-if="!open" class="size-5 mx-auto cursor-pointer" name="solar:round-alt-arrow-right-linear" @click="emit('toggleSidebar')" />
-            <Icon v-if="open" class="size-5 cursor-pointer hover:text-white" name="solar:round-alt-arrow-left-linear" @click="emit('toggleSidebar')" />
+            <Icon v-if="!open" class="size-5 shrink-0 mx-auto cursor-pointer" name="solar:round-alt-arrow-right-linear" @click="emit('toggleSidebar')" />
+            <Icon v-if="open" class="size-5 shrink-0 cursor-pointer hover:text-white" name="solar:round-alt-arrow-left-linear" @click="emit('toggleSidebar')" />
         </div>
         <div class="relative px-3 scrollbar-w-2 scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar scrollbar-thumb-white/25 overflow-y-hidden hover:overflow-y-auto">
             <ul class="flex flex-col gap-2 font-light text-sm mb-12">
@@ -604,12 +597,12 @@ const isSidebarMenuItem = (item: SideBarMenu): item is SidebarMenuItem => typeof
                                 @click="toggleSubMenuOpen(item.path)"
                             >
                                 <div class="items-center flex gap-2">
-                                    <Icon :name="item.icon" class="size-5 opacity-75" />
+                                    <Icon :name="item.icon" class="size-5 opacity-75 shrink-0" />
                                     <div v-if="open">{{ item.name }}</div>
                                 </div>
                                 <Icon
                                     v-if="item.subMenus?.length > 0 && open"
-                                    :class="[activeMenuItem === item.path || item.subMenus.some((m) => m.path === activeMenuItem) ? 'rotate-90' : '', 'size-4 ease-in-out duration-300 opacity-75']"
+                                    :class="[activeMenuItem === item.path || item.subMenus.some((m) => m.path === activeMenuItem) ? 'rotate-90' : '', 'shrink-0 size-4 ease-in-out duration-300 opacity-75']"
                                     name="solar:alt-arrow-down-line-duotone"
                                 />
                                 <div v-if="!open" class="amj__tooltip-content">
@@ -630,10 +623,10 @@ const isSidebarMenuItem = (item: SideBarMenu): item is SidebarMenuItem => typeof
                                                     :to="subItem.path"
                                                 >
                                                     <div class="items-center flex gap-2">
-                                                        <Icon :name="subItem.icon" class="size-5 opacity-75" />
+                                                        <Icon :name="subItem.icon" class="size-5 opacity-75 shrink-0" />
                                                         <div v-if="open">{{ subItem.name }}</div>
                                                     </div>
-                                                    <Icon v-if="subItem.subMenus.length > 0 && open" class="size-4 opacity-75" name="solar:alt-arrow-down-line-duotone" />
+                                                    <Icon v-if="subItem.subMenus.length > 0 && open" class="size-4 shrink-0 opacity-75" name="solar:alt-arrow-down-line-duotone" />
                                                     <div v-if="!open" class="amj__tooltip-content">
                                                         <span class="amj__tooltip-text">{{ subItem.name }}</span>
                                                     </div>

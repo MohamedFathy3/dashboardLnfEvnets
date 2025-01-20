@@ -104,7 +104,6 @@ const handleModalSubmit = async () => {
             value: settingValue,
         };
     });
-    console.log(childrenValue);
     const { data, error } = await useApiFetch(`/api/setting-event/section-update`, {
         method: 'POST',
         body: {
@@ -172,7 +171,7 @@ const handleModalSubmit = async () => {
                         <template v-if="field.type === 'color-picker'">
                             <div class="flex justify-between gap-6">
                                 <div class="form-label">{{ field.label }}</div>
-                                <ColorPicker v-model:pureColor="field.value" :disabled="!usePermissionCheck(['conference_setting_update'])" picker-type="chrome" format="rgb" shape="square" lang="En" :debounce="1" picker-container="div" />
+                                <ColorPicker v-model:pure-color="field.value" :disabled="!usePermissionCheck(['conference_setting_update'])" picker-type="chrome" format="rgb" shape="square" lang="En" :debounce="1" picker-container="div" />
                             </div>
                         </template>
                         <template v-if="field.type === 'button'">

@@ -114,6 +114,7 @@ const item = ref({
     name: null,
     key: null,
     orderId: null,
+    capacity: 4,
     code: null,
     active: true,
     image: null,
@@ -121,6 +122,7 @@ const item = ref({
 const rules = ref({
     name: { required },
     key: { required },
+    capacity: { required, numeric },
     orderId: { numeric },
     code: { required },
     active: {},
@@ -143,6 +145,7 @@ const resetItemValues = async () => {
         name: null,
         key: null,
         orderId: null,
+        capacity: 4,
         code: null,
         active: true,
         image: null,
@@ -339,6 +342,7 @@ async function restoreItems() {
                     </th>
                     <th class="text-left">Name</th>
                     <th>Key</th>
+                    <th>Capacity</th>
                     <th class="text-center">Active</th>
                     <th v-if="serverParams.deleted">Deleted At</th>
                     <th class="text-right">Action</th>
@@ -360,6 +364,7 @@ async function restoreItems() {
                             </div>
                         </td>
                         <td>+{{ row.key }}</td>
+                        <td>{{ row.capacity }}</td>
                         <td>
                             <div data-tw-merge class="flex items-center place-content-center" @change="useToggleSwitch(row.id, 'active', 'country')">
                                 <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="!usePermissionCheck(['country_update']) || serverParams.deleted" />
@@ -378,7 +383,7 @@ async function restoreItems() {
                 </template>
                 <template v-else>
                     <tr v-for="i in serverParams.perPage" :key="i">
-                        <td colspan="5">
+                        <td colspan="6">
                             <div class="h-12 !opacity-50 animate-pulse" />
                         </td>
                     </tr>
@@ -403,7 +408,8 @@ async function restoreItems() {
                         <FormInputField v-model="item.name" :errors="v$.name.$errors" class="lg:col-span-12" label="Name" name="name" placeholder="Name" />
                         <FormInputField v-model="item.key" :errors="v$.key.$errors" class="lg:col-span-6" label="Key" name="key" placeholder="Key" />
                         <FormInputField v-model="item.code" :errors="v$.code.$errors" class="lg:col-span-6" label="Code" name="code" placeholder="Code" />
-                        <FormInputField v-model="item.orderId" :errors="v$.orderId.$errors" class="lg:col-span-12" label="Order" name="order-id" placeholder="Order Number" />
+                        <FormInputField v-model="item.capacity" :errors="v$.capacity.$errors" class="lg:col-span-6" label="Capacity" name="capacity" placeholder="Capacity" />
+                        <FormInputField v-model="item.orderId" :errors="v$.orderId.$errors" class="lg:col-span-6" label="Order" name="order-id" placeholder="Order Number" />
                     </div>
                 </div>
             </template>

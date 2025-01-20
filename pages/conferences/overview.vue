@@ -5,7 +5,7 @@
                 <Icon name="solar:chart-2-outline" class="size-5 opacity-75" />
                 <div>Conference Overview</div>
             </div>
-            <ConferenceSwitcher @reload="fetchOverViewData" />
+            <ConferenceSwitcher @reload="reFetchData" />
         </div>
         <ConferenceOldWarning />
         <div v-if="usePermissionCheck(['conference_overview_list'])">
@@ -61,7 +61,11 @@ import colors from 'tailwindcss/colors';
 definePageMeta({
     middleware: 'auth',
 });
-const { data: overview, execute: fetchOverViewData } = await useApiFetch<ConferenceOverview>('/api/event/dashboard/overview', {
+const {
+    data: overview,
+    execute: fetchOverViewData,
+    refresh,
+} = await useApiFetch<ConferenceOverview>('/api/event/dashboard/overview', {
     immediate: false,
     lazy: true,
 });
@@ -77,7 +81,7 @@ const approvedMembersByTypeCount = ref<PieChartApiData>();
 const orderStatusCount = ref<PieChartApiData>();
 const approvedDelegatesByUserType = ref<PieChartApiData>();
 
-onMounted(async () => {
+const reFetchData = async () => {
     loadingOverview.value = true;
     await fetchOverViewData();
     if (overview.value) {
@@ -94,6 +98,9 @@ onMounted(async () => {
     }
     await loadPageData();
     loadingOverview.value = false;
+};
+onMounted(async () => {
+    await reFetchData();
 });
 // Final Preparation Data Objects
 const conferenceInfoBoxes = ref();
