@@ -239,6 +239,10 @@ function getLastOrderAmount(id) {
     }
     return lastOrderAmountFromOrders;
 }
+const reloadData = async () => {
+    await prepareInfoBoxes();
+    await refresh();
+};
 </script>
 <template>
     <div v-if="usePermissionCheck(['conference_member_list'])" class="flex flex-col gap-8">
@@ -259,7 +263,7 @@ function getLastOrderAmount(id) {
                     </button>
                 </template>
                 <LazyMemberExportOptions v-if="usePermissionCheck(['conference_member_export'])" />
-                <ConferenceSwitcher @reload="refresh" />
+                <ConferenceSwitcher @reload="reloadData" />
             </div>
         </div>
         <!-- Network Members Statistics -->

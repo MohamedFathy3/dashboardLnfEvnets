@@ -164,6 +164,10 @@ async function refreshFilterData() {
     serverParams.value.page = 1;
     await refresh();
 }
+const reloadData = async () => {
+    await prepareInfoBoxes();
+    await refresh();
+};
 </script>
 <template>
     <div v-if="usePermissionCheck(['conference_order_list'])" class="flex flex-col gap-8">
@@ -173,7 +177,7 @@ async function refreshFilterData() {
                 <Icon name="solar:clipboard-list-linear" class="size-5 opacity-75" />
                 <div>Orders</div>
             </div>
-            <ConferenceSwitcher @reload="refresh" />
+            <ConferenceSwitcher @reload="reloadData" />
         </div>
         <ConferenceOldWarning />
         <!-- Network Members Statistics -->
