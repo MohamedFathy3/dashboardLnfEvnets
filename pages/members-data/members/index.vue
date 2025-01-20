@@ -25,10 +25,7 @@ const networkFilter = ref({
 const membershipTypes = ref([
     { name: 'Member', value: 'member' },
     { name: 'Founder', value: 'founder' },
-    { name: 'Partner', value: 'partner' },
     { name: 'Vendor', value: 'vendor' },
-    { name: 'Non Member', value: 'non_member' },
-    { name: 'WSA Team', value: 'wsa_team' },
 ]);
 const membershipStatuses = [
     // { name: 'Pending', value: 'pending' },

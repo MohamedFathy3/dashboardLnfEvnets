@@ -106,10 +106,11 @@ const initDownloadByType = async () => {
                     v-for="listItem in list"
                     :key="listItem.id"
                     :class="listItem.id === selectedList ? 'btn-primary' : 'btn-secondary opacity-50 hover:opacity-100'"
-                    class="text-center btn btn-primary btn-rounded py-1 px-6 w-full"
+                    class="text-center btn btn-primary btn-rounded py-1 px-6 w-full flex gap-5"
                     @click="changeSelectedList(listItem.id)"
                 >
-                    {{ listItem.name }}
+                    <div>{{ listItem.name }}</div>
+                    <span v-if="!listLoading && listItem.id === selectedList" class="bg-white rounded-full text-slate-800 py-0.25 px-1 font-semibold">{{ rows.length }}</span>
                 </li>
             </ul>
         </div>
