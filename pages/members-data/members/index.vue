@@ -315,41 +315,48 @@ function openModal() {
 <template>
     <div v-if="usePermissionCheck(['network_member_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
-        <div class="md:flex md:items-center md:justify-between md:gap-5">
+        <div class="lg:flex lg:items-center lg:justify-between md:gap-5">
             <div class="flex items-center gap-2">
                 <Icon name="solar:case-minimalistic-linear" class="size-5 opacity-75" />
                 <div>{{ serverParams.deleted ? 'Deleted Members' : 'Members' }}</div>
             </div>
-            <div class="flex md:flex-row flex-col md:items-center md:gap-5 md:space-y-0 space-y-5">
-                <button v-if="usePermissionCheck(['network_member_export'])" class="btn btn-dark btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" type="button" @click="onExport">
+            <div class="flex lg:flex-row flex-col lg:items-center lg:gap-5 lg:space-y-0 space-y-5">
+                <NuxtLink :href="config.public.apiUrl + '/export-pdf/get-user-report/download'">
+                    <button v-if="usePermissionCheck(['network_member_export'])" class="btn btn-dark btn-rounded px-6 btn-sm gap-3 lg:w-fit w-full lg:mt-0 mt-5" type="button">
+                        <Icon name="solar:download-outline" class="size-5 opacity-75" />
+                        <span>WSA Sheet</span>
+                    </button>
+                </NuxtLink>
+
+                <button v-if="usePermissionCheck(['network_member_export'])" class="btn btn-dark btn-rounded px-6 btn-sm gap-3 lg:w-fit w-full lg:mt-0 mt-5" type="button" @click="onExport">
                     <Icon name="solar:download-outline" class="size-5 opacity-75" />
                     <span>Export XLSX</span>
                 </button>
-                <button v-if="usePermissionCheck(['network_member_export'])" class="btn btn-dark btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" type="button" @click="openModal">
+                <button v-if="usePermissionCheck(['network_member_export'])" class="btn btn-dark btn-rounded px-6 btn-sm gap-3 lg:w-fit w-full lg:mt-0 mt-5" type="button" @click="openModal">
                     <Icon name="solar:download-outline" class="size-5 opacity-75" />
                     <span>Export By Category</span>
                 </button>
                 <template v-if="selectedRows.length > 0">
                     <template v-if="serverParams.deleted">
-                        <button v-if="usePermissionCheck(['network_member_force_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
+                        <button v-if="usePermissionCheck(['network_member_force_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 lg:w-fit w-full lg:mt-0 mt-5" @click="forceDeleteItems">
                             <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
                             Delete Permanently
                         </button>
                     </template>
                     <template v-else>
-                        <button v-if="usePermissionCheck(['network_member_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
+                        <button v-if="usePermissionCheck(['network_member_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 lg:w-fit w-full lg:mt-0 mt-5" @click="deleteItems">
                             <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
                             Delete Items
                         </button>
                     </template>
                     <template v-if="serverParams.deleted">
-                        <button v-if="usePermissionCheck(['network_member_restore'])" class="btn btn-success btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="restoreItems">
+                        <button v-if="usePermissionCheck(['network_member_restore'])" class="btn btn-success btn-rounded px-6 btn-sm gap-3 lg:w-fit w-full lg:mt-0 mt-5" @click="restoreItems">
                             <Icon name="solar:restart-circle-outline" class="size-5 opacity-75" />
                             Restore Items
                         </button>
                     </template>
                 </template>
-                <button v-if="usePermissionCheck(['network_member_force_delete', 'network_member_delete', 'network_member_restore'])" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
+                <button v-if="usePermissionCheck(['network_member_force_delete', 'network_member_delete', 'network_member_restore'])" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 lg:w-fit w-full lg:mt-0 mt-5" @click="toggleDeleted">
                     <Icon :name="serverParams.deleted ? 'solar:hamburger-menu-line-duotone' : 'solar:trash-bin-minimalistic-line-duotone'" class="size-5 opacity-75" />
                     {{ serverParams.deleted ? 'Active Members List' : 'Deleted Members' }}
                 </button>

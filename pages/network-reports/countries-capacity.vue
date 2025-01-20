@@ -88,7 +88,7 @@ const initDownloadByType = async () => {
 };
 </script>
 <template>
-    <div v-if="usePermissionCheck(['network_report_countries_capacity'])" class="flex flex-col gap-8">
+    <div v-if="usePermissionCheck(['network_report_countries_capacity_list'])" class="flex flex-col gap-8">
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">

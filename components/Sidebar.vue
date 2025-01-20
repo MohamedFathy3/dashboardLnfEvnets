@@ -423,8 +423,15 @@ const menuItems = ref<SideBarMenu[]>([
         name: 'Conference Reports',
         path: '/conferences-reports',
         icon: 'solar:chart-linear',
-        permission: ['conference_report_one_to_one_list', 'conference_report_room_list', 'conference_report_dietary_list', 'conference_report_shirt_list'],
+        permission: ['conference_report_one_to_one_list', 'conference_report_member_by_category', 'conference_report_room_list', 'conference_report_dietary_list', 'conference_report_shirt_list'],
         subMenus: [
+            {
+                name: 'Events Att. Report',
+                path: '/conferences-reports/members-category-report',
+                icon: 'solar:users-group-two-rounded-line-duotone',
+                subMenus: [],
+                permission: ['conference_report_member_by_category'],
+            },
             {
                 name: 'One to One Report',
                 path: '/conferences-reports/one-to-one-report',
