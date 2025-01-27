@@ -20,6 +20,9 @@
                 <div class="lg:col-span-12 intro-x">
                     <ChartBarFive :chart-data-values="ordersStatusesPerMonth.data" :chart-labels="ordersStatusesPerMonth.labels" :section-heading="ordersStatusesPerMonth.sectionHeading" icon="solar:graph-outline" />
                 </div>
+                <div class="lg:col-span-12 intro-x">
+                    <ChartBarFive :chart-data-values="ordersStatusesPerMonthPivot.data" :chart-labels="ordersStatusesPerMonthPivot.labels" :section-heading="ordersStatusesPerMonthPivot.sectionHeading" icon="solar:graph-outline" />
+                </div>
                 <div class="lg:col-span-6 intro-x">
                     <ChartLineSix
                         :chart-data-values="registeredCompaniesByMonthData.data"
@@ -75,6 +78,7 @@ const paymentsPerMonth = ref<ChartPaymentsPerMonth>();
 const registeredCompaniesByMonth = ref<ChartPaymentsPerMonth>();
 const ordersCountPerMonth = ref<ChartPaymentsPerMonth>();
 const ordersStatusCountPerMonth = ref<ChartPaymentsPerMonth>();
+const ordersStatusCountPerMonthPivot = ref<ChartPaymentsPerMonth>();
 const topVisitsByCountry = ref<Visit>();
 const approvedMembersCountryCount = ref<Visit>();
 const approvedMembersByTypeCount = ref<PieChartApiData>();
@@ -90,6 +94,7 @@ const reFetchData = async () => {
         registeredCompaniesByMonth.value = overview.value.registeredCompaniesByMonth;
         ordersCountPerMonth.value = overview.value.ordersCountPerMonth;
         ordersStatusCountPerMonth.value = overview.value.ordersStatusCountPerMonth;
+        ordersStatusCountPerMonthPivot.value = overview.value.ordersStatusCountPerMonthPivot;
         topVisitsByCountry.value = overview.value.topVisitsByCountry;
         approvedMembersCountryCount.value = overview.value.approvedMembersCountryCount;
         approvedMembersByTypeCount.value = overview.value.approvedMembersByTypeCount;
@@ -107,6 +112,7 @@ const conferenceInfoBoxes = ref();
 const ordersPaymentChart = ref();
 const ordersCountChart = ref();
 const ordersStatusesPerMonth = ref();
+const ordersStatusesPerMonthPivot = ref();
 const membersByType = ref();
 const orderStatuses = ref();
 const registeredCompaniesByMonthData = ref();
@@ -190,6 +196,19 @@ async function prepareOrderStatusesPerMonthChart() {
         ],
     };
 }
+async function prepareOrderStatusesPerMonthChartPivot() {
+    ordersStatusesPerMonthPivot.value = {
+        sectionHeading: 'Orders Status Timeline',
+        labels: ordersStatusCountPerMonthPivot.value?.months,
+        data: [
+            { data: ordersStatusCountPerMonthPivot.value?.months_number.in_application_form, label: 'Application Form' },
+            { data: ordersStatusCountPerMonthPivot.value?.months_number.pending_payment, label: 'Pending Payment' },
+            { data: ordersStatusCountPerMonthPivot.value?.months_number.pending_bank_transfer, label: 'Requested Bank Transfer' },
+            { data: ordersStatusCountPerMonthPivot.value?.months_number.approved_bank_transfer, label: 'Approved Bank Transfer' },
+            { data: ordersStatusCountPerMonthPivot.value?.months_number.approved_online_payment, label: 'Online Payment' },
+        ],
+    };
+}
 async function prepareMembersByTypePieChart() {
     membersByType.value = {
         label: approvedMembersByTypeCount.value?.label,
@@ -216,6 +235,7 @@ async function loadPageData() {
     await preparePaymentChart();
     await prepareOrdersChart();
     await prepareOrderStatusesPerMonthChart();
+    await prepareOrderStatusesPerMonthChartPivot();
     await prepareMembersByTypePieChart();
     await prepareOrdersByStatusPieChart();
     await prepareRegCompaniesByMonthChart();

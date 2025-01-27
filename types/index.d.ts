@@ -237,6 +237,7 @@ type ConferenceOverview = {
     registeredCompaniesByMonth: ChartPaymentsPerMonth;
     ordersCountPerMonth: ChartPaymentsPerMonth;
     ordersStatusCountPerMonth: ChartPaymentsPerMonth;
+    ordersStatusCountPerMonthPivot: ChartPaymentsPerMonth;
     topVisitsByCountry: Visit;
     approvedMembersCountryCount: Visit;
     approvedMembersByTypeCount: PieChartApiData;

@@ -198,6 +198,7 @@ const menuItems = ref<SideBarMenu[]>([
                 permission: ['network_trade_reference_list'],
             },
             { name: 'Groups', path: '/members-data/groups', icon: 'solar:link-square-line-duotone', subMenus: [], permission: ['network_group_list'] },
+            { name: 'Claim Forms', path: '/members-data/claim-forms', icon: 'solar:square-transfer-horizontal-broken', subMenus: [], permission: ['network_claim_form_list'] },
         ],
     },
     {
