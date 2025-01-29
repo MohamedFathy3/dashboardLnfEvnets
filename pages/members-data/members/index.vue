@@ -321,7 +321,7 @@ function openModal() {
                 <div>{{ serverParams.deleted ? 'Deleted Members' : 'Members' }}</div>
             </div>
             <div class="flex lg:flex-row flex-col lg:items-center lg:gap-5 lg:space-y-0 space-y-5">
-                <NuxtLink :href="config.public.apiUrl + '/export-pdf/get-user-report/download'">
+                <NuxtLink target="_blank" :href="config.public.apiUrl + '/export-pdf/get-user-report/download'">
                     <button v-if="usePermissionCheck(['network_member_export'])" class="btn btn-dark btn-rounded px-6 btn-sm gap-3 lg:w-fit w-full lg:mt-0 mt-5" type="button">
                         <Icon name="solar:download-outline" class="size-5 opacity-75" />
                         <span>WSA Sheet</span>
