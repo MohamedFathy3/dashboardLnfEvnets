@@ -365,7 +365,7 @@ async function restoreItems() {
                             </td>
                             <td>
                                 <div data-tw-merge @change="useToggleSwitch(row.id, 'collection', 'network')">
-                                    <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="!usePermissionCheck(['network_update']) || serverParams.deleted" />
+                                    <FormSwitch :id="'row-collection-' + row.id" v-model="row.collection" :disabled="!usePermissionCheck(['network_update']) || serverParams.deleted" />
                                 </div>
                             </td>
                             <td v-if="serverParams.deleted" class="text-sm">{{ row.deletedAt }}</td>

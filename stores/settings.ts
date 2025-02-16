@@ -1,5 +1,5 @@
 export const useSettingsStore = defineStore('settings', () => {
-    const networkId = ref<number>(1);
+    const networkId = useCookie('WSA_CURRENT_NETWORK_ID', { maxAge: 60 * 60 * 2 });
     const conferenceId = useCookie('WSA_CURRENT_CONFERENCE_ID', { maxAge: 60 * 60 * 2 });
     const network = ref<Network>();
     const networks = ref<Network[]>();
@@ -22,8 +22,8 @@ export const useSettingsStore = defineStore('settings', () => {
     const setNetworks = (data?: Network[]) => {
         networks.value = data;
     };
-    const setNetworkId = (data?: number) => {
-        networkId.value = data ? data : 1;
+    const setNetworkId = (data?: string) => {
+        networkId.value = data ? data : '1';
     };
 
     const getCurrentConference = async () => {

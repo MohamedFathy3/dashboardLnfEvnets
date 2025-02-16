@@ -34,6 +34,23 @@ watch(
 async function logout() {
     await userStore.logout();
 }
+const currentPath = useRoute().fullPath;
+async function fetchNetworkData () {
+    console.log('start network data fetching...')
+    await settingStore.getNetwork()
+    console.log('network data fetched')
+    return navigateTo(currentPath)
+}
+
+watch(
+  () => settingStore.networkId,
+  async (newNetworkId, oldNetworkId) => {
+    if (newNetworkId !== oldNetworkId) {
+      await fetchNetworkData();
+      await reloadNuxtApp({ force: true });
+    }
+  }
+);
 </script>
 
 <template>
