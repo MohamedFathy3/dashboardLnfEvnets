@@ -64,7 +64,7 @@ const handleModalSubmit = async () => {
         let settingValue = child.value;
         if (child.type === 'uploader') {
             if (typeof child.image === 'object') {
-                settingValue = child.image.id;
+                settingValue = child.image?.id;
             } else if (typeof child.image === 'number') {
                 settingValue = child.image;
             }
