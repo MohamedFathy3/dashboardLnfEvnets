@@ -51,6 +51,20 @@ watch(
     }
   }
 );
+const isLoading = ref(false);
+async function resetServerCache() {
+    isLoading.value = true;
+    const {data, error} = await useApiFetch('/api/cache-clear', {lazy: true})
+
+    if(data.value) {
+        useToast({ title: 'Success', message: data.value?.message as string, type: 'success', duration: 5000 });
+    }
+    if(error.value) {
+        useToast({ title: 'Error', message: data.value?.message as string, type: 'error', duration: 5000 });
+    }
+    isLoading.value = false
+}
+
 </script>
 
 <template>
@@ -73,6 +87,7 @@ watch(
             </template>
         </ul>
         <div class="justify-end flex items-center gap-5 z-50 mr-5">
+        <button type="button" @click="resetServerCache" class="text-sm px-6 rounded-full bg-white border text-slate-600 py-2">Reset Server Cache</button>
             <FormSelectField
                 id="network-selector"
                 v-model="settingStore.networkId"

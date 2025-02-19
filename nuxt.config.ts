@@ -101,5 +101,8 @@ export default defineNuxtConfig({
     tiptap: {
         prefix: 'Tiptap',
     },
+    plugins: [
+        '~/plugins/settings.ts'
+      ],
     compatibilityDate: '2024-09-01',
 });

@@ -22,8 +22,8 @@ export const useSettingsStore = defineStore('settings', () => {
     const setNetworks = (data?: Network[]) => {
         networks.value = data;
     };
-    const setNetworkId = (data?: string) => {
-        networkId.value = data ? data : '1';
+    const setNetworkId = (data?: any) => {
+        networkId.value = data ? data : 1;
     };
 
     const getCurrentConference = async () => {
@@ -74,6 +74,7 @@ export const useSettingsStore = defineStore('settings', () => {
         });
         if (res.value) {
             setNetwork(res.value as Network);
+            setNetworkId((res.value as Network).id as any);
         }
         if (error && error.value) {
             setNetwork();

@@ -5,8 +5,13 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     } else {
         await settings.getCurrentConference();
     }
+    if (settings.networkId) {
+        await settings.getNetwork();
+    } else {
+        await settings.setNetworkId(1);
+        await settings.getNetwork();
+    }
     await settings.getAllConference();
-    await settings.getNetwork();
     await settings.getActiveNetworks();
 
     const resources = useResourceStore();
