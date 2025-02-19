@@ -69,7 +69,7 @@ async function resetServerCache() {
 
 <template>
     <div class="flex items-center gap-5 justify-end lg:justify-between py-3 text-white/75 pl-5">
-        <ul class="lg:flex hidden items-center font-light gap-2 text-sm">
+        <ul class="lg:flex hidden items-center font-light gap-2 text-xs">
             <li class="flex items-center gap-2 intro-x">
                 <Icon class="size-4 opacity-50" name="solar:double-alt-arrow-right-line-duotone" />
                 <NuxtLink :to="route.fullPath === '/' ? '' : '/'" class="flex items-center gap-2">
