@@ -110,7 +110,7 @@ async function resendPassword() {
                     <UiMemberStatusBox class="lg:col-span-4" :data="company.currentNetworkStatus.status" />
                     <UiMemberIDBox v-if="company.currentNetworkStatus.status !== 'pending'" class="lg:col-span-4" :data="company.wsaId" />
                     <UiMemberJoinBox v-else class="lg:col-span-4" :data="company.currentNetworkStatus.createdAt" />
-                    <UiMemberFPPBox class="lg:col-span-4" :data="company.currentNetworkStatus.fpp" />
+                    <UiMemberFPPBox class="lg:col-span-4" :data="company.currentNetworkStatus?.fpp" />
                 </template>
                 <div v-else class="lg:col-span-12 p-5 text-base text-center bg-white border-2 border-dashed font-medium opacity-75">This member is not assigned to any network</div>
                 <MemberOrdersCard class="lg:col-span-12" :member="company" />
