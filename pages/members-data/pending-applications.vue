@@ -339,7 +339,7 @@ const viewMember = async (value) => {
                                     <div class="flex flex-col gap-0.5">
                                         <div class="flex items-center gap-1.5">
                                             <span class="truncate 2xl:max-w-64 max-w-44">{{ row.name }}</span>
-                                            <Icon v-if="row.currentNetworkStatus.fpp" name="solar:shield-star-bold" class="size-5 text-success" />
+                                            <Icon v-if="row.currentNetworkStatus?.fpp" name="solar:shield-star-bold" class="size-5 text-success" />
                                         </div>
                                         <div class="flex items-center text-xs whitespace-nowrap">
                                             <NuxtImg :src="row.country.imageUrl" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
