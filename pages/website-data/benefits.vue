@@ -410,7 +410,7 @@ const contentTypes = ref([
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:stars-minimalistic-line-duotoner" class="size-5 opacity-75" />
+                <Icon name="solar:stars-minimalistic-linear" class="size-5 opacity-75" />
                 <div>{{ serverParams.deleted ? 'Deleted Benefits' : 'Benefits' }}</div>
             </div>
             <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
