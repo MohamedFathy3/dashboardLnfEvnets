@@ -410,35 +410,35 @@ const contentTypes = ref([
         <!-- Page Title & Action Buttons -->
         <div class="md:flex md:items-center md:justify-between md:gap-5">
             <div class="flex items-center gap-2">
-                <Icon name="solar:asteroid-linear" class="size-5 opacity-75" />
-                <div>{{ serverParams.deleted ? 'Deleted FAQs' : 'FAQs' }}</div>
+                <Icon name="solar:stars-minimalistic-line-duotoner" class="size-5 opacity-75" />
+                <div>{{ serverParams.deleted ? 'Deleted Benefits' : 'Benefits' }}</div>
             </div>
             <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
                 <template v-if="selectedRows.length > 0">
                     <template v-if="serverParams.deleted">
-                        <button v-if="usePermissionCheck(['network_benefit_force_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
+                        <button type="button" v-if="usePermissionCheck(['network_benefit_force_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="forceDeleteItems">
                             <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
                             Delete Permanently
                         </button>
                     </template>
                     <template v-else>
-                        <button v-if="usePermissionCheck(['network_benefit_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
+                        <button type="button" v-if="usePermissionCheck(['network_benefit_delete'])" class="btn btn-danger btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="deleteItems">
                             <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-5 opacity-75" />
                             Delete Items
                         </button>
                     </template>
                     <template v-if="serverParams.deleted">
-                        <button v-if="usePermissionCheck(['network_benefit_restore'])" class="btn btn-success btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="restoreItems">
+                        <button type="button" v-if="usePermissionCheck(['network_benefit_restore'])" class="btn btn-success btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="restoreItems">
                             <Icon name="solar:restart-circle-outline" class="size-5 opacity-75" />
                             Restore Items
                         </button>
                     </template>
                 </template>
-                <button v-if="usePermissionCheck(['network_benefit_create'])" :disabled="serverParams.deleted" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
+                <button type="button" v-if="usePermissionCheck(['network_benefit_create'])" :disabled="serverParams.deleted" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="openModal()">
                     <Icon name="solar:add-square-linear" class="size-5 opacity-75" />
                     Add New
                 </button>
-                <button v-if="usePermissionCheck(['network_benefit_delete', 'network_benefit_force_delete'])" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
+                <button type="button" v-if="usePermissionCheck(['network_benefit_delete', 'network_benefit_force_delete'])" class="btn btn-primary btn-rounded px-6 btn-sm gap-3 md:w-fit w-full md:mt-0 mt-5" @click="toggleDeleted">
                     <Icon :name="serverParams.deleted ? 'solar:hamburger-menu-line-duotone' : 'solar:trash-bin-minimalistic-line-duotone'" class="size-5 opacity-75" />
                     {{ serverParams.deleted ? 'Items List' : 'Deleted Items' }}
                 </button>
@@ -460,11 +460,11 @@ const contentTypes = ref([
                     { name: 'A : Z', value: 'asc' },
                 ]"
             />
-            <button class="xl:col-span-6 lg:col-span-6 btn btn-rounded btn-sm btn-primary gap-3 w-full" @click="refresh">
+            <button type="button" class="xl:col-span-6 lg:col-span-6 btn btn-rounded btn-sm btn-primary gap-3 w-full" @click="refresh">
                 <Icon name="solar:rounded-magnifer-line-duotone" class="size-5 shrink-0" />
                 Filter
             </button>
-            <button class="xl:col-span-6 lg:col-span-6 btn btn-rounded btn-sm btn-secondary gap-3 w-full" @click="resetServerParams">
+            <button type="button" class="xl:col-span-6 lg:col-span-6 btn btn-rounded btn-sm btn-secondary gap-3 w-full" @click="resetServerParams">
                 <Icon name="solar:restart-circle-outline" class="size-5 shrink-0" />
                 Reset
             </button>
@@ -498,7 +498,7 @@ const contentTypes = ref([
                         <td v-if="serverParams.deleted" class="text-sm">{{ row.deletedAt }}</td>
                         <td class="text-right">
                             <div>
-                                <button :disabled="serverParams.deleted" class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
+                                <button type="button" :disabled="serverParams.deleted" class="btn btn-secondary btn-rounded btn-sm gap-3" @click="openModal(row.id)">
                                     <Icon name="solar:pen-new-round-outline" class="size-4" />
                                     Edit
                                 </button>
@@ -567,7 +567,7 @@ const contentTypes = ref([
                                     <Icon name="solar:hamburger-menu-line-duotone" class="w-6 h-6 opacity-75" />
                                     <div class="uppercase opacity-75">Content Items</div>
                                 </div>
-                                <button class="btn btn-primary btn-rounded btn-sm gap-3" @click="openChildModal()">
+                                <button type="button" class="btn btn-primary btn-rounded btn-sm gap-3" @click="openChildModal()">
                                     <Icon name="solar:add-circle-outline" class="w-5 h-5" />
                                     <span>Add Content Item</span>
                                 </button>
@@ -589,11 +589,11 @@ const contentTypes = ref([
                                         <div class="text-sm">{{ subItem.orderId }}</div>
                                         <div class="flex items-center space-x-2 text-xs justify-end">
                                             <div class="flex justify-center items-center gap-3">
-                                                <button :disabled="formLoading" class="gap-1.5 btn btn-sm btn-secondary btn-rounded" @click="openChildModal(subItem.id)">
+                                                <button type="button" :disabled="formLoading" class="gap-1.5 btn btn-sm btn-secondary btn-rounded" @click="openChildModal(subItem.id)">
                                                     <Icon name="solar:pen-new-round-outline" class="w-4 h-4" />
                                                     <span>Edit</span>
                                                 </button>
-                                                <button :disabled="formLoading" class="gap-1.5 btn btn-sm btn-outline-danger btn-rounded" @click="deleteChild(subItem.id, subItem.menuId)">
+                                                <button type="button" :disabled="formLoading" class="gap-1.5 btn btn-sm btn-outline-danger btn-rounded" @click="deleteChild(subItem.id, subItem.menuId)">
                                                     <Icon name="solar:close-circle-outline" class="w-4 h-4" />
                                                     <span>Remove</span>
                                                 </button>
@@ -617,11 +617,11 @@ const contentTypes = ref([
                                                 <div class="text-sm">{{ child.orderId }}</div>
                                                 <div class="flex items-center space-x-2 text-xs justify-end">
                                                     <div class="flex justify-center items-center gap-3">
-                                                        <button :disabled="formLoading" class="gap-1.5 btn btn-sm btn-secondary btn-rounded" @click="openChildModal(child.id)">
+                                                        <button type="button" :disabled="formLoading" class="gap-1.5 btn btn-sm btn-secondary btn-rounded" @click="openChildModal(child.id)">
                                                             <Icon name="solar:pen-new-round-outline" class="w-4 h-4" />
                                                             <span>Edit</span>
                                                         </button>
-                                                        <button :disabled="formLoading" class="gap-1.5 btn btn-sm btn-outline-danger btn-rounded" @click="deleteChild(child.id, child.menuId)">
+                                                        <button type="button" :disabled="formLoading" class="gap-1.5 btn btn-sm btn-outline-danger btn-rounded" @click="deleteChild(child.id, child.menuId)">
                                                             <Icon name="solar:close-circle-outline" class="w-4 h-4" />
                                                             <span>Remove</span>
                                                         </button>
