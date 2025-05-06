@@ -26,6 +26,21 @@ const serverParams = ref({
 const formLoading = ref(false);
 const isOpen = ref(false);
 const editMode = ref(false);
+const expandedLists = ref([]);
+
+// Toggle expand/collapse for each permission group
+const toggleList = (name) => {
+    if (expandedLists.value.includes(name)) {
+        expandedLists.value = expandedLists.value.filter((n) => n !== name);
+    } else {
+        expandedLists.value.push(name);
+    }
+};
+
+const isExpanded = (name) => {
+    return expandedLists.value.includes(name);
+};
+
 const resetServerParams = async () => {
     filter.value = {
         name: null,
@@ -270,6 +285,25 @@ const replaceWord = (text, word, replacement) => {
     const regex = new RegExp(word, 'g');
     return text.replace(regex, replacement);
 };
+
+const getIconByName = (name, expanded) => {
+  const icons= {
+
+    'Conference Hotel': 'mdi:hotel',
+    'Conference Page': 'mdi:file-document',
+    'Conference Email Template': 'mdi:email',
+    'Conference Faq': 'mdi:comment-question',
+    'Conference Delegate': 'mdi:account',
+    'Conference Order': 'mdi:clipboard-text',
+    'Conference Shirt': 'mdi:tshirt-crew',
+    'Conference Sponsor': 'mdi:star-circle',
+    'Conference Spouse': 'mdi:heart',
+    'Conference Setting': 'mdi:cog',
+  };
+
+  const base = icons[name] || 'mdi:folder';
+  return expanded ? base : `${base}-outline`;
+};
 </script>
 <template>
     <div class="flex flex-col gap-8">
@@ -374,63 +408,137 @@ const replaceWord = (text, word, replacement) => {
         <TablePagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
 
         <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
-            <template #header>
-                <div class="flex justify-between items-center">
-                    <div class="font-medium" v-html="editMode ? 'Update Item' : 'Add New Item'"></div>
-                    <Icon class="w-8 h-8 opacity-50 cursor-pointer hover:opacity-100 ease-in-out duration-300" name="solar:close-square-outline" @click="closeModal" />
-                </div>
-            </template>
-            <template #content>
-                <div class="grid lg:grid-cols-12 gap-5 items-start">
-                    <FormInputField v-model="item.name" :errors="v$.name.$errors" class="lg:col-span-12" label="Name" name="name" placeholder="Name" />
-                    <div class="lg:col-span-12 grid lg:grid-cols-12 gap-5 items-start">
-                        <div v-for="(list, index) in permissions" :key="index" class="lg:col-span-12">
-                            <div class="flex items-center justify-between px-1">
-                                <div>
-                                    <span class="ml-1">{{ list.name }}</span>
-                                </div>
-                            </div>
-                            <div class="mt-2 bg-slate-50 rounded-xl borer">
-                                <div class="border border-slate-200 bg-slate-50/50 rounded-2xl p-5 flex flex-col gap-5">
-                                    <fieldset class="px-4 grid lg:grid-cols-7 gap-5 grid-cols-3 duration-300 ease-in-out">
-                                        <div v-for="permission in list.children" :key="permission.id" class="relative flex items-center">
-                                            <div class="flex items-center">
-                                                <input
-                                                    :id="permission.id"
-                                                    v-model="item.permissions"
-                                                    :checked="item.permissions.some((p) => p.permissionId === permission.id)"
-                                                    :aria-describedby="permission.id + '-description'"
-                                                    :name="permission.id"
-                                                    :value="{ permissionId: permission.id }"
-                                                    type="checkbox"
-                                                    class="focus:ring-primary h-5 w-5 rounded text-primary border-slate-500 disabled:read-only:opacity-50 disabled:read-only:cursor-not-allowed"
-                                                />
-                                            </div>
-                                            <div class="ml-3 text-xs whitespace-nowrap">
-                                                <label :class="[item.permissions.some((p) => p.permissionId === permission.id) && 'text-success', 'disabled:read-only:text-slate-500']" :for="permission.id" class="font-sm ease-in-out duration-150">
-                                                    {{ replaceWord(permission.name, 'List', 'Show') }}
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                </div>
-                            </div>
+    <!-- Header -->
+    <template #header>
+      <div class="flex justify-between items-center">
+        <div class="font-medium" v-html="editMode ? 'Update Item' : 'Add New Item'"></div>
+        <Icon
+          class="w-8 h-8 opacity-50 cursor-pointer hover:opacity-100 ease-in-out duration-300"
+          name="solar:close-square-outline"
+          @click="closeModal"
+        />
+      </div>
+    </template>
+
+    <!-- Content -->
+    <template #content>
+      <div class="grid lg:grid-cols-12 gap-5 items-start">
+        <!-- Name Field -->
+        <FormInputField
+          v-model="item.name"
+          :errors="v$.name.$errors"
+          class="lg:col-span-12"
+          label="Name"
+          name="name"
+          placeholder="Name"
+        />
+
+        <!-- Permissions -->
+        <div class="lg:col-span-12 grid lg:grid-cols-12 gap-5 items-start">
+          <div
+            v-for="(list, index) in permissions"
+            :key="index"
+            class="lg:col-span-12"
+          >
+            <!-- Clickable Section Header -->
+            <div
+              class="flex items-center justify-between px-1 cursor-pointer select-none"
+              @click="toggleList(list.name)"
+            >
+            <span class="ml-1 font-medium text-slate-800 flex items-center gap-2">
+  <Icon
+    :name="getIconByName(list.name, isExpanded(list.name))"
+    class="w-5 h-5 text-slate-500"
+  />
+  {{ list.name }}
+</span>
+
+              <Icon
+                :name="isExpanded(list.name) ? 'solar:alt-arrow-up-linear' : 'solar:alt-arrow-down-linear'"
+                class="w-4 h-4 text-slate-500"
+              />
+            </div>
+            <hr v-if="index !== permissions.length - 1" class="mt-2" />
+
+            <!-- Collapsible Content -->
+            <TransitionExpand>
+              <div v-if="isExpanded(list.name)">
+                <div class="mt-2 bg-slate-50 rounded-xl border">
+                  <div
+                    class=" bg-slate-50/50 rounded-2xl p-5 flex flex-col gap-5"
+                  >
+                    <fieldset
+                      class="px-4 grid lg:grid-cols-7 gap-5 grid-cols-3 duration-300 ease-in-out"
+                    >
+                      <div
+                        v-for="permission in list.children"
+                        :key="permission.id"
+                        class="relative flex items-center"
+                      >
+                        <div class="flex items-center">
+                          <input
+                            :id="permission.id"
+                            v-model="item.permissions"
+                            :checked="item.permissions.some((p) => p.permissionId === permission.id)"
+                            :aria-describedby="permission.id + '-description'"
+                            :name="permission.id"
+                            :value="{ permissionId: permission.id }"
+                            type="checkbox"
+                            class="focus:ring-primary h-5 w-5 rounded text-primary border-slate-500 disabled:read-only:opacity-50 disabled:read-only:cursor-not-allowed"
+                          />
                         </div>
-                    </div>
+                        <div class="ml-3 text-xs whitespace-nowrap">
+                          <label
+                            :class="[
+                              item.permissions.some((p) => p.permissionId === permission.id) && 'text-success',
+                              'disabled:read-only:text-slate-500'
+                            ]"
+                            :for="permission.id"
+                            class="font-sm ease-in-out duration-150"
+                          >
+                            {{ replaceWord(permission.name, 'List', 'Show') }}
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
                 </div>
-            </template>
-            <template #footer>
-                <div class="w-full flex items-center justify-end gap-5">
-                    <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-danger px-4" type="button" @click="closeModal">
-                        <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
-                        <span>Close</span>
-                    </button>
-                    <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleModalSubmit()">
-                        <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
-                        <span v-html="editMode ? 'Update' : 'Save'" />
-                    </button>
-                </div>
-            </template>
-        </TheModal>
+              </div>
+            </TransitionExpand>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Footer -->
+    <template #footer>
+      <div class="w-full flex items-center justify-end gap-5">
+        <button
+          :disabled="formLoading"
+          class="btn-rounded btn-sm btn btn-danger px-4"
+          type="button"
+          @click="closeModal"
+        >
+          <Icon
+            :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'"
+            class="w-5 h-5 mr-2"
+          />
+          <span>Close</span>
+        </button>
+        <button
+          :disabled="formLoading"
+          class="btn-rounded btn-sm btn btn-primary px-4"
+          type="button"
+          @click="handleModalSubmit()"
+        >
+          <Icon
+            :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'"
+            class="w-5 h-5 mr-2"
+          />
+          <span v-html="editMode ? 'Update' : 'Save'" />
+        </button>
+      </div>
+    </template>
+  </TheModal>
     </div>
 </template>

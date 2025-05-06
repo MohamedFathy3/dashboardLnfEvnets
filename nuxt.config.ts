@@ -20,8 +20,8 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            appUrl: process.env.APP_URL ?? 'http://events-nuxt.test:4224',
-            apiUrl: process.env.API_URL ?? 'http://dashboard.wsa-network.test:8805',
+            appUrl: process.env.APP_URL ?? 'http://cp.wsa-network.test:3000',
+            apiUrl: process.env.API_URL ?? 'http://api.wsa.test:8805',
             description: 'WSA Events is a part of World Shipping Alliance is an independent worldwide network for all freight forwarders.',
             keywords:
                 'World Shipping Alliance, freight forwarders network, global logistics, OTI/NVOCC operations, logistics community, logistics excellence, logistics network, dependable connections, global freight services, freight agents, logistics journey, event, wsa',
@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     nitro: {
         routeRules: {
             '/backend/**': {
-                proxy: `${process.env.API_URL ?? 'http://dashboard.wsa-network.test:8805'}/**`,
+                proxy: `${process.env.API_URL ?? 'http://api.wsa.test:8805'}/**`,
             },
             '/get-geoip/**': {
                 proxy: `http://ip-api.com/json/**`,
@@ -45,7 +45,7 @@ export default defineNuxtConfig({
         // '/dashboard/**': { ssr: false },
     },
     css: ['@/assets/css/main.scss'],
-    modules: ['nuxt-lodash', '@pinia/nuxt', 'nuxt-icon', '@nuxtjs/eslint-module', '@nuxtjs/color-mode', '@nuxt/image', 'nuxt-swiper', 'nuxt-headlessui', '@morev/vue-transitions/nuxt', '@unlok-co/nuxt-stripe', 'nuxt-tiptap-editor'],
+    modules: ['nuxt-lodash', '@pinia/nuxt', 'nuxt-icon', '@nuxtjs/color-mode', '@nuxt/image', 'nuxt-swiper', 'nuxt-headlessui', '@morev/vue-transitions/nuxt', '@unlok-co/nuxt-stripe', 'nuxt-tiptap-editor'],
     image: {
         inject: true,
         quality: 65,

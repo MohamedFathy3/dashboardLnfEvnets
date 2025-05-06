@@ -1,0 +1,2 @@
+npm uninstall eslint @nuxt/eslint-config eslint-plugin-nuxt eslint-plugin-vue
+rm -f .eslintrc .eslintrc.js .eslint.cjs .eslint.json .eslintignore
