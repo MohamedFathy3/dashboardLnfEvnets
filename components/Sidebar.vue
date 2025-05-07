@@ -550,6 +550,13 @@ const menuItems = ref<SideBarMenu[]>([
                 permission: ['network_setting_field_list'],
             },
             {
+                name: 'Media',
+                path: '/network-settings/media',
+                icon: 'solar:folder-linear',
+                subMenus: [],
+                permission: ['media_list'],
+            },
+            {
                 name: 'Email Templates',
                 path: '/network-settings/email-templates',
                 icon: 'solar:streets-navigation-linear',
