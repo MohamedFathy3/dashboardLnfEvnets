@@ -204,6 +204,31 @@ const currencyTotalsArray = (invoices) => {
         return [];
     }
 };
+
+const statusList = [
+    { label: 'Open', value: 'open' },
+    { label: 'Closed', value: 'closed' },
+    { label: 'Postponed', value: 'postponed' },
+];
+
+const changeStatus = async (event, id) => {
+    const target = event.target;
+    const status = target.value;
+    try {
+        const response = await useApiFetch(`/api/claim-forms/${id}/status`, {
+            method: 'PATCH',
+            body: {
+                status,
+            },
+        });
+
+        useToast({ title: 'Success', message: response.data.value.message, type: 'success', duration: 5000 });
+        await refresh();
+
+    } catch (error) {
+        useToast({ title: 'Error', message: error, type: 'error', duration: 5000 });
+    }
+};
 </script>
 <template>
     <div v-if="usePermissionCheck(['network_claim_form_list'])" class="flex flex-col gap-8">
@@ -279,6 +304,7 @@ const currencyTotalsArray = (invoices) => {
                     </th>
                     <th>Member</th>
                     <th>Debtor</th>
+                    <th>Status</th>
                     <th>Created at</th>
                     <th v-if="serverParams.deleted">Deleted At</th>
                     <th class="text-right">Action</th>
@@ -305,6 +331,11 @@ const currencyTotalsArray = (invoices) => {
                                 <div class="opacity-75 font-semibold">{{ row.debtor.country?.name }}</div>
                                 <span class="capitalize font-light opacity-80">, {{ row.debtor.city?.toLowerCase() }}</span>
                             </div>
+                        </td>
+                        <td class="font-normal 2xl:max-w-64 max-w-44">
+
+                            <UiClaimStatusBadge :status="row.status" />
+
                         </td>
                         <td class="text-sm font-normal whitespace-nowrap">
                             <div>{{ row.createdAt }}</div>
@@ -341,7 +372,19 @@ const currencyTotalsArray = (invoices) => {
             <template #content>
                 <div v-if="item" class="flex flex-col gap-5">
                     <div class="py-1 pl-5 border-l-4 border-success">
-                        <div class="ml-2 font-semibold">Member Details</div>
+                        <div class="flex justify-between items-center">
+                            <div class="ml-2 font-semibold">Member Details</div>
+                            <div class="flex items-center gap-1 text-sm mt-1 opacity-75">
+                                <div class="font-semibold py-2">
+                                    <select name="status" id="status" class="rounded-full w-40 border border-gray-300 px-4 py-1 text-sm shadow-lg cursor-pointer" @change="changeStatus($event, item.id)">
+                                        <option value="">change Status</option>
+                                        <option v-for="status in statusList" :key="status.value" :value="status.value" :selected="status.value === item.status">
+                                            {{ status.label }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="mt-3 divide-y divide-dashed p-3 border rounded-xl bg-slate-50/50">
                             <div class="py-1.5 grid lg:grid-cols-12 gap-5 items-start">
                                 <div class="lg:col-span-4 text-sm font-medium">Company Name</div>

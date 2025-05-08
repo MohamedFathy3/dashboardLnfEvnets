@@ -2,17 +2,15 @@
 definePageMeta({ middleware: 'auth' });
 
 const selectedRows = ref([]);
-const sortByList = ref([
-  { name: 'Sort By ID', value: 'id' },
-  { name: 'Sort By Name', value: 'name' },
-]);
 const filter = ref({ name: null });
+
 const serverParams = ref({
   page: 1,
   length: 10,
   search: null,
   paginate: true,
-  notUsed: 1,
+  notUsed: 0, // default to show all media
+  deleted: false,
 });
 
 const {
@@ -43,7 +41,8 @@ watch(filter, (newVal) => {
 }, { deep: true });
 
 const toggleDeleted = async () => {
-  serverParams.value.deleted = !serverParams.value.deleted;
+  // Toggle between used and not-used images
+  serverParams.value.notUsed = serverParams.value.notUsed === 0 ? 1 : 0;
   selectedRows.value = [];
   await refresh();
 };
@@ -71,66 +70,68 @@ const toggleRowSelection = (id) => {
   index === -1 ? selectedRows.value.push(id) : selectedRows.value.splice(index, 1);
 };
 
-async function deleteItems() {
-  const confirmed = confirm('Are you sure you want to delete selected items?');
-  if (confirmed) {
-    const { data, error } = await useApiFetch(`/api/media/delete`, {
-      body: { items: selectedRows.value },
-      method: 'DELETE',
-      lazy: true,
-    });
-    if (data.value) {
-      useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
-      await refresh();
-    } else if (error.value) {
-      useToast({ title: 'Error', message: error.value.message, type: 'error', duration: 5000 });
-    }
-  }
-}
+const resetServerParams = async () => {
+  serverParams.value = {
+    page: 1,
+    length: 10,
+    search: null,
+    paginate: true,
+    notUsed: 0, // back to default (all media)
+    deleted: false,
+  };
+  filter.value = { name: null };
+  selectedRows.value = [];
+  await refresh();
+};
 
-async function forceDeleteItems() {
-  const confirmed = confirm('Are you sure you want to delete selected items permanently?');
-  if (confirmed) {
-    const { data, error } = await useApiFetch(`/api/media/force-delete`, {
-      body: { items: selectedRows.value },
-      method: 'DELETE',
-      lazy: true,
-    });
-    if (data.value) {
-      useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
-      await refresh();
-    } else if (error.value) {
-      useToast({ title: 'Error', message: error.value.message, type: 'error', duration: 5000 });
-    }
+const deleteItems = async () => {
+  const confirmed = confirm('Are you sure you want to delete selected items?');
+  if (!confirmed) return;
+
+  const { data, error } = await useApiFetch(`/api/media/delete`, {
+    body: { items: selectedRows.value },
+    method: 'POST',
+    lazy: true,
+  });
+
+  if (data.value) {
+    useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
+    selectedRows.value = [];
+    await refresh();
+  } else if (error.value) {
+    useToast({ title: 'Error', message: error.value.message, type: 'error', duration: 5000 });
   }
-}
+};
 </script>
 
 <template>
   <div v-if="usePermissionCheck(['conference_setting_field_list'])" class="flex flex-col gap-8">
+    <!-- Header Actions -->
     <div class="md:flex md:items-center md:justify-between md:gap-5">
       <div class="flex items-center gap-2">
         <Icon name="solar:server-2-outline" class="size-5 opacity-75" />
-        <div>{{ serverParams.deleted ? 'Not Used Media' : 'Active Media' }}</div>
+        <div>{{ serverParams.notUsed ? 'Not Used Media' : 'All Media' }}</div>
       </div>
       <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
-        <button v-if="selectedRows.length > 0 && !serverParams.deleted" @click="deleteItems" class="btn btn-danger btn-sm">
-          <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-4 mr-1" /> Delete Selected
-        </button>
-        <button v-if="selectedRows.length > 0 && serverParams.deleted" @click="forceDeleteItems" class="btn btn-danger btn-sm">
-          <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-4 mr-1" /> Delete Permanently
+        <button
+          v-if="selectedRows.length > 0 && serverParams.notUsed === 1"
+          @click="deleteItems"
+          class="btn btn-danger btn-sm"
+        >
+          <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-4 mr-1" />
+          Delete Selected
         </button>
         <button @click="toggleDeleted" class="btn btn-primary btn-sm">
-          <Icon name="solar:refresh-circle-outline" class="size-4 mr-1" /> {{ serverParams.deleted ? 'Show Used' : 'Show Not Used' }}
+          <Icon name="solar:refresh-circle-outline" class="size-4 mr-1" />
+          {{ serverParams.notUsed === 1 ? 'Show All Media' : 'Show Not Used Only' }}
         </button>
       </div>
     </div>
 
-
-    <form class="flex items-center gap-5 grow p-5 
-     bg-slate-50 rounded-full mb-5">
+    <!-- Search Filter -->
+    <form class="flex items-center gap-5 grow p-5 bg-slate-50 rounded-full mb-5">
       <div class="text-base grow relative">
-        <FormInputField v-model="filter.name" placeholder="Search by Name" />
+        <FormInputField v-model="filter.name" placeholder="Search by Name"  />
         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
           <Icon name="solar:magnifer-linear" class="h-5 w-5 text-slate-400" />
         </div>
@@ -145,12 +146,23 @@ async function forceDeleteItems() {
       </button>
     </form>
 
-
+    <!-- Media Grid -->
     <div class="grid lg:grid-cols-6 sm:grid-cols-6 gap-5">
-      <div v-for="row in rows?.data" :key="row.id" @click="toggleRowSelection(row.id)"
-           :class="['shadow-sm p-2 group rounded-xl border transition-all cursor-pointer', isSelected(row.id) ? 'ring-2 ring-primary' : '']">
-        <img :src="row.fullUrl" :alt="row.name" :title="row.name"
-             class="h-14 w-14 mx-auto rounded-xl object-cover transition-all bg-white group-hover:w-full group-hover:object-contain" />
+      <div
+        v-for="row in rows?.data"
+        :key="row.id"
+        @click="toggleRowSelection(row.id)"
+        :class="[
+          'shadow-sm p-2 group rounded-xl border transition-all cursor-pointer',
+          isSelected(row.id) ? 'ring-2 ring-primary' : ''
+        ]"
+      >
+        <img
+          :src="row.fullUrl"
+          :alt="row.name"
+          :title="row.name"
+          class="h-14 w-14 mx-auto rounded-xl object-cover transition-all bg-white group-hover:w-full group-hover:object-contain"
+        />
         <div class="text-xs mt-3 text-center">
           <div class="truncate font-medium">{{ row.name }}</div>
           <div class="truncate font-light">{{ (row.size / 1024).toFixed(2) }} KB</div>
@@ -159,6 +171,12 @@ async function forceDeleteItems() {
       </div>
     </div>
 
-    <TableMediaPagination :pending="status === 'pending'" :rows="rows" :page="serverParams.page" @change-page="changePage" />
+    <!-- Pagination -->
+    <TableMediaPagination
+      :pending="status === 'pending'"
+      :rows="rows"
+      :page="serverParams.page"
+      @change-page="changePage"
+    />
   </div>
 </template>
