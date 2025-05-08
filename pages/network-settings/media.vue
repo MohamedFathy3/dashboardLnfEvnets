@@ -88,7 +88,7 @@ const deleteItems = async () => {
   if (!confirmed) return;
 
   const { data, error } = await useApiFetch(`/api/media/delete`, {
-    body: { items: selectedRows.value },
+    body: { ids: selectedRows.value },
     method: 'POST',
     lazy: true,
   });
@@ -131,9 +131,7 @@ const deleteItems = async () => {
     <form class="flex items-center gap-5 grow p-5 bg-slate-50 rounded-full mb-5">
       <div class="text-base grow relative">
         <FormInputField v-model="filter.name" placeholder="Search by Name" />
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <Icon name="solar:magnifer-linear" class="h-5 w-5 text-slate-400" />
-        </div>
+     
       </div>
       <button type="button" class="btn-rounded btn-sm btn btn-primary px-4 gap-2" @click="refresh">
         <Icon name="solar:rounded-magnifer-line-duotone" class="size-5" />
