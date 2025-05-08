@@ -9,7 +9,7 @@ const serverParams = ref({
   length: 10,
   search: null,
   paginate: true,
-  notUsed: 0, // default to show all media
+  notUsed: 0,
   deleted: false,
 });
 
@@ -41,7 +41,6 @@ watch(filter, (newVal) => {
 }, { deep: true });
 
 const toggleDeleted = async () => {
-  // Toggle between used and not-used images
   serverParams.value.notUsed = serverParams.value.notUsed === 0 ? 1 : 0;
   selectedRows.value = [];
   await refresh();
@@ -76,7 +75,7 @@ const resetServerParams = async () => {
     length: 10,
     search: null,
     paginate: true,
-    notUsed: 0, // back to default (all media)
+    notUsed: 0,
     deleted: false,
   };
   filter.value = { name: null };
@@ -131,7 +130,7 @@ const deleteItems = async () => {
     <!-- Search Filter -->
     <form class="flex items-center gap-5 grow p-5 bg-slate-50 rounded-full mb-5">
       <div class="text-base grow relative">
-        <FormInputField v-model="filter.name" placeholder="Search by Name"  />
+        <FormInputField v-model="filter.name" placeholder="Search by Name" />
         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
           <Icon name="solar:magnifer-linear" class="h-5 w-5 text-slate-400" />
         </div>
