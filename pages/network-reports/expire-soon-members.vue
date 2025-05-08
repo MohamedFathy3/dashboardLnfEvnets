@@ -33,6 +33,7 @@ const membershipStatuses = [
     { name: 'Suspended', value: 'suspended' },
     { name: 'Blacklisted', value: 'blacklisted' },
 ];
+
 const serverParams = ref({
     filters: {},
     networkFilter: {
@@ -42,6 +43,8 @@ const serverParams = ref({
     },
     orderBy: 'wsa_id',
     orderByDirection: 'asc',
+    fromDate: '',
+    toDate: '',
     perPage: 10,
     page: 1,
     paginate: true,
@@ -125,6 +128,11 @@ const changePage = async (value) => {
     selectedRows.value = [];
     await refresh();
 };
+const today = new Date();
+const maxDate = new Date();
+maxDate.setDate(today.getDate() + 120);
+
+const toDateMin = computed(() => serverParams.value.fromDate || today);
 </script>
 <template>
     <div v-if="usePermissionCheck(['network_member_list'])" class="flex flex-col gap-8">
@@ -274,6 +282,9 @@ const changePage = async (value) => {
                             { name: 'A : Z', value: 'asc' },
                         ]"
                     />
+                    <FormDatePicker v-model="serverParams.fromDate" placeholder="From Date" class="xl:col-span-6 lg:col-span-6" name="from_date" :time-picker="false" :min-date="today" :max-date="maxDate" />
+
+                    <FormDatePicker v-model="serverParams.toDate" placeholder="To Date" class="xl:col-span-6 lg:col-span-6" name="to_date" :time-picker="false" :min-date="toDateMin" :max-date="maxDate" />
                 </div>
             </TransitionExpand>
             <button class="xl:col-span-4 lg:col-span-4 btn btn-rounded btn-sm btn-primary gap-3 w-full" @click="refresh">

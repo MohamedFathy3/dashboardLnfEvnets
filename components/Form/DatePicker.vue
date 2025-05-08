@@ -3,6 +3,14 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
 const props = defineProps({
+    minDate: {
+        type: [Date, String],
+        default: null,
+    },
+    maxDate: {
+        type: [Date, String],
+        default: null,
+    },
     flexTitle: {
         type: Boolean,
         default: false,
@@ -97,6 +105,8 @@ watchEffect(() => {
             class="form-control form-control-rounded"
             :readonly="readonly"
             :disabled="disabled"
+            :min-date="minDate"
+            :max-date="maxDate"
             :class="{ 'has-error': errors.length > 0 }"
         >
             <template #dp-input="{ value }">
