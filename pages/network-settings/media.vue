@@ -51,8 +51,11 @@ const allSelected = computed(() => (rows.value?.data ?? []).every((row) => isSel
 
 const selectAllRows = () => {
   const data = rows.value?.data ?? [];
-  const all = data.every((row) => isSelected(row.id));
-  selectedRows.value = all ? [] : data.map((row) => row.id);
+  if (allSelected.value) {
+    selectedRows.value = [];
+  } else {
+    selectedRows.value = data.map((row) => row.id);
+  }
 };
 
 const changePage = async (value) => {
@@ -103,29 +106,36 @@ const deleteItems = async () => {
 };
 </script>
 
+
 <template>
   <div v-if="usePermissionCheck(['conference_setting_field_list'])" class="flex flex-col gap-8">
     <!-- Header Actions -->
     <div class="md:flex md:items-center md:justify-between md:gap-5">
-      <div class="flex items-center gap-2">
-        <Icon name="solar:server-2-outline" class="size-5 opacity-75" />
-        <div>{{ serverParams.notUsed ? 'Not Used Media' : 'All Media' }}</div>
-      </div>
-      <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
-        <button
-          v-if="selectedRows.length > 0 && serverParams.notUsed === 1"
-          @click="deleteItems"
-          class="btn btn-danger btn-sm"
-        >
-          <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-4 mr-1" />
-          Delete Selected
-        </button>
-        <button @click="toggleDeleted" class="btn btn-primary btn-sm">
-          <Icon name="solar:refresh-circle-outline" class="size-4 mr-1" />
-          {{ serverParams.notUsed === 1 ? 'Show All Media' : 'Show Not Used Only' }}
-        </button>
-      </div>
-    </div>
+  <div class="flex items-center gap-2">
+    <Icon name="solar:server-2-outline" class="size-5 opacity-75" />
+    <div>{{ serverParams.notUsed ? 'Not Used Media' : 'All Media' }}</div>
+  </div>
+  <div class="md:flex md:items-center md:gap-5 md:space-y-0 space-y-5">
+    <button
+      v-if="selectedRows.length > 0 && serverParams.notUsed === 1"
+      @click="deleteItems"
+      class="btn btn-danger btn-sm"
+    >
+      <Icon name="solar:trash-bin-minimalistic-line-duotone" class="size-4 mr-1" />
+      Delete Selected
+    </button>
+
+    <button @click="toggleDeleted" class="btn btn-primary btn-sm">
+      <Icon name="solar:refresh-circle-outline" class="size-4 mr-1" />
+      {{ serverParams.notUsed === 1 ? 'Show All Media' : 'Show Not Used Only' }}
+    </button>
+
+    <button @click="selectAllRows" class="btn btn-primary btn-sm">
+      <Icon name="solar:check-circle-broken" class="size-4 mr-1" />
+      {{ allSelected ? 'Unselect All' : 'Select All' }}
+    </button>
+  </div>
+</div>
 
     <!-- Search Filter -->
     <form class="flex items-center gap-5 grow p-5 bg-slate-50 rounded-full mb-5">
