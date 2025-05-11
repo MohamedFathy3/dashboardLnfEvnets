@@ -6,7 +6,7 @@ const filter = ref({ name: null });
 
 const serverParams = ref({
   page: 1,
-  length: 10,
+  length: 50,
   search: null,
   paginate: true,
   notUsed: 0,
@@ -72,7 +72,7 @@ const toggleRowSelection = (id) => {
 const resetServerParams = async () => {
   serverParams.value = {
     page: 1,
-    length: 10,
+    length: 50,
     search: null,
     paginate: true,
     notUsed: 0,
