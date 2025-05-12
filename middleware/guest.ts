@@ -1,18 +1,15 @@
 export default defineNuxtRouteMiddleware(async (to) => {
     const userStore = useUserStore();
-  
-    // Only fetch user if token exists and user not yet loaded
+
+    // Wait for user fetch if token exists and user not loaded
     if (userStore.token && !userStore.user) {
-      try {
         await userStore.fetchAuthUser();
-      } catch (err) {
-        // optional: log error or silently fail
-      }
     }
-  
-    // If authenticated, redirect to home (or dashboard)
-    if (userStore.user && to.path !== '/') {
-      return navigateTo('/');
+
+    // ✅ Prevent redirect if already going to home (prevent infinite loop)
+    // ✅ Allow route to continue if route is / (home)
+    // ✅ Only redirect guest if user is already authenticated
+    if (userStore.user && to.path === '/login') {
+        return navigateTo('/');
     }
-  });
-  
+});

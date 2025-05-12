@@ -2,7 +2,7 @@ import type { LocationQueryValue } from 'vue-router';
 
 export const useUserStore = defineStore('user', () => {
     const user = ref<Admin>();
-    const token = useCookie('WSA_ADMIN_AUTH_TOKEN', { maxAge: 60 * 60 * 2 });
+const token = useCookie('WSA_ADMIN_AUTH_TOKEN', { maxAge: 60 * 60 * 2, watch: true });
 
     const setToken = (data?: string) => (token.value = data);
     const setUser = (data?: Admin) => (user.value = data);
@@ -12,23 +12,24 @@ export const useUserStore = defineStore('user', () => {
         const { data: userData, error } = await useApiFetch(`/api/admin/login`, {
             method: 'POST',
             body: data,
-            lazy: true,
         });
         if (userData.value) {
             setUser((userData.value as ApiResponse).data as Admin);
             setToken((userData.value as ApiResponse).token as string);
-            if (path) {
+            useToast({ title: 'Welcome', message: 'Logged in Successfully', type: 'success', duration: 5000 });
+
+            if (path && typeof path === 'string') {
                 navigateTo(path);
             } else {
                 navigateTo('/');
             }
-            useToast({ title: 'Welcome', message: 'Logged in Successfully', type: 'success', duration: 5000 });
         }
         if (error.value) {
-            const message = error.value.data.message;
-            useToast({ title: 'Error', message: message, type: 'error', duration: 5000 });
+            const message = error.value.data?.message || 'Login failed';
+            useToast({ title: 'Error', message, type: 'error', duration: 5000 });
         }
     };
+
 
     const fetchAuthUser = async () => {
         const { data: res, error } = await useApiFetch(`/api/get-admin`, {
