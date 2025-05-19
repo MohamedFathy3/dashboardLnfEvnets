@@ -1,146 +1,129 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 const route = useRoute();
 const userStore = useUserStore();
 const settingStore = useSettingsStore();
-const formatRoutePath = (path: string) => {
-    if (path === '/') {
-        return [];
-    } else {
-        path = path.replace(/^\//, '').replace(/\/$/, '');
-        const segments = path.split('/');
-        return segments.map((segment, index) => {
-            let name = segment
-                .split('-')
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-            // Check if the last segment is a number
-            if (index === segments.length - 1 && /^\d+$/.test(segment)) {
-                name = 'View';
-            }
-            const url = '/' + segments.slice(0, index + 1).join('/');
-            return { name, url };
-        });
-    }
-};
+const currentPath = route.fullPath;
 const formattedPath = ref(formatRoutePath(route.fullPath));
 
-watch(
-    () => route.fullPath,
-    (newPath) => {
-        formattedPath.value = formatRoutePath(newPath);
-    },
-);
+function formatRoutePath(path: string) {
+  if (path === '/') return [];
+  path = path.replace(/^\//, '').replace(/\/$/, '');
+  return path.split('/').map((segment, index, array) => {
+    let name = segment.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    if (index === array.length - 1 && /^\d+$/.test(segment)) name = 'View';
+    return { name, url: '/' + array.slice(0, index + 1).join('/') };
+  });
+}
+
+watch(() => route.fullPath, (newPath) => {
+  formattedPath.value = formatRoutePath(newPath);
+});
 
 async function logout() {
-    await userStore.logout();
+  await userStore.logout();
 }
-const currentPath = useRoute().fullPath;
-async function fetchNetworkData () {
-    console.log('start network data fetching...')
-    await settingStore.getNetwork()
-    console.log('network data fetched')
-    return navigateTo(currentPath)
+
+async function fetchNetworkData() {
+  console.log('🔄 Fetching network data for ID:', settingStore.networkId);
+  await settingStore.getNetwork();
+  await settingStore.getCurrentConference();
+  await settingStore.getAllConference();
+  return navigateTo(currentPath, { replace: true });
 }
 
 watch(
   () => settingStore.networkId,
-  async (newNetworkId, oldNetworkId) => {
-    if (newNetworkId !== oldNetworkId) {
+  async (newId, oldId) => {
+    if (newId !== oldId) {
       await fetchNetworkData();
-      await reloadNuxtApp({ force: true });
+            await reloadNuxtApp({ force: true });
+
     }
   }
 );
+
 const isLoading = ref(false);
 async function resetServerCache() {
-    isLoading.value = true;
-    const {data, error} = await useApiFetch('/api/cache-clear', {lazy: true})
-
-    if(data.value) {
-        useToast({ title: 'Success', message: data.value?.message as string, type: 'success', duration: 5000 });
-    }
-    if(error.value) {
-        useToast({ title: 'Error', message: data.value?.message as string, type: 'error', duration: 5000 });
-    }
-    isLoading.value = false
+  isLoading.value = true;
+  const { data, error } = await useApiFetch('/api/cache-clear', { lazy: true });
+  useToast({
+    title: error.value ? 'Error' : 'Success',
+    message: (data.value?.message || 'Unknown response') as string,
+    type: error.value ? 'error' : 'success',
+    duration: 5000,
+  });
+  isLoading.value = false;
 }
-
 </script>
 
 <template>
-    <div class="flex items-center gap-5 justify-end lg:justify-between py-3 text-white/75 pl-5">
-        <ul class="lg:flex hidden items-center font-light gap-2 text-xs">
-            <li class="flex items-center gap-2 intro-x">
-                <Icon class="size-4 opacity-50" name="solar:double-alt-arrow-right-line-duotone" />
-                <NuxtLink :to="route.fullPath === '/' ? '' : '/'" class="flex items-center gap-2">
-                    <span :class="[route.fullPath === '/' ? 'opacity-100' : 'hover:opacity-100 opacity-50 ease-in-out duration-300']">Dashboard</span>
+  <div class="flex items-center gap-5 justify-end lg:justify-between py-3 text-white/75 pl-5">
+    <!-- Breadcrumb -->
+    <ul class="lg:flex hidden items-center font-light gap-2 text-xs">
+      <li class="flex items-center gap-2">
+        <Icon class="size-4 opacity-50" name="solar:double-alt-arrow-right-line-duotone" />
+        <NuxtLink :to="'/'" class="hover:opacity-100 opacity-50">Dashboard</NuxtLink>
+        <Icon v-if="route.fullPath !== '/'" class="size-4 opacity-50" name="solar:double-alt-arrow-right-line-duotone" />
+      </li>
+      <template v-for="(path, i) in formattedPath" :key="i">
+        <li class="flex items-center gap-2">
+          <NuxtLink :to="i === formattedPath.length - 1 ? '' : path.url">
+            <span :class="i === formattedPath.length - 1 ? 'text-white' : 'hover:opacity-100 opacity-50'">{{ path.name }}</span>
+          </NuxtLink>
+          <Icon v-if="i !== formattedPath.length - 1" class="size-4 opacity-50" name="solar:double-alt-arrow-right-line-duotone" />
+        </li>
+      </template>
+    </ul>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-5 z-50 mr-5">
+      <button @click="resetServerCache" class="text-sm px-6 rounded-full bg-white border text-slate-600 py-2">Reset Server Cache</button>
+
+      <FormSelectField
+        id="network-selector"
+        v-model="settingStore.networkId"
+        class="text-slate-800 sm:w-auto w-36"
+        placeholder="Select Network"
+        :clearable="false"
+        :select-data="settingStore.networks"
+        labelvalue="name"
+        keyvalue="id"
+      />
+
+      <HeadlessMenu as="div" class="relative inline-block">
+        <HeadlessMenuButton>
+          <div class="flex items-center gap-1.5 py-1 px-1 rounded-xl hover:bg-white/10">
+            <div class="text-right">
+              <div class="text-sm font-medium truncate">{{ userStore.user?.name }}</div>
+              <div class="text-xs opacity-75 font-light truncate">
+                {{ userStore.user?.superAdmin ? 'Super Admin' : userStore.user?.role?.name }}
+              </div>
+            </div>
+            <Icon class="size-4 shrink-0" name="solar:alt-arrow-down-outline" />
+          </div>
+        </HeadlessMenuButton>
+        <TransitionExpand>
+          <HeadlessMenuItems class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg ring-1 ring-black/5 text-slate-600">
+            <ul class="py-1">
+              <HeadlessMenuItem as="li">
+                <NuxtLink class="w-full px-3 py-2 flex items-center gap-3 hover:bg-primary hover:text-white rounded-full" to="/profile">
+                  <Icon class="size-5" name="solar:user-circle-line-duotone" /> Profile
                 </NuxtLink>
-                <Icon v-if="route.fullPath !== '/'" class="size-4 opacity-50" name="solar:double-alt-arrow-right-line-duotone" />
-            </li>
-            <template v-for="(path, i) in formattedPath" :key="i">
-                <li v-if="route.fullPath !== '/'" class="intro-x flex items-center gap-2">
-                    <NuxtLink :to="i === formattedPath.length - 1 ? '' : path.url" class="flex items-center gap-2">
-                        <span :class="[route.fullPath === '/' ? 'opacity-100' : '', i === formattedPath.length - 1 ? 'text-white' : 'ease-in-out duration-300 hover:opacity-100 opacity-50']">{{ path.name }}</span>
-                    </NuxtLink>
-                    <Icon v-if="i !== formattedPath.length - 1" class="size-4 opacity-50" name="solar:double-alt-arrow-right-line-duotone" />
-                </li>
-            </template>
-        </ul>
-        <div class="justify-end flex items-center gap-5 z-50 mr-5">
-        <button type="button" @click="resetServerCache" class="text-sm px-6 rounded-full bg-white border text-slate-600 py-2">Reset Server Cache</button>
-            <FormSelectField
-                id="network-selector"
-                v-model="settingStore.networkId"
-                class="text-slate-800 sm:w-auto w-36 cursor-pointer"
-                placeholder="Please select a network..."
-                :clearable="false"
-                :select-data="settingStore.networks"
-                labelvalue="name"
-                keyvalue="id"
-            />
-            <HeadlessMenu as="div" class="relative inline-block self-end">
-                <HeadlessMenuButton>
-                    <div class="flex items-center gap-1.5 py-1 px-1 rounded-xl hover:bg-white/10">
-                        <div class="text-right">
-                            <div class="sm:text-sm text-xs font-medium truncate sm:w-auto w-24">{{ userStore.user?.name }}</div>
-                            <div class="text-xs opacity-75 font-extralight truncate sm:w-auto w-24">
-                                {{ userStore.user?.superAdmin ? 'Super Admin' : userStore.user?.role?.name }}
-                            </div>
-                        </div>
-                        <Icon class="size-4 shrink-0" name="solar:alt-arrow-down-outline" />
-                    </div>
-                </HeadlessMenuButton>
-                <TransitionExpand>
-                    <HeadlessMenuItems as="div" class="absolute text-sm right-0 mt-2 w-56 origin-top-right rounded-xl bg-white shadow-lg ring-1 ring-black/5 focus:outline-none text-slate-600 z-50">
-                        <ul class="px-2 py-1">
-                            <HeadlessMenuItem as="li" class="py-0.5">
-                                <NuxtLink class="w-full p-2 flex items-center gap-3 grow px-3 rounded-full hover:bg-primary hover:text-white ease-in-out duration-100" to="/profile">
-                                    <Icon class="size-5 opacity-75" name="solar:user-circle-line-duotone" />
-                                    <div>Profile</div>
-                                </NuxtLink>
-                            </HeadlessMenuItem>
-                            <HeadlessMenuItem as="li" class="py-0.5">
-                                <NuxtLink class="w-full p-2 flex items-center gap-3 grow px-3 rounded-full hover:bg-primary hover:text-white ease-in-out duration-100" to="/profile/edit">
-                                    <Icon class="size-5 opacity-75" name="solar:settings-outline" />
-                                    <div>Edit profile</div>
-                                </NuxtLink>
-                            </HeadlessMenuItem>
-                            <HeadlessMenuItem as="li" class="py-0.5">
-                                <NuxtLink class="w-full p-2 flex items-center gap-3 grow px-3 rounded-full hover:bg-primary hover:text-white ease-in-out duration-100" to="/profile/tasks">
-                                    <Icon class="size-5 opacity-75" name="solar:server-2-outline" />
-                                    <div>Tasks</div>
-                                </NuxtLink>
-                            </HeadlessMenuItem>
-                            <HeadlessMenuItem as="li" class="py-0.5 text-danger">
-                                <div class="w-full p-2 flex items-center gap-3 grow cursor-pointer px-3 rounded-full hover:bg-danger hover:text-white ease-in-out duration-100" @click="logout">
-                                    <Icon class="size-5 opacity-75" name="solar:logout-3-line-duotone" />
-                                    <div>Logout</div>
-                                </div>
-                            </HeadlessMenuItem>
-                        </ul>
-                    </HeadlessMenuItems>
-                </TransitionExpand>
-            </HeadlessMenu>
-        </div>
+              </HeadlessMenuItem>
+              <HeadlessMenuItem as="li">
+                <NuxtLink class="w-full px-3 py-2 flex items-center gap-3 hover:bg-primary hover:text-white rounded-full" to="/profile/edit">
+                  <Icon class="size-5" name="solar:settings-outline" /> Edit Profile
+                </NuxtLink>
+              </HeadlessMenuItem>
+              <HeadlessMenuItem as="li" class="text-danger">
+                <div class="w-full px-3 py-2 flex items-center gap-3 cursor-pointer hover:bg-danger hover:text-white rounded-full" @click="logout">
+                  <Icon class="size-5" name="solar:logout-3-line-duotone" /> Logout
+                </div>
+              </HeadlessMenuItem>
+            </ul>
+          </HeadlessMenuItems>
+        </TransitionExpand>
+      </HeadlessMenu>
     </div>
+  </div>
 </template>
