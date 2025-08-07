@@ -12,6 +12,8 @@ const userStore = useUserStore();
 const route = useRoute();
 const redirectPath = route.query?.redirect;
 async function login() {
+        console.log('Login credentials:', credentials.value); // تحقق من القيم المدخلة
+
     if (redirectPath) {
         await userStore.login(credentials.value, redirectPath);
     } else {

@@ -20,8 +20,8 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            appUrl: process.env.NUXT_APP_URL ?? 'https://cp.wsa-network.com',
-            apiUrl: process.env.NUXT_API_URL ?? 'https://api.wsa-network.com',
+            appUrl: process.env.NUXT_APP_URL ?? 'http://events-nuxt.test:4224',
+            apiUrl: process.env.NUXT_API_URL ?? 'http://127.0.0.1:8000/**',
             description: 'WSA Events is a part of World Shipping Alliance is an independent worldwide network for all freight forwarders.',
             keywords:
                 'World Shipping Alliance, freight forwarders network, global logistics, OTI/NVOCC operations, logistics community, logistics excellence, logistics network, dependable connections, global freight services, freight agents, logistics journey, event, wsa',
@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     nitro: {
         routeRules: {
             '/backend/**': {
-                proxy: `${process.env.NUXT_API_URL ?? 'https://api.wsa-network.com'}/**`,
+                proxy: `${process.env.NUXT_API_URL ?? 'http://127.0.0.1:8000'}/**`,
             },
             '/get-geoip/**': {
                 proxy: `http://ip-api.com/json/**`,

@@ -330,17 +330,86 @@ const generateTimeOptions = computed(() => {
         <!-- Table -->
         <table class="table table-report font-light">
             <thead>
-                <tr class="uppercase text-sm">
-                    <th class="text-left">
-                        <input v-model="allSelected" type="checkbox" class="form-check-input" @change="selectAllRows" />
-                    </th>
-                    <th>Time</th>
-                    <th>Day</th>
-                    <th>Note</th>
-                    <th class="text-center">Active</th>
-                    <th class="text-center">Default Status</th>
-                    <th v-if="usePermissionCheck(['conference_time_slot_update'])" class="text-right">Action</th>
-                </tr>
+              <tr class="uppercase text-sm bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+  <!-- عمود التحديد -->
+  <th class="sticky left-0 bg-gray-50 dark:bg-slate-800 z-10 pl-6 pr-2 py-3 text-left">
+    <input
+      v-model="allSelected"
+      type="checkbox"
+      class="form-checkbox h-4 w-4 text-primary rounded border-gray-300 dark:border-slate-600 focus:ring-primary dark:bg-slate-700"
+      @change="selectAllRows"
+    />
+  </th>
+
+  <!-- عمود الوقت -->
+  <th class="px-4 py-3 text-center whitespace-nowrap">
+    <div class="flex flex-col items-center">
+      <span>TIME</span>
+      <span class="text-xs text-primary/80 dark:text-primary/60 font-normal mt-1 flex items-center">
+        <Icon name="mdi:clock-outline" class="w-3.5 h-3.5 mr-1" />
+        Start Time
+      </span>
+    </div>
+  </th>
+
+  <!-- عمود اليوم -->
+  <th class="px-4 py-3 text-center whitespace-nowrap">
+    <div class="flex flex-col items-center">
+      <span>DAY</span>
+      <span class="text-xs text-primary/80 dark:text-primary/60 font-normal mt-1 flex items-center">
+        <Icon name="mdi:calendar-today" class="w-3.5 h-3.5 mr-1" />
+        Day of Event
+      </span>
+    </div>
+  </th>
+
+  <!-- عمود الملاحظات -->
+  <th class="px-4 py-3 text-center whitespace-nowrap">
+    <div class="flex flex-col items-center">
+      <span>NOTE</span>
+      <span class="text-xs text-primary/80 dark:text-primary/60 font-normal mt-1 flex items-center">
+        <Icon name="mdi:note-text-outline" class="w-3.5 h-3.5 mr-1" />
+        Additional Info
+      </span>
+    </div>
+  </th>
+
+  <!-- عمود النشط -->
+  <th class="px-4 py-3 text-center whitespace-nowrap">
+    <div class="flex flex-col items-center">
+      <span>ACTIVE</span>
+      <span class="text-xs text-primary/80 dark:text-primary/60 font-normal mt-1 flex items-center">
+        <Icon name="mdi:check-circle-outline" class="w-3.5 h-3.5 mr-1" />
+        Is Active?
+      </span>
+    </div>
+  </th>
+
+  <!-- عمود الحالة الافتراضية -->
+  <th class="px-4 py-3 text-center whitespace-nowrap">
+    <div class="flex flex-col items-center">
+      <span class="font-semibold">DEFAULT STATUS</span>
+      <span class="text-xs text-primary/80 dark:text-primary/60 font-normal mt-1 flex items-center">
+        <Icon name="mdi:coffee" class="w-3.5 h-3.5 mr-1" />
+        Café Break
+      </span>
+    </div>
+  </th>
+
+  <!-- عمود الإجراءات (إذا كانت الصلاحية متوفرة) -->
+  <th 
+    v-if="usePermissionCheck(['conference_time_slot_update'])"
+    class="sticky right-0 bg-gray-50 dark:bg-slate-800 z-10 px-6 py-3 text-right whitespace-nowrap"
+  >
+    <div class="flex flex-col items-end">
+      <span>ACTION</span>
+      <span class="text-xs text-primary/80 dark:text-primary/60 font-normal mt-1 flex items-center">
+        <Icon name="mdi:pencil-outline" class="w-3.5 h-3.5 mr-1" />
+        Edit / Delete
+      </span>
+    </div>
+  </th>
+</tr>
             </thead>
             <tbody>
                 <template v-if="status !== 'pending' && rows">
