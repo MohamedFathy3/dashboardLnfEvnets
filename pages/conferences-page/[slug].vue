@@ -2,6 +2,7 @@
 import { required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 
+
 definePageMeta({
     middleware: 'auth',
 });
@@ -236,6 +237,7 @@ async function closeSubChildModal() {
     i$.value.$reset();
     await resetSubChildrenValues();
 }
+
 async function openModal(id = null) {
     formLoading.value = true;
     if (id !== null) {
@@ -247,6 +249,8 @@ async function openModal(id = null) {
     formLoading.value = false;
     isOpen.value = true;
 }
+
+
 async function openSubChildModal(id = null) {
     formLoading.value = true;
     if (id !== null) {
@@ -258,7 +262,31 @@ async function openSubChildModal(id = null) {
     formLoading.value = false;
     isOpenSubChild.value = true;
 }
-async function updateItem() {
+
+const handleModalSubmits = async () => {
+    const children = children.value.children.map((child) => {
+        let settingValue = child.value;
+        if (child.type === 'uploader') {
+            if (typeof child.value === 'object') {
+                settingValue = child.value?.id;
+            } else if (typeof child.value === 'number') {
+                settingValue = child.value;
+            }
+        }
+        return {
+            id: child.id,
+            type: child.type,
+            value: settingValue,
+        };
+    });
+}
+
+
+    async function updateItem() {
+
+
+
+
     const { data, error } = await useApiFetch(`/api/event-page/${item.value.id}`, {
         method: 'PUT',
         body: item,
@@ -267,6 +295,7 @@ async function updateItem() {
     if (data.value) {
         useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
         await refresh();
+        await handleModalSubmits();
         console.log('🚀 Fetched sub-children:', data.value);
 
     }
@@ -395,6 +424,7 @@ async function refreshPageData() {
 //         }
 //     }
 // }
+
 onMounted(async () => {
     loadingPage.value = true;
     await resetItemValues();
@@ -433,6 +463,7 @@ onMounted(async () => {
                     </div>
                 </div>
                 <div class="lg:col-span-4 bg-white rounded-xl p-5 shadow-sm">
+
                     <FormUploader v-model="item.image" :errors="v$.image.$errors" :allowed-types="['image']" label="Cover Image" name="image" />
                 </div>
             </div>
@@ -480,12 +511,12 @@ onMounted(async () => {
             </template>
             <template #content>
                 <div class="grid grid-cols-12 gap-5">
-                    <template v-if="['home_slider'].includes(children.slug)">
+                    <template v-if="['home_slider','contact_cta'].includes(children.slug)">
                         <FormUploader v-model="children.gallery" :allowed-types="['image']" :limit="100" :errors="s$.gallery.$errors" class="col-span-12" label="Gallery" :max="24" />
                     </template>
                     <template v-else>
                         <template v-if="!['home_cta', 'home_video'].includes(children.slug)">
-                            <FormUploader v-model="children.image" :errors="s$.image.$errors" class="col-span-12" label="Image" :max="1" />
+                            <FormUploader v-model="children.image" :errors="s$.image.$errors"  :allowed-types="['image']"   class="col-span-12" name="children-image" label="Image" />
                         </template>
                     </template>
                     <FormInputField v-model="children.name" :errors="s$.name.$errors" class="col-span-12 sm:col-span-6" label="Name" :name="children.slug + '-name-' + children.id" placeholder="Name" />
@@ -638,7 +669,9 @@ onMounted(async () => {
                         </template>
                         <template #content>
                             <div class="grid grid-cols-12 gap-5">
-                                <FormUploader v-model="subChild.image" :errors="i$.image.$errors" class="col-span-12" label="Image" :max="1" />
+                                <FormUploader v-model="subChild.image" :errors="i$.image.$errors"  :allowed-types="['image']"  class="col-span-12" label=" Image" name="item-image"/>
+
+
                                 <FormInputField v-model="subChild.title" type="text" :errors="i$.title.$errors" class="col-span-12" label="Title" :name="'item-title'" placeholder="Title" />
                                 <FormInputField v-model="subChild.icon" type="text" :errors="i$.icon.$errors" class="col-span-12 sm:col-span-4" label="Icon" :name="'item-icon'" placeholder="Icon" />
                                 <FormInputField v-model="subChild.orderId" :errors="i$.orderId.$errors" type="number" class="col-span-12 sm:col-span-4" label="Position" name="'item-order-id'" placeholder="Position" />
