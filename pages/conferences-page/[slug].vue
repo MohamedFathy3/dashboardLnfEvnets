@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 
@@ -6,7 +6,7 @@ definePageMeta({
     middleware: 'auth',
 });
 const route = useRoute();
-const slug = ref(route.params?.slug as string);
+const slug = ref(String(route.params?.slug || ''));
 const loadingPage = ref(true);
 const formLoading = ref(false);
 const isOpen = ref(false);
@@ -267,9 +267,12 @@ async function updateItem() {
     if (data.value) {
         useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
         await refresh();
+        console.log('🚀 Fetched sub-children:', data.value);
+
     }
     if (error.value) {
         useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
+        console.log('Error updating item:', error.value);
     }
 }
 async function updateChildrenItem() {
@@ -286,6 +289,24 @@ async function updateChildrenItem() {
         useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
     }
 }
+
+async function updateSubItem() {
+  const { data, error } = await useApiFetch(`/api/event-item/${subChild.value.id}`, {
+    method: 'PUT',
+    body: subChild.value, 
+  });
+
+  if (data.value) {
+    useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
+    console.log('🚀 Updated sub-child:', data.value);
+    await refreshPageData();
+  }
+
+  if (error.value) {
+  }
+}
+
+
 // async function addSubChild() {
 //     const { data, error } = await useApiFetch(`/api/event-item`, {
 //         method: 'POST',
@@ -320,25 +341,29 @@ async function handleChildrenModalSubmit() {
         return false;
     }
     await updateChildrenItem();
+
     await closeModal();
+    await updateSubItem()
     formLoading.value = false;
+    console.log('🚀 Updated children:', formLoading.value);
+
 }
 
-// async function handleSubChildrenModalSubmit() {
-//     formLoading.value = true;
-//     const result = await s$.value.$validate();
-//     if (!result) {
-//         formLoading.value = false;
-//         return false;
-//     }
-//     if (editModeSubChild) {
-//         await updateChildrenItem();
-//     } else {
-//         await addSubChild();
-//     }
-//     await closeSubChildModal();
-//     formLoading.value = false;
-// }
+async function handleSubChildrenModalSubmit() {
+   const isValid = await i$.value.$validate();
+  if (!isValid) return;
+
+  formLoading.value = true;
+
+  if (editModeSubChild.value) {
+    await updateSubItem();
+  } else {
+      useToast({ title: 'Error', message: error.value.message || 'Unknown error', type: 'error', duration: 5000 });
+  }
+
+  formLoading.value = false;
+  closeSubChildModal();
+}
 
 async function initPageData() {
     await execute();
@@ -628,7 +653,7 @@ onMounted(async () => {
                                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:close-circle-linear'" class="w-5 h-5 mr-2" />
                                     <span>Close</span>
                                 </button>
-                                <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleChildrenModalSubmit()">
+                                <button :disabled="formLoading" class="btn-rounded btn-sm btn btn-primary px-4" type="button" @click="handleSubChildrenModalSubmit()">
                                     <Icon :name="formLoading ? 'svg-spinners:3-dots-fade' : 'solar:check-circle-broken'" class="w-5 h-5 mr-2" />
                                     <span v-html="editModeSubChild ? 'Update' : 'Save'" />
                                 </button>

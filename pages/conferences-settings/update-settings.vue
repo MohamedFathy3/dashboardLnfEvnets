@@ -8,7 +8,10 @@ const { data, refresh, execute } = await useApiFetch(`/api/setting-event/section
     lazy: true,
     immediate: false,
     transform: (data) => data.data,
+    
 });
+
+
 const loadingPage = ref(true);
 const formLoading = ref(false);
 const editMode = ref(false);
@@ -22,6 +25,9 @@ const item = {
     url: null,
     active: true,
 };
+
+
+
 const buttonStyles = [
     { name: 'Primary', id: 'primary' },
     { name: 'Secondary', id: 'secondary' },
@@ -104,21 +110,35 @@ const handleModalSubmit = async () => {
             value: settingValue,
         };
     });
+
+
     const { data, error } = await useApiFetch(`/api/setting-event/section-update`, {
         method: 'POST',
         body: {
             children: childrenValue,
+            
         },
         lazy: true,
+        
     });
+
     if (data.value) {
         useToast({ title: 'Success', message: data.value.message, type: 'success', duration: 5000 });
         await refresh();
+
+
+
+
     }
     if (error.value) {
         useToast({ title: 'Error', message: data.value.message, type: 'error', duration: 5000 });
+
     }
 };
+
+
+
+
 </script>
 <template>
     <div v-if="usePermissionCheck(['conference_setting_list'])" class="flex flex-col gap-8">
