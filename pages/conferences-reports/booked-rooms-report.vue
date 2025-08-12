@@ -117,7 +117,7 @@ onMounted(async () => {
                                             <div class="ml-2">
                                                 <div class="font-medium truncate">{{ person.name }}</div>
                                                 <div class="text-xs truncate capitalize">{{ person.jobTitle ? person.jobTitle : person.type }}</div>
-                                                <div class="text-xs font-medium truncate">{{ person.company.name }}</div>
+                                                <!-- <div class="text-xs font-medium truncate">{{ person.company.name   }}</div> -->
                                             </div>
                                         </div>
                                     </div>
