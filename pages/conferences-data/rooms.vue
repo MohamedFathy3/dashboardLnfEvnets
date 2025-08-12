@@ -458,8 +458,8 @@ const removeFeatureRow = (index) => {
             <template #content>
                 <div class="grid lg:grid-cols-12 gap-5 items-start">
                     <div class="lg:col-span-4 space-y-5">
-                        <FormUploader v-model="item.image" :errors="v$.image.$errors" label="Cover Image" name="image" :max="1" />
-                        <FormUploader v-model="item.gallery" :errors="v$.gallery.$errors" label="Gallery" name="gallery" />
+                        <FormUploader v-model="item.image" :errors="v$.image.$errors" label="Cover Image" :allowed-types="['image']" name="item-image" :max="1" />
+                        <FormUploader v-model="item.gallery" :errors="v$.gallery.$errors" label="Gallery" :allowed-types="['image']" name="item-gallery" />
                     </div>
                     <div class="lg:col-span-8 grid grid-cols-12 gap-5">
                         <FormInputField v-model="item.name" :errors="v$.name.$errors" class="col-span-12" label="Name" :name="'name'" placeholder="Name" />

@@ -430,8 +430,8 @@ const faqTypes = ref([
             <template #content>
                 <div class="grid lg:grid-cols-12 gap-5 items-start">
                     <div class="lg:col-span-4 space-y-5">
-                        <FormUploader v-model="item.image" :errors="v$.image.$errors" label="Image" :max="1" />
-                        <FormUploader v-model="item.imageDark" :errors="v$.imageDark.$errors" label="Image Dark Mode" :max="1" />
+                        <FormUploader v-model="item.image" :allowed-types="['image']" :errors="v$.image.$errors" label="Image" :max="1" />
+                        <FormUploader v-model="item.imageDark" :allowed-types="['image']" :errors="v$.imageDark.$errors" label="Image Dark Mode" :max="1" />
                     </div>
                     <div class="lg:col-span-8 grid-cols-12 grid gap-3">
                         <FormInputField v-model="item.postTitle" :errors="v$.postTitle.$errors" class="col-span-12" label="Post Title" name="post-title" placeholder="Post Title" />
