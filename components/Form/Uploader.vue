@@ -357,7 +357,7 @@ const {
     refresh,
 } = await useApiFetch(`/api/media`, {
     immediate: false,
-    params: mediaGalleryParams.value,
+   params: mediaGalleryParams,
     lazy: true,
     transform: (images) => images.data,
 });
@@ -382,13 +382,8 @@ function formatBytes(bytes) {
     const i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)));
     return Math.round(100 * (bytes / Math.pow(k, i))) / 100 + ' ' + sizes[i];
 }
-const changePage = async (value) => {
-    const pageNumber = parseInt(value);
-    if (!isNaN(pageNumber)) {
-        mediaGalleryParams.value.page = pageNumber;
-    } else {
-        console.error('Invalid page number:', value);
-    }
+const changePage = async (page) => {
+    mediaGalleryParams.value.page = Number(page);
     await refresh();
 };
 const handleSearchAction = async () => {

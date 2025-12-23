@@ -6,6 +6,8 @@ import useVuelidate from '@vuelidate/core';
 definePageMeta({
     middleware: 'auth',
 });
+
+
 const route = useRoute();
 const slug = ref(String(route.params?.slug || ''));
 const loadingPage = ref(true);
@@ -394,6 +396,8 @@ async function handleSubChildrenModalSubmit() {
   closeSubChildModal();
 }
 
+const childrenSlug = computed(() => children?.slug || '');
+
 async function initPageData() {
     await execute();
     if (data.value) {
@@ -502,6 +506,7 @@ onMounted(async () => {
                 <Icon name="eos-icons:three-dots-loading" class="size-16" />
             </div>
         </div>
+        
         <TheModal :open-modal="isOpen" size="5xl" @close-modal="closeModal()">
             <template #header>
                 <div class="flex justify-between items-center">
@@ -511,9 +516,19 @@ onMounted(async () => {
             </template>
             <template #content>
                 <div class="grid grid-cols-12 gap-5">
-                    <template v-if="['home_slider','contact_cta'].includes(children.slug)">
-                        <FormUploader v-model="children.gallery" :allowed-types="['image']" :limit="100" :errors="s$.gallery.$errors" class="col-span-12" label="Gallery" :max="24" />
-                    </template>
+<template v-if="['home_slider','contact_cta'].includes(childrenSlug)">
+
+
+
+   <FormUploader
+        v-model="children.gallery"
+        :allowed-types="['image']"
+        :limit="100"
+        :errors="s$?.gallery?.$errors || []"
+        class="col-span-12"
+        label="Gallery"
+        :max="24"
+    />                    </template>
                     <template v-else>
                         <template v-if="!['home_cta', 'home_video'].includes(children.slug)">
                             <FormUploader v-model="children.image" :errors="s$.image.$errors"  :allowed-types="['image']"   class="col-span-12" name="children-image" label="Image" />
@@ -623,7 +638,7 @@ onMounted(async () => {
                             </div>
                         </template>
                     </template>
-                    <template v-if="children && children.items?.length > 0">
+<template v-if="children?.items && children.items.length">
                         <div class="font-medium text-base mt-5 col-span-12">
                             <div class="flex items-center w-full pb-3 border-b justify-between">
                                 <div class="flex items-center">

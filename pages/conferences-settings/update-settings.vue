@@ -245,7 +245,7 @@ const handleModalSubmit = async () => {
                                 <div class="flex items-center justify-between gap-5">
                                     <div class="opacity-75 form-label">{{ field.label }}</div>
                                     <div>
-                                        <button :disabled="!usePermissionCheck(['conference_setting_update'])" type="button" class="btn btn-sm btn-primary btn-rounded" @click="openModal()">
+                                        <button :disabled="!usePermissionCheck(['conference_setting_update'])" type="button" class="btn btn-sm btn-primary btn-rounded" @click="openModal(), console.log(field.id), itemDataType = field.data">
                                             <Icon name="solar:add-circle-outline" class="w-4 h-4 mr-2" />
                                             <span>Add New</span>
                                         </button>
