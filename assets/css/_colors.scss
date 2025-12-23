@@ -1,7 +1,7 @@
 /* Default colors */
 :root {
-  --color-primary: 0 25 95;
-  --color-primary-hover: 9 51 98;
+  --color-primary: 15 44 73; /* #0f2c49 - الأساسي الجديد */
+  --color-primary-hover: 25 65 110; /* hover أغمق */
   --color-secondary: theme("colors.rgb.slate.200");
   --color-success: theme("colors.rgb.green.600");
   --color-info: theme("colors.rgb.cyan.500");
@@ -10,6 +10,20 @@
   --color-danger: theme("colors.rgb.red.700");
   --color-light: theme("colors.rgb.slate.100");
   --color-dark: theme("colors.rgb.slate.800");
+  
+  /* درجات اللون الجديد */
+  --color-navy-50: 229 240 248;   /* #e6f0f8 */
+  --color-navy-100: 204 225 241;  /* #cce1f1 */
+  --color-navy-200: 153 195 227;  /* #99c3e3 */
+  --color-navy-300: 102 165 213;  /* #66a5d5 */
+  --color-navy-400: 51 135 199;   /* #3387c7 */
+  --color-navy-500: 15 44 73;     /* #0f2c49 - الأساسي */
+  --color-navy-600: 12 35 58;     /* #0c233a */
+  --color-navy-700: 9 27 44;      /* #091b2c */
+  --color-navy-800: 6 18 29;      /* #06121d */
+  --color-navy-900: 3 9 15;       /* #03090f */
+  
+  /* الألوان القديمة (حفظ للتوافق) */
   --color-slate-50: theme("colors.rgb.slate.50");
   --color-slate-100: theme("colors.rgb.slate.100");
   --color-slate-200: theme("colors.rgb.slate.200");
@@ -24,11 +38,19 @@
 
 /* Default dark-mode colors */
 .dark {
-  --color-primary: theme("colors.rgb.blue.600");
+  --color-primary: 25 85 140; /* نسخة أفتح للداكن */
+  --color-primary-hover: 35 105 170; /* hover للداكن */
   --color-alternative: theme("colors.rgb.slate.200");
-  --color-primary-hover: theme("colors.rgb.blue.800");
   --color-secondary: theme("colors.rgb.slate.100");
   --color-danger: theme("colors.rgb.red.500");
+  
+  /* درجات داكنة للون الجديد */
+  --color-navy-500: 25 85 140;   /* #19558c */
+  --color-navy-600: 20 70 120;   /* #144678 */
+  --color-navy-700: 15 55 100;   /* #0f3764 */
+  --color-navy-800: 10 40 80;    /* #0a2850 */
+  --color-navy-900: 5 25 60;     /* #05193c */
+  
   --color-slate-500: theme("colors.rgb.slate.600");
   --color-dark: theme("colors.rgb.slate.800");
   --color-darkmode-50: 87 103 132;
@@ -43,21 +65,40 @@
   --color-darkmode-900: 15 23 42;
 }
 
-/* Theme 1 colors */
+/* Theme 1 colors - Deep Blue Theme */
 .theme-1 {
-  --color-primary: theme("colors.rgb.blue.700");
-  --color-secondary: theme("colors.rgb.slate.200");
-  --color-success: theme("colors.rgb.teal.600");
-  --color-info: theme("colors.rgb.cyan.500");
-  --color-warning: theme("colors.rgb.amber.400");
+  --color-primary: 15 44 73; /* #0f2c49 */
+  --color-primary-hover: 25 65 110;
+  --color-secondary: 204 225 241; /* #cce1f1 - متناسق مع الأساسي */
+  --color-success: theme("colors.rgb.emerald.600");
+  --color-info: theme("colors.rgb.sky.500");
+  --color-warning: theme("colors.rgb.amber.500");
   --color-pending: theme("colors.rgb.orange.500");
-  --color-danger: theme("colors.rgb.red.700");
-  --color-light: theme("colors.rgb.slate.100");
-  --color-dark: theme("colors.rgb.slate.800");
+  --color-danger: theme("colors.rgb.red.600");
+  --color-light: theme("colors.rgb.slate.50");
+  --color-dark: theme("colors.rgb.slate.900");
+
+  /* درجات متناسقة مع التيم */
+  --color-slate-50: 229 240 248;   /* #e6f0f8 */
+  --color-slate-100: 204 225 241;  /* #cce1f1 */
+  --color-slate-200: 153 195 227;  /* #99c3e3 */
+  --color-slate-300: 102 165 213;  /* #66a5d5 */
+  --color-slate-400: 51 135 199;   /* #3387c7 */
+  --color-slate-500: 15 44 73;     /* #0f2c49 */
+  --color-slate-600: 12 35 58;     /* #0c233a */
+  --color-slate-700: 9 27 44;      /* #091b2c */
+  --color-slate-800: 6 18 29;      /* #06121d */
+  --color-slate-900: 3 9 15;       /* #03090f */
 
   &.dark {
-    --color-primary: theme("colors.rgb.blue.600");
-    --color-secondary: theme("colors.rgb.slate.100");
+    --color-primary: 25 85 140; /* #19558c */
+    --color-primary-hover: 35 105 170;
+    --color-secondary: 53 69 103; /* متناسق مع الداكن */
+    --color-slate-500: 25 85 140;   /* #19558c */
+    --color-slate-600: 20 70 120;   /* #144678 */
+    --color-slate-700: 15 55 100;   /* #0f3764 */
+    --color-slate-800: 10 40 80;    /* #0a2850 */
+    --color-slate-900: 5 25 60;     /* #05193c */
   }
 }
 
@@ -75,5 +116,45 @@
 
   &.dark {
     --color-primary: 44 85 197;
+  }
+}
+
+/* Theme 3 colors - Navy Ocean Theme */
+.theme-3 {
+  --color-primary: 0 50 100; /* #003264 - أزرق بحري */
+  --color-primary-hover: 0 70 130;
+  --color-secondary: 200 225 245; /* #c8e1f5 */
+  --color-success: theme("colors.rgb.teal.500");
+  --color-info: theme("colors.rgb.blue.400");
+  --color-warning: theme("colors.rgb.yellow.500");
+  --color-pending: theme("colors.rgb.orange.400");
+  --color-danger: theme("colors.rgb.red.600");
+  --color-light: theme("colors.rgb.slate.50");
+  --color-dark: theme("colors.rgb.slate.900");
+
+  &.dark {
+    --color-primary: 30 90 160;
+    --color-primary-hover: 40 110 190;
+    --color-secondary: 53 69 103;
+  }
+}
+
+/* Theme 4 colors - Midnight Blue Theme */
+.theme-4 {
+  --color-primary: 10 30 60; /* #0a1e3c - منتصف الليل */
+  --color-primary-hover: 20 50 90;
+  --color-secondary: 180 210 240; /* #b4d2f0 */
+  --color-success: theme("colors.rgb.emerald.500");
+  --color-info: theme("colors.rgb.cyan.400");
+  --color-warning: theme("colors.rgb.amber.400");
+  --color-pending: theme("colors.rgb.orange.300");
+  --color-danger: theme("colors.rgb.red.500");
+  --color-light: theme("colors.rgb.slate.100");
+  --color-dark: theme("colors.rgb.slate.900");
+
+  &.dark {
+    --color-primary: 40 80 150;
+    --color-primary-hover: 50 100 180;
+    --color-secondary: 65 81 114;
   }
 }

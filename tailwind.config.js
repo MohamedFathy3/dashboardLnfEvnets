@@ -28,6 +28,19 @@ import {
     zinc as _zinc,
 } from 'tailwindcss/colors';
 import { toRGB, withOpacityValue } from '@left4code/tw-starter/dist/js/tailwind-config-helper';
+// إضافة اللون الجديد هنا
+const deepBlue = {
+  50: '#e6f0f8',
+  100: '#cce1f1',
+  200: '#99c3e3',
+  300: '#66a5d5',
+  400: '#3387c7',
+  500: '#0f2c49',  // اللون الأساسي
+  600: '#0c233a',
+  700: '#091b2c',
+  800: '#06121d',
+  900: '#03090f',
+}
 
 export const content = ['./components/**/*.{js,vue,ts}', './*.{vue,ts,js}', './layouts/**/*.vue', './pages/**/*.vue', './plugins/**/*.{js,ts}', './nuxt.config.{js,ts}', './app.vue'];
 
@@ -49,7 +62,12 @@ export const safelist = [
     'btn-rounded-secondary',
     'btn-rounded-pending',
     'btn-rounded-danger',
-
+  'bg-deep-blue',
+    'text-deep-blue',
+    'border-deep-blue',
+    'bg-deep-blue-500',
+    'text-deep-blue-500',
+    'border-deep-blue-500',
     'text-primary',
     'text-warning',
     'text-success',
@@ -135,7 +153,22 @@ export const theme = {
                 neutral: _neutral,
                 gray: _gray,
                 slate: _slate,
+                // إضافة اللون الجديد
+                deepBlue: deepBlue,
             }),
+            // إضافة اللون هنا
+            deepBlue: {
+                50: deepBlue[50],
+                100: deepBlue[100],
+                200: deepBlue[200],
+                300: deepBlue[300],
+                400: deepBlue[400],
+                500: deepBlue[500],
+                600: deepBlue[600],
+                700: deepBlue[700],
+                800: deepBlue[800],
+                900: deepBlue[900],
+            },
             primary: withOpacityValue('--color-primary'),
             'primary-hover': withOpacityValue('--color-primary-hover'),
             alternative: withOpacityValue('--color-alternative'),
