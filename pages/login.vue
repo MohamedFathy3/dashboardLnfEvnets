@@ -26,7 +26,14 @@ async function login() {
         <ToastList />
         <div class="w-full min-h-dvh p-5 md:p-20 flex items-center justify-center">
             <div class="sm:w-96 w-80 intro-y">
-                <WSANetworkLogo alt="WSA Consol Dashboard" class="w-64 text-white mx-auto" />
+                <!-- <WSANetworkLogo alt="WSA Consol Dashboard" class="w-64 text-white mx-auto" /> -->
+        <img
+  src="~/assets/images/LNF_.svg"
+  alt="WSA Consol Dashboard"
+  class="w-64 mx-auto"
+/>
+
+
                 <form @submit.prevent="login">
                     <div
                         class="!rounded-3xl box px-5 py-8 mt-4 max-w-[450px] relative before:content-[''] before:z-[-1] before:w-[95%] before:h-full before:bg-slate-200/65 before:border before:border-slate-200/25 before:-mt-5 before:absolute before:rounded-2xl before:mx-auto before:inset-x-0 before:dark:bg-darkmode-600/70 before:dark:border-darkmode-500/60"

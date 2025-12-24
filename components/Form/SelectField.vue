@@ -120,7 +120,7 @@ watchEffect(() => {
             <span v-if="label && required" class="ml-1 text-sm text-danger">*</span>
         </div>
         <div class="relative flex items-stretch grow focus-within:z-10">
-            <VueSelect
+            <!-- <VueSelect
                 :id="name"
                 v-model="value"
                 :disabled="disabled"
@@ -181,7 +181,7 @@ watchEffect(() => {
                         v-on="events"
                     />
                 </template>
-            </VueSelect>
+            </VueSelect> -->
         </div>
         <div v-if="description" class="form-help !text-slate-400 ml-4" v-html="description" />
         <template v-if="errors.length > 0">

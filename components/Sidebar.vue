@@ -208,13 +208,16 @@ const menuItems = ref<SideBarMenu[]>([
     //     subMenus: [],
     //     permission: ['network_application_list'],
     // },
+    { name: 'LNF Members List ', path: '/networkLnf', icon: 'solar:monitor-linear', subMenus: [],                 permission: ['network_admin_list'],
+ },
+
     'Event & Conferences',
     { name: 'Conference Overview', path: '/conferences/overview', icon: 'solar:monitor-linear', subMenus: [], permission: [] },
     {
         name: 'Conferences',
         path: '/conferences',
         icon: 'solar:calendar-mark-outline',
-        permission: ['conference_list', 'conference_day_list', 'conference_time_slot_list', 'conference_program_list', 'conference_coupon_list', 'conference_sponsor_list'],
+permission: ['network_admin_list'],         
         subMenus: [
             { name: 'Conferences', path: '/conferences/conferences', icon: 'solar:calendar-outline', subMenus: [], permission: ['conference_list'] },
             { name: 'Event Days', path: '/conferences/event-days', icon: 'solar:sunrise-outline', subMenus: [], permission: ['conference_day_list'] },
@@ -224,14 +227,14 @@ const menuItems = ref<SideBarMenu[]>([
                 path: '/conferences/agenda-programs',
                 icon: 'solar:server-2-linear',
                 subMenus: [],
-                permission: ['conference_program_list'],
+permission: ['network_admin_list'],  
             },
             {
                 name: 'Discount coupons',
                 path: '/conferences/discount-coupons',
                 icon: 'solar:tag-price-linear',
                 subMenus: [],
-                permission: ['conference_coupon_list'],
+permission: ['network_admin_list'],  
             },
             { name: 'Sponsors', path: '/conferences/sponsors', icon: 'solar:medal-ribbon-star-linear', subMenus: [], permission: ['conference_sponsor_list'] },
         ],
@@ -257,22 +260,20 @@ const menuItems = ref<SideBarMenu[]>([
                 path: '/conferences-data/header-menu',
                 icon: 'solar:hamburger-menu-line-duotone',
                 subMenus: [],
-                permission: ['conference_menu_list'],
-            },
+permission: ['network_admin_list'],              },
             {
                 name: 'T-Shirt Sizes',
                 path: '/conferences-data/t-shirt-sizes',
                 icon: 'solar:t-shirt-outline',
                 subMenus: [],
-                permission: ['conference_shirt_list'],
+                permission: ['network_admin_list'],
             },
             {
                 name: 'Dietaries',
                 path: '/conferences-data/dietaries',
                 icon: 'solar:donut-bitten-bold-duotone',
                 subMenus: [],
-                permission: ['conference_dietary_list'],
-            },
+permission: ['network_admin_list'],              },
             {
                 name: 'Contact Messages',
                 path: '/conferences-data/conference-contact-messages',
@@ -281,22 +282,21 @@ const menuItems = ref<SideBarMenu[]>([
                 permission: ['conference_message_list'],
             },
             // { name: 'Hotels', path: '/conferences-data/hotels', icon: 'solar:buildings-2-line-duotone', subMenus: [], permission: ['conference_hotel_list'] },
-            { name: 'Rooms', path: '/conferences-data/rooms', icon: 'solar:bed-line-duotone', subMenus: [], permission: ['conference_room_list'] },
+            { name: 'Rooms', path: '/conferences-data/rooms', icon: 'solar:bed-line-duotone', subMenus: [], permission: ['network_admin_list'],   },
             { name: 'Packages', path: '/conferences-data/packages', icon: 'solar:box-outline', subMenus: [], permission: ['conference_package_list'] },
             {
                 name: 'Sponsorship Items',
                 path: '/conferences-data/sponsorship-items',
                 icon: 'solar:medal-ribbons-star-linear',
                 subMenus: [],
-                permission: ['conference_sponsorship_item_list'],
-            },
+permission: ['network_admin_list'],              },
             {
                 name: 'Help Center',
                 path: '/conferences-data/help-center',
                 icon: 'solar:question-square-linear',
                 subMenus: [],
-                permission: ['conference_faq_list'],
-            },
+permission: ['network_admin_list'],         
+     },
         ],
     },
     {
@@ -497,15 +497,15 @@ const menuItems = ref<SideBarMenu[]>([
         name: 'Admins Area',
         path: '/admins-area',
         icon: 'solar:server-2-line-duotone',
-        permission: ['network_list', 'network_admin_list', 'network_role_list', 'network_affiliate_list'],
+permission: ['network_admin_list'],  
         subMenus: [
-            {
-                name: 'Networks',
-                path: '/admins-area/networks',
-                icon: 'solar:globus-outline',
-                subMenus: [],
-                permission: ['network_list'],
-            },
+            // {
+            //     name: 'Networks',
+            //     path: '/admins-area/networks',
+            //     icon: 'solar:globus-outline',
+            //     subMenus: [],
+            //     permission: ['network_list'],
+            // },
             {
                 name: 'Admins',
                 path: '/admins-area/admins',
@@ -520,51 +520,51 @@ const menuItems = ref<SideBarMenu[]>([
                 subMenus: [],
                 permission: ['network_role_list'],
             },
-            {
-                name: 'Affiliates',
-                path: '/admins-area/affiliates',
-                icon: 'solar:chat-round-call-line-duotone',
-                subMenus: [],
-                permission: ['network_affiliate_list'],
-            },
+            // {
+            //     name: 'Affiliates',
+            //     path: '/admins-area/affiliates',
+            //     icon: 'solar:chat-round-call-line-duotone',
+            //     subMenus: [],
+            //     permission: ['network_affiliate_list'],
+            // },
         ],
     },
-    {
-        name: 'Network Settings',
-        path: '/network-settings',
-        icon: 'solar:settings-outline',
-        permission: ['network_setting_list', 'network_setting_field_list', 'network_email_template_list'],
-        subMenus: [
-            {
-                name: 'Update Settings',
-                path: '/network-settings/update-settings',
-                icon: 'solar:pen-new-square-outline',
-                subMenus: [],
-                permission: ['network_setting_list'],
-            },
-            {
-                name: 'Setting Fields',
-                path: '/network-settings/setting-fields',
-                icon: 'solar:server-2-outline',
-                subMenus: [],
-                permission: ['network_setting_field_list'],
-            },
-            {
-                name: 'Media',
-                path: '/network-settings/media',
-                icon: 'solar:folder-linear',
-                subMenus: [],
-                permission: ['media_list'],
-            },
-            {
-                name: 'Email Templates',
-                path: '/network-settings/email-templates',
-                icon: 'solar:streets-navigation-linear',
-                subMenus: [],
-                permission: ['network_email_template_list'],
-            },
-        ],
-    },
+    // {
+    //     name: 'Network Settings',
+    //     path: '/network-settings',
+    //     icon: 'solar:settings-outline',
+    //     permission: ['network_setting_list', 'network_setting_field_list', 'network_email_template_list'],
+    //     subMenus: [
+    //         {
+    //             name: 'Update Settings',
+    //             path: '/network-settings/update-settings',
+    //             icon: 'solar:pen-new-square-outline',
+    //             subMenus: [],
+    //             permission: ['network_setting_list'],
+    //         },
+    //         {
+    //             name: 'Setting Fields',
+    //             path: '/network-settings/setting-fields',
+    //             icon: 'solar:server-2-outline',
+    //             subMenus: [],
+    //             permission: ['network_setting_field_list'],
+    //         },
+    //         {
+    //             name: 'Media',
+    //             path: '/network-settings/media',
+    //             icon: 'solar:folder-linear',
+    //             subMenus: [],
+    //             permission: ['media_list'],
+    //         },
+    //         {
+    //             name: 'Email Templates',
+    //             path: '/network-settings/email-templates',
+    //             icon: 'solar:streets-navigation-linear',
+    //             subMenus: [],
+    //             permission: ['network_email_template_list'],
+    //         },
+    //     ],
+    // },
 ]);
 
 const route = useRoute();
@@ -585,8 +585,9 @@ const isSidebarMenuItem = (item: SideBarMenu): item is SidebarMenuItem => typeof
             <div :class="['flex items-center gap-3 place-content-center']">
                 <Icon v-if="open" class="size-7 shrink-0" name="solar:asteroid-linear" />
                 <div v-if="open" class="text-lg">
-                    <span class="text-white">{{ settingStore.network?.name }}</span>
-                    <span class="text-[0.65rem] font-light align-super ml-2 opacity-75">v1.0.3</span>
+                    <!-- <span class="text-white">{{ settingStore.network?.name }}</span> -->
+                    <span class="text-white">LNF Events</span>
+                    <span class="text-[0.65rem] font-light align-super ml-2 opacity-75">v2.0.2</span>
                 </div>
             </div>
             <Icon v-if="!open" class="size-5 shrink-0 mx-auto cursor-pointer" name="solar:round-alt-arrow-right-linear" @click="emit('toggleSidebar')" />

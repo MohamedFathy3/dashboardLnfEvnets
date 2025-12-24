@@ -477,7 +477,8 @@ type SidebarMenuItem = {
     path: string;
     icon: string;
     permission: string[];
-    subMenus: SidebarMenuItem[];
+    subMenus: SidebarMenuItem[];    
+    superAdmin?: string | boolean;
 };
 
 type SideBarMenu = string | SidebarMenuItem;
