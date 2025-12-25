@@ -5,86 +5,10 @@ definePageMeta({
 });
 const showOrderBreakout = ref(false);
 
-// ======== جلب بيانات الطلب ========
 const { data: order, refresh } = await useApiFetch(`/api/dashboard/order/${route.params.id}`, {
     lazy: true,
     transform: (order) => order.data,
 });
-
-// ======== تعريف ال order statuses ========
-const orderStatuses = ref([
-    { name: 'Application Form', value: 'in_application_form' },
-    { name: 'Pending Payment', value: 'pending_payment' },
-    { name: 'Pending Bank Transfer', value: 'pending_bank_transfer' },
-    { name: 'Approved Online Payment', value: 'approved_online_payment' },
-    { name: 'Approved Bank Transfer', value: 'approved_bank_transfer' },
-]);
-
-// ======== دوال تغيير حالة الطلب ========
-const currentStatus = ref(order?.value?.status);
-const changingStatus = ref(false);
-
-const changeOrderStatus = async (newStatus) => {
-    if (!order.value?.id || changingStatus.value) return;
-    
-    changingStatus.value = true;
-    
-    try {
-        const { data, error } = await useApiFetch(`/api/dashboard/order/${order.value.id}/change-status`, {
-            body: { status: newStatus },
-            method: 'POST',
-        });
-        
-        if (data.value) {
-            useToast({ 
-                title: 'Success', 
-                message: 'Status Changed Successfully', 
-                type: 'success', 
-                duration: 5000 
-            });
-            
-            // تحديث الحالة المحلية
-            currentStatus.value = newStatus;
-            
-            // إعادة تحميل البيانات
-            setTimeout(() => {
-                refresh();
-            }, 100);
-        }
-        
-        if (error && error.value) {
-            console.error('Status change error:', error.value);
-            useToast({ 
-                title: 'Error', 
-                message: error.value.message || 'Failed to change status', 
-                type: 'error', 
-                duration: 5000 
-            });
-            
-            // إعادة الحالة السابقة في حالة الخطأ
-            currentStatus.value = order.value?.status;
-        }
-    } catch (err) {
-        console.error('Unexpected error:', err);
-        useToast({ 
-            title: 'Error', 
-            message: 'Unexpected error occurred', 
-            type: 'error', 
-            duration: 5000 
-        });
-    } finally {
-        changingStatus.value = false;
-    }
-};
-
-// تحديث currentStatus عند تغيير order
-watch(() => order.value?.status, (newStatus) => {
-    if (newStatus) {
-        currentStatus.value = newStatus;
-    }
-}, { immediate: true });
-
-// ======== دوال الصفحة ========
 function showOrderDetails() {
     showOrderBreakout.value = !showOrderBreakout.value;
 }
@@ -108,8 +32,8 @@ const getDaysAndNightsValues = (datesArray) => {
     const timeDifference = endDate.getTime() - startDate.getTime();
     const millisecondsPerDay = 1000 * 60 * 60 * 24;
 
-    const nights = Math.ceil(timeDifference / millisecondsPerDay);
-    const days = nights + 1;
+    const nights = Math.ceil(timeDifference / millisecondsPerDay); // Adjusted to include the last day
+    const days = nights + 1; // Nights excluding the last day
 
     return `${nights} Nights and ${days} Days`;
 };
@@ -119,7 +43,6 @@ const bedTypes = ref([
     { name: 'King Size Bed', value: 'king_size' },
 ]);
 </script>
-
 <template>
     <div v-if="order" class="flex flex-col gap-5">
         <div class="flex flex-col gap-5">
@@ -133,32 +56,11 @@ const bedTypes = ref([
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <UiNetworkTypeBadge :data="order.company.membershipType" />
-                    
-                    <!-- ======== SELECT FIELD HERE ======== -->
-                   <div v-if="usePermissionCheck(['conference_order_update'])">
-    <FormSelectField
-        id="status-selector"
-        v-model="currentStatus"
-        :disabled="changingStatus || !usePermissionCheck(['conference_order_update'])"
-        class="text-slate-800 cursor-pointer w-[18rem]"
-        placeholder="Please select a status..."
-        :clearable="false"
-        :select-data="orderStatuses"
-        labelvalue="name"
-        keyvalue="value"
-        @change="changeOrderStatus"
-    />
-    <div v-if="changingStatus" class="text-xs text-blue-500 mt-1 animate-pulse">
-        Updating status...
-    </div>
-</div>
-                    <!-- ======== END SELECT FIELD ======== -->
-                    
-                </div>
+                    <!-- <UiNetworkTypeBadge :data="order.company.membershipType" /> -->
+                    <ConferenceOrderStatusSwitch :disabled="!usePermissionCheck(['conference_order_update'])" :order-id="order.id" :order-status="order.status" @reload="refresh" />
+                </div> 
             </div>
         </div>
-        
         <div v-if="usePermissionCheck(['conference_order_list'])">
             <div class="grid lg:grid-cols-12 gap-8 text-sm font-light items-start">
                 <div class="bg-white shadow-sm p-5 rounded-xl lg:col-span-3 flex items-center place-content-center h-full">
