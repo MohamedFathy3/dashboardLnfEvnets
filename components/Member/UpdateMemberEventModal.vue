@@ -245,7 +245,7 @@ const companyTypes = ref([
                             name="company-type-company"
                             placeholder="Company Type"
                         />
-                        <FormSelectField
+                        <!-- <FormSelectField
                             v-model="item.membershipType"
                             :errors="v$.membershipType.$errors"
                             labelvalue="name"
@@ -256,7 +256,7 @@ const companyTypes = ref([
                             label="Membership Type"
                             name="company-membership-type"
                             placeholder="Membership Type"
-                        />
+                        /> -->
                         <FormSelectField
                             v-model="item.category"
                             :errors="v$.category.$errors"
@@ -270,7 +270,7 @@ const companyTypes = ref([
                             placeholder="Category - Internal Usage Only"
                             description="For Reporting and Internal Usage Only"
                         />
-                        <FormInputField v-model="item.wsaId" :errors="v$.wsaId.$errors" class="col-span-12 lg:col-span-6" type="number" label="WSA ID" name="wsa-id" placeholder="WSA ID" />
+                        <!-- <FormInputField v-model="item.wsaId" :errors="v$.wsaId.$errors" class="col-span-12 lg:col-span-6" type="number" label="WSA ID" name="wsa-id" placeholder="WSA ID" /> -->
                     </div>
                 </div>
                 <div class="mt-6">

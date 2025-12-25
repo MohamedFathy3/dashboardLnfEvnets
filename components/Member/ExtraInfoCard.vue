@@ -25,22 +25,22 @@ const resources = useResourceStore();
                 </div>
                 <div class="font-medium ml-6">{{ props.member.eventRegisterDate }}</div>
             </li>
-            <li v-if="props.member?.membershipType" class="py-1.5 flex items-center justify-between min-h-10">
+            <!-- <li v-if="props.member?.membershipType" class="py-1.5 flex items-center justify-between min-h-10">
                 <div class="flex items-center gap-1.5">
                     <Icon name="solar:bookmark-linear" class="size-4 opacity-75" />
                     Membership
                 </div>
                 <UiNetworkTypeBadge :data="props.member.membershipType" />
-            </li>
-            <li class="py-1.5 flex items-center justify-between min-h-10">
+            </li> -->
+            <!-- <li class="py-1.5 flex items-center justify-between min-h-10">
                 <div class="flex items-center gap-1.5">
                     <Icon name="solar:bookmark-linear" class="size-4 opacity-75" />
                     Company Type
                 </div>
                 <UiCompanyTypeBadge v-if="props.member.typeCompany" :data="props.member.typeCompany" />
                 <div v-else class="font-light ml-6">---</div>
-            </li>
-            <li :class="[props.member.referralId && 'flex-col', 'py-1.5 flex justify-between min-h-10']">
+            </li> -->
+            <!-- <li :class="[props.member.referralId && 'flex-col', 'py-1.5 flex justify-between min-h-10']">
                 <div class="flex items-center gap-1.5">
                     <Icon name="solar:multiple-forward-left-linear" class="size-4 opacity-75" />
                     Referral
@@ -58,7 +58,7 @@ const resources = useResourceStore();
                 </div>
                 <div v-if="props.member?.ref" class="font-medium ml-6">{{ props.member.ref?.name }}</div>
                 <div v-else class="font-light ml-6">---</div>
-            </li>
+            </li> -->
             <li class="py-1.5 flex flex-col justify-between min-h-10">
                 <div class="flex items-center gap-1.5">
                     <Icon name="solar:globus-linear" class="size-4 opacity-75" />

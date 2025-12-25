@@ -12,14 +12,7 @@ const sortByList = ref([
 const filter = ref({
     uuid: null,
 });
-const membershipTypes = ref([
-    { name: 'Member', value: 'member' },
-    { name: 'Founder', value: 'founder' },
-    { name: 'Partner', value: 'partner' },
-    { name: 'Vendor', value: 'vendor' },
-    { name: 'Non Member', value: 'non_member' },
-    { name: 'WSA Team', value: 'wsa_team' },
-]);
+
 const orderStatuses = [
     { name: 'Application Form', value: 'in_application_form' },
     { name: 'Pending Payment', value: 'pending_payment' },
@@ -190,7 +183,7 @@ const reloadData = async () => {
             <TransitionExpand>
                 <div v-if="showFilter" class="lg:col-span-12 grid lg:grid-cols-12 gap-5 items-center">
                     <div class="lg:col-span-12">
-                        <div class="border border-slate-100 bg-slate-50/50 rounded-lg grid grid-cols-12 p-5 gap-5">
+                        <!-- <div class="border border-slate-100 bg-slate-50/50 rounded-lg grid grid-cols-12 p-5 gap-5">
                             <div class="sm:col-span-12">
                                 <fieldset class="px-5 grid lg:grid-cols-3 sm:grid-cols-2 gap-5 grid-cols-1 duration-300 ease-in-out">
                                     <div v-for="option in membershipTypes" :key="option.value" class="relative flex items-start">
@@ -218,7 +211,7 @@ const reloadData = async () => {
                                     </div>
                                 </fieldset>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="lg:col-span-12">
                         <div class="border border-slate-100 bg-slate-50/50 rounded-lg grid grid-cols-12 p-5 gap-5">

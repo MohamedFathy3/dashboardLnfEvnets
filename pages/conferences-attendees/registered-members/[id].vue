@@ -54,9 +54,9 @@ async function resendPassword() {
                         <span>Update Member</span>
                     </button>
                     <HeadlessMenu as="div" class="relative inline-block">
-                        <HeadlessMenuButton>
+                        <!-- <HeadlessMenuButton>
                             <Icon class="size-6 opacity-75 hover:scale-105 transition-all" name="solar:hamburger-menu-outline" />
-                        </HeadlessMenuButton>
+                        </HeadlessMenuButton> -->
                         <TransitionExpand>
                             <HeadlessMenuItems as="div" class="absolute text-sm right-0 mt-3 w-56 origin-top-right rounded-xl bg-white shadow-lg ring-1 ring-black/5 focus:outline-none text-slate-600 z-50">
                                 <ul class="p-1">
@@ -112,7 +112,7 @@ async function resendPassword() {
                     <UiMemberJoinBox v-else class="lg:col-span-4" :data="company.currentNetworkStatus.createdAt" />
                     <UiMemberFPPBox class="lg:col-span-4" :data="company.currentNetworkStatus?.fpp" />
                 </template>
-                <div v-else class="lg:col-span-12 p-5 text-base text-center bg-white border-2 border-dashed font-medium opacity-75">This member is not assigned to any network</div>
+                <!-- <div v-else class="lg:col-span-12 p-5 text-base text-center bg-white border-2 border-dashed font-medium opacity-75">This member is not assigned to any network</div> -->
                 <MemberOrdersCard class="lg:col-span-12" :member="company" />
                 <div class="lg:col-span-12">
                     <div class="intro-y block sm:flex items-center h-10">

@@ -249,7 +249,7 @@ const companyTypes = ref([
                             name="company-type-company"
                             placeholder="Company Type"
                         />
-                        <FormInputField v-model="item.wsaId" :errors="v$.wsaId.$errors" class="col-span-12 lg:col-span-6" type="number" label="WSA ID" name="wsa-id" placeholder="WSA ID" />
+                        <!-- <FormInputField v-model="item.wsaId" :errors="v$.wsaId.$errors" class="col-span-12 lg:col-span-6" type="number" label="WSA ID" name="wsa-id" placeholder="WSA ID" /> -->
                         <FormInputField v-model="item.mapLat" :errors="v$.mapLat.$errors" class="col-span-12 lg:col-span-6" label="Latitude" name="company-map-lat" placeholder="Latitude" />
                         <FormInputField v-model="item.mapLong" :errors="v$.mapLong.$errors" class="col-span-12 lg:col-span-6" label="Longitude" name="company-map-long" placeholder="Longitude" />
                     </div>

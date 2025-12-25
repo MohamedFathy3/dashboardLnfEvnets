@@ -76,7 +76,7 @@ const props = defineProps({
                                 <span class="px-2 py-0.5 rounded-full bg-slate-100 border">{{ diet.name }}</span>
                             </template>
                             <template v-if="delegate.extraDietaries">
-                                <span class="px-2 py-0.5 rounded-full bg-slate-100 border">{{ delegate.extraDietaries }}</span>
+                                <span class="px-2 py-0.5 text-sm rounded-full bg-slate-100 border">{{ delegate.extraDietaries }}</span>
                             </template>
                         </div>
                         <div v-else class="font-normal opacity-65">No Dietaries</div>

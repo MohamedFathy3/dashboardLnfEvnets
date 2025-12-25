@@ -47,6 +47,10 @@ const changeOrder = async (status) => {
         emit('reload');
     }, 100);
 };
+console.log('🔧 ConferenceOrderStatusSwitch mounted');
+console.log('   Order ID from props:', props.orderId);
+console.log('   Order Status from props:', props.orderStatus);
+console.log('   Component file loaded successfully');
 </script>
 <template>
     <div>
