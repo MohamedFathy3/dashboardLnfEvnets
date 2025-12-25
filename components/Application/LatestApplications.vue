@@ -11,12 +11,7 @@ const props = defineProps({
 <template>
     <div>
         <div class="flex items-center flex-col md:flex-row justify-between md:gap-5 gap-3">
-            <div class="flex items-center gap-3">
-                <Icon name="solar:buildings-3-line-duotone" class="opacity-75 size-5" />
-                <span class="font-medium">Latest Applications</span>
-            </div>
-            <NuxtLink class="text-xs px-2 py-1 rounded-full bg-white border text-center md:w-auto w-full" href="/members-data/pending-applications">View More</NuxtLink>
-        </div>
+               </div>
         <div class="hidden md:block">
             <table class="table table-report font-light">
                 <tbody>

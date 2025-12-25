@@ -36,44 +36,9 @@ async function openModal(id = null) {
 <template>
     <div>
         <div class="flex flex-col md:flex-row items-center justify-between sm:gap-5 gap-2">
-            <div class="flex items-center gap-3">
-                <Icon name="solar:chat-line-line-duotone" class="opacity-75 size-5" />
-                <span class="font-medium">Latest Contact Messages</span>
-            </div>
-            <NuxtLink class="text-xs px-2 py-1 rounded-full bg-white border md:w-auto w-full text-center" href="/website-data/network-messages">View More</NuxtLink>
-        </div>
+               </div>
         <div class="hidden md:block text-xs">
-            <table class="table table-report font-light">
-                <tbody>
-                    <template v-if="props.data.length > 0">
-                        <template v-for="row in props.data" :key="row.id">
-                            <tr>
-                                <td>
-                                    <div class="opacity-75 font-medium">{{ row.name }}</div>
-                                    <div class="mt-0.5">
-                                        <span class="lowercase py-0.5 whitespace-nowrap truncate opacity-75">{{ row.email }}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <div class="opacity-75 font-medium">{{ row.sentSince }}</div>
-                                        <div class="mt-1">
-                                            <span class="py-1 whitespace-nowrap truncate opacity-75 capitalize">{{ row.createdAt }}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-right">
-                                    <div>
-                                        <button class="btn btn-secondary btn-rounded btn-sm gap-3 size-8" @click="openModal(row.id)">
-                                            <Icon name="solar:eye-outline" class="size-4 shrink-0" />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </template>
-                    </template>
-                </tbody>
-            </table>
+        
         </div>
         <div v-if="props.data.length > 0" class="md:hidden flex flex-col gap-3 mt-5">
             <div v-for="row in props.data" :key="row.id" class="box p-3 text-xs">

@@ -11,11 +11,7 @@ const props = defineProps({
 <template>
     <div>
         <div class="flex items-center flex-col md:flex-row justify-between gap-3 md:gap-5">
-            <div class="flex items-center gap-3">
-                <Icon name="solar:buildings-3-line-duotone" class="opacity-75 size-5" />
-                <span class="font-medium">Expire Soon Members</span>
-            </div>
-            <NuxtLink class="text-xs px-2 py-1 rounded-full bg-white border md:w-auto w-full text-center" href="/network-reports/expire-soon-members">View More</NuxtLink>
+           
         </div>
         <div class="hidden md:block">
             <table class="table table-report font-light w-full">
