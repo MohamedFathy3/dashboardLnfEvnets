@@ -400,7 +400,7 @@ const reloadData = async () => {
                                         <div class="flex items-center text-xs whitespace-nowrap">
                                             <NuxtImg :src="row.countryFlag" class="h-4 !rounded-sm w-6 object-cover shrink-0 mr-1.5" />
                                             <div class="opacity-75 font-semibold">{{ row.countryName }}</div>
-                                            <span class="capitalize font-light opacity-80">, {{ row.city.toLowerCase() }}</span>
+                                            <span class="capitalize font-light opacity-80 w-20 overflow-hidden">, {{ row.city.toLowerCase() }}</span>
                                         </div>
                                         <div class="hover:text-warning transition-colors cursor-pointer text-xs opacity-75 mt-0.5 lowercase" @click="useClipboard(row.email.toLowerCase())">
                                             <span class="truncate 2xl:max-w-64 max-w-44">{{ row.email.toLowerCase() }}</span>

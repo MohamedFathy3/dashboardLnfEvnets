@@ -112,12 +112,14 @@ const item = ref({
     orderId: null,
     active: true,
     image: null,
+    bcc: null,
 });
 const rules = ref({
     name: { required },
     orderId: {},
     active: {},
     image: {},
+    bcc: {},
 });
 const v$ = useVuelidate(rules, item);
 const fetchItem = async (id) => {
@@ -328,7 +330,7 @@ async function restoreItems() {
                     <th class="text-left">Name</th>
                     <th class="text-center">Active</th>
                     <th v-if="serverParams.deleted">Deleted At</th>
-                    <th class="text-center">Postion</th>
+                    <th class="text-center">BCC</th>
                     <th class="text-right">Action</th>
                 </tr>
             </thead>
@@ -357,12 +359,13 @@ async function restoreItems() {
                                 <FormSwitch :id="'row-active-' + row.id" v-model="row.active" :disabled="!usePermissionCheck(['network_referral_update']) || serverParams.deleted" />
                             </div>
                         </td>
-                                <td>
+                           <td>
                             <div data-tw-merge class="flex items-center place-content-center" @change="useToggleSwitch(row.id, 'active', 'referral')">
-                                                                        <span class="truncate 2xl:max-w-64 max-w-44">{{ row.orderId }}</span>
+                                                                        <span class="truncate 2xl:max-w-64 max-w-44">{{ row.bcc }}</span>
 
                             </div>
                         </td>
+                        
                         
                         <td v-if="serverParams.deleted" class="text-sm">{{ row.deletedAt }}</td>
                         <td class="text-right">
@@ -401,7 +404,7 @@ async function restoreItems() {
                 <div class="grid lg:grid-cols-12 gap-5 items-start">
 
                     <FormInputField v-model="item.name" :errors="v$.name.$errors" class="lg:col-span-6" label="Name" name="name" placeholder="Name" />
-                    <FormInputField v-model="item.orderId" :errors="v$.orderId.$errors" class="lg:col-span-6" label="Order" name="order-id" placeholder="Order Number" />
+                    <FormInputField v-model="item.bcc" :errors="v$.bcc.$errors" class="lg:col-span-6" label="BCC" name="bcc" placeholder="BCC" />
                 </div>
             </template>
             <template #footer>
