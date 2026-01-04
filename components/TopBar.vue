@@ -79,7 +79,7 @@ async function resetServerCache() {
     <div class="flex items-center gap-5 z-50 mr-5">
       <button @click="resetServerCache" class="text-sm px-6 rounded-full bg-white border text-slate-600 py-2">Reset Server Cache</button>
 
-      <FormSelectField
+      <!-- <FormSelectField
         id="network-selector"
         v-model="settingStore.networkId"
         class="text-slate-800 sm:w-auto w-36"
@@ -88,7 +88,7 @@ async function resetServerCache() {
         :select-data="settingStore.networks"
         labelvalue="name"
         keyvalue="id"
-      />
+      /> -->
 
       <HeadlessMenu as="div" class="relative inline-block">
         <HeadlessMenuButton>

@@ -5,7 +5,7 @@
                 <Icon name="solar:chart-2-outline" class="size-5 opacity-75" />
                 <div>Conference Overview</div>
             </div>
-            <ConferenceSwitcher @reload="reFetchData" />
+            <!-- <ConferenceSwitcher @reload="reFetchData" /> -->
         </div>
         <ConferenceOldWarning />
         <div v-if="usePermissionCheck(['conference_overview_list'])">

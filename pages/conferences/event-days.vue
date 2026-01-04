@@ -149,7 +149,7 @@ async function handleModalSubmit() {
                 <Icon name="solar:sunrise-outline" class="size-5 opacity-75" />
                 <div>Event Days</div>
             </div>
-            <ConferenceSwitcher @reload="refresh" />
+            <!-- <ConferenceSwitcher @reload="refresh" /> -->
         </div>
         <ConferenceOldWarning />
         <!-- Filter & Search -->
