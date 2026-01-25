@@ -29,11 +29,13 @@ const item = ref({
     image: null,
     active: true,
     orderId: null,
+    title: null,
 });
 const rules = ref({
     title: {},
     name: { required },
     slug: { required },
+    title: { required },
     keywords: {},
     description: {},
     image: {},
@@ -452,6 +454,7 @@ onMounted(async () => {
             <div class="grid lg:grid-cols-12 gap-5 items-start">
                 <div class="lg:col-span-8 grid lg:grid-cols-12 gap-5 items-center bg-white rounded-xl p-5 shadow-sm">
                     <FormInputField v-model="item.name" :errors="v$.name.$errors" class="lg:col-span-6" label="Name" name="name" placeholder="Name" />
+                    <FormInputField v-model="item.title" :errors="v$.title.$errors" class="lg:col-span-6" label="Title" name="title" placeholder="Title" />
                     <FormInputField v-model="item.slug" readonly disabled :errors="v$.slug.$errors" class="lg:col-span-6" label="Slug" name="slug" placeholder="Slug" />
                     <FormInputField v-model="item.keywords" :errors="v$.keywords.$errors" class="lg:col-span-12" label="Keywords" name="keywords" placeholder="Keywords" type="textarea" />
                     <FormInputField v-model="item.description" :errors="v$.description.$errors" class="lg:col-span-12" label="Description" name="description" placeholder="Description" type="textarea" />
