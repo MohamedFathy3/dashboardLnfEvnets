@@ -22,9 +22,9 @@ export default defineNuxtConfig({
         public: {
             appUrl: process.env.NUXT_APP_URL ?? 'http://events-nuxt.test:4224',
             apiUrl: process.env.NUXT_API_URL ?? 'http://127.0.0.1:8000/**',
-            description: 'WSA Events is a part of World Shipping Alliance is an independent worldwide network for all freight forwarders.',
+            description: 'LNF Events is a part of LNF Shipping Alliance is an independent worldwide network for all freight forwarders.',
             keywords:
-                'World Shipping Alliance, freight forwarders network, global logistics, OTI/NVOCC operations, logistics community, logistics excellence, logistics network, dependable connections, global freight services, freight agents, logistics journey, event, wsa',
+                'LNF Shipping Alliance, freight forwarders network, global logistics, OTI/NVOCC operations, logistics community, logistics excellence, logistics network, dependable connections, global freight services, freight agents, logistics journey, event, wsa',
         },
     },
     build: {
@@ -66,7 +66,7 @@ export default defineNuxtConfig({
         buildAssetsDir: '/wsa-dashboard/',
         rootId: '__wsadashboard',
         head: {
-            title: 'WSA Dashboard',
+            title: 'LNF Dashboard',
             charset: 'utf-8',
             viewport: 'width=device-width, initial-scale=1',
             htmlAttrs: {
