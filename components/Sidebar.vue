@@ -572,7 +572,11 @@ const route = useRoute();
 const activeMenuItem = ref(route.fullPath);
 
 function toggleSubMenuOpen(path: string) {
-    activeMenuItem.value = path;
+    if (activeMenuItem.value === path) {
+        activeMenuItem.value = '';
+    } else {
+        activeMenuItem.value = path;
+    }
 }
 
 const isString = (item: SideBarMenu): item is string => typeof item === 'string';
